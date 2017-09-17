@@ -9,6 +9,7 @@ public class Balloon : MonoBehaviour
         if (c.GetComponent<Rigidbody2D>().gravityScale > 0f)
         {
             //StartCoroutine(c.GetComponent<PlayerController>().BalloonFly());
+            if(c.tag == "Player")
             StartCoroutine(Fly(c));
         }
     }
@@ -18,7 +19,7 @@ public class Balloon : MonoBehaviour
         GetComponent<AudioSource>().Play();
         Flyer.GetComponent<Rigidbody2D>().gravityScale = -0.5f;
         Flyer.GetComponent<PlayerController>().Balloons.SetActive(true);
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(2f);
         Flyer.GetComponent<Rigidbody2D>().gravityScale = 8;
         Flyer.GetComponent<PlayerController>().Balloons.SetActive(false);
     }
