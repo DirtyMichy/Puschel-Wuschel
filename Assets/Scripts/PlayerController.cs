@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
+using GamepadInput;
 
-public class PlayerController : MonoBehaviour {
-
+public class PlayerController : MonoBehaviour
+{
 	public bool facingRight = true;
 	public bool jump = true;
 
@@ -10,27 +11,46 @@ public class PlayerController : MonoBehaviour {
 	public float maxSpeed = 5f;
 	public float jumpForce = 1000f;
 	public Transform groundCheck;
-	public float h;
+	//public float h;
 	public Camera cam;
     public int powerUpCount = 0;
+    public int playerID = 0;
 
     public bool grounded = false;
 	private Animator anim;
 	private Rigidbody2D rb2d;
 
+    GamepadInput.GamePad.Index[] gamePadIndex;
+
     public GameObject Balloons;
 
+    public void SetPlayerID(int i)
+    {
+        playerID = i;
+        if (i == 0)
+            cam = Camera.main;
+    }
+
 	// Use this for initialization
-	void Start () {
+	void Start ()
+    {
 		anim = GetComponent<Animator> ();
 		rb2d = GetComponent<Rigidbody2D> ();
-	}
+
+        gamePadIndex = new GamepadInput.GamePad.Index[4];
+        gamePadIndex[0] = GamePad.Index.One;
+        gamePadIndex[1] = GamePad.Index.Two;
+        gamePadIndex[2] = GamePad.Index.Three;
+        gamePadIndex[3] = GamePad.Index.Four;
+    }
 	
 	// Update is called once per frame
-	void Update () {
+	void Update ()
+    {
 		grounded = Physics2D.Linecast (transform.position, groundCheck.position, 1 << LayerMask.NameToLayer ("Ground"));
 
-		if (Input.GetButton ("Jump") && grounded)
+		//if (Input.GetButton ("Jump") && grounded)
+        if ((Input.GetKeyDown(KeyCode.Space) || GamePad.GetButton(GamePad.Button.A, gamePadIndex[playerID])) && grounded)
         {
 			jump = true;
             GetComponent<AudioSource>().Play();
@@ -42,22 +62,29 @@ public class PlayerController : MonoBehaviour {
 		}
 	}
 
-	void FixedUpdate(){
+	void FixedUpdate()
+    {
+		//h = Input.GetAxis ("Horizontal");
 
-		h = Input.GetAxis ("Horizontal");
+        Vector2 directionCurrent = GamePad.GetAxis(GamePad.Axis.LeftStick, gamePadIndex[playerID]);
 
-//		anim.SetFloat("Speed", Mathf.Abs(h));
-		
-		if (h * rb2d.velocity.x < maxSpeed)
-			rb2d.AddForce(Vector2.right * h * moveForce);
+        if (Input.GetKey(KeyCode.A))
+            directionCurrent.x = -1f;
+        if (Input.GetKey(KeyCode.D))
+            directionCurrent.x = 1f;
+        
+        //		anim.SetFloat("Speed", Mathf.Abs(h));
+        Debug.Log(directionCurrent.x);
+        if (directionCurrent.x * rb2d.velocity.x < maxSpeed)
+			rb2d.AddForce(Vector2.right * directionCurrent.x * moveForce);
 
 		
 		if (Mathf.Abs (rb2d.velocity.x) > maxSpeed)
 			rb2d.velocity = new Vector2(Mathf.Sign (rb2d.velocity.x) * maxSpeed, rb2d.velocity.y);
 		
-		if (h > 0 && !facingRight)
+		if (directionCurrent.x > 0 && !facingRight)
 			Flip ();
-		else if (h < 0 && facingRight)
+		else if (directionCurrent.x < 0 && facingRight)
 			Flip ();
 		
 		if (jump)
@@ -67,7 +94,7 @@ public class PlayerController : MonoBehaviour {
 			jump = false;
 		}
 
-		if (h != 0) {
+		if (directionCurrent.x != 0) {
 			anim.SetBool ("isWalking", true);
 		}else{
 			anim.SetBool ("isWalking", false);
