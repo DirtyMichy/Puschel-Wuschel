@@ -19,7 +19,7 @@ public class Collectible : MonoBehaviour {
 
     void OnTriggerEnter2D(Collider2D c)
     {
-        if(!collected)
+        if(!collected && c.tag == "Player")
         {
             collected = true;
             c.GetComponent<PlayerController>().powerUpCount++;

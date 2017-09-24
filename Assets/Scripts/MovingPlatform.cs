@@ -13,4 +13,20 @@ public class MovingPlatform : MonoBehaviour {
     {
         iTween.MoveBy(gameObject, iTween.Hash("y", rangeY, "x", rangeX, "loopType", "pingPong", "easeType", "easeInOutExpo", "speed", speed));
     }
+
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        if(collision.gameObject.tag == "Player")
+        {
+            collision.gameObject.transform.parent = gameObject.transform;
+        }
+    }
+
+        private void OnCollisionExit2D(Collision2D collision)
+    {
+        if(collision.gameObject.tag == "Player")
+        {
+            collision.gameObject.transform.parent = null;
+        }
+    }
 }

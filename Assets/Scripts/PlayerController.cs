@@ -10,12 +10,13 @@ public class PlayerController : MonoBehaviour
 	public float moveForce = 365f;
 	public float maxSpeed = 5f;
 	public float jumpForce = 1000f;
-	public Transform groundCheck;
+	public Transform[] groundCheck;
 	//public float h;
 	public Camera cam;
     public int powerUpCount = 0;
     public int playerID = 0;
 
+    public bool isLeader = false;
     public bool grounded = false;
 	private Animator anim;
 	private Rigidbody2D rb2d;
@@ -34,9 +35,11 @@ public class PlayerController : MonoBehaviour
 	// Use this for initialization
 	void Start ()
     {
-		anim = GetComponent<Animator> ();
-		rb2d = GetComponent<Rigidbody2D> ();
+        cam = Camera.main;
 
+        anim = GetComponent<Animator> ();
+		rb2d = GetComponent<Rigidbody2D> ();
+        
         gamePadIndex = new GamepadInput.GamePad.Index[4];
         gamePadIndex[0] = GamePad.Index.One;
         gamePadIndex[1] = GamePad.Index.Two;
@@ -47,34 +50,60 @@ public class PlayerController : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
     {
-		grounded = Physics2D.Linecast (transform.position, groundCheck.position, 1 << LayerMask.NameToLayer ("Ground"));
+        for(int i = 0; i < groundCheck.Length; i++)
+        {
+            if (Physics2D.Linecast(transform.position, groundCheck[i].position, 1 << LayerMask.NameToLayer("Ground")))
+                grounded = true;
+        }
 
 		//if (Input.GetButton ("Jump") && grounded)
-        if ((Input.GetKeyDown(KeyCode.Space) || GamePad.GetButton(GamePad.Button.A, gamePadIndex[playerID])) && grounded)
+        if ((((Input.GetKeyDown(KeyCode.Space) || Input.GetKey(KeyCode.W)) &&  playerID == 0) || GamePad.GetButton(GamePad.Button.A, gamePadIndex[playerID])) && grounded)
         {
 			jump = true;
             GetComponent<AudioSource>().Play();
 		}
 
-		float x = transform.position.x;
-		if (x > 0) {		
-			cam.transform.position = new Vector3(x,0f,-10f);
+        grounded = false;
+        /*
+		if (isLeader)
+        {
+            float x = transform.position.x;
+            cam.transform.position = new Vector3(x,0f,-10f);
 		}
-	}
+        */
+        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+        
+        float rightestPos = 0;
+        int leader = 0;
 
-	void FixedUpdate()
+        for (int i = 0; i < players.Length; i++)
+        {
+            if (players[i].transform.position.x > rightestPos && players[i].transform.position.x > 0)
+            {
+                rightestPos = players[i].transform.position.x;
+                leader = i;
+            }
+        }
+        if ((players[leader].transform.position.x - transform.position.x) >= 14)
+        {
+            transform.position = players[leader].transform.position;
+        }
+
+    }
+
+    void FixedUpdate()
     {
 		//h = Input.GetAxis ("Horizontal");
 
         Vector2 directionCurrent = GamePad.GetAxis(GamePad.Axis.LeftStick, gamePadIndex[playerID]);
 
-        if (Input.GetKey(KeyCode.A))
+        if (Input.GetKey(KeyCode.A) && playerID == 0)
             directionCurrent.x = -1f;
-        if (Input.GetKey(KeyCode.D))
+        if (Input.GetKey(KeyCode.D) && playerID == 0)
             directionCurrent.x = 1f;
         
         //		anim.SetFloat("Speed", Mathf.Abs(h));
-        Debug.Log(directionCurrent.x);
+        //Debug.Log(directionCurrent.x);
         if (directionCurrent.x * rb2d.velocity.x < maxSpeed)
 			rb2d.AddForce(Vector2.right * directionCurrent.x * moveForce);
 
@@ -108,6 +137,14 @@ public class PlayerController : MonoBehaviour
 		theScale.x *= -1;
 		transform.localScale = theScale;
 	}
+
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Player")
+        {
+            Physics2D.IgnoreCollision(GetComponent<Collider2D>(), collision.gameObject.GetComponent<Collider2D>());
+        }
+    }
     /*
     public IEnumerator BalloonFly()
     {

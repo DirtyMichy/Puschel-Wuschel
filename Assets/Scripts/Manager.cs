@@ -24,6 +24,47 @@ public class Manager : MonoBehaviour {
             GameOver = true;
             StartCoroutine(RestartScene());
         }
+        /*
+        float playerPos = 0;
+        int leadingPlayer = 0;
+
+        for (int i = 0; i < players.Length; i++)
+        {
+            if(players[i].transform.position.x > playerPos && players[i].transform.position.x > 0)
+            {
+                players[i].GetComponent<PlayerController>().isLeader = false;
+                playerPos = players[i].transform.position.x;
+                leadingPlayer = i;
+            }
+        }
+
+        Debug.Log(leadingPlayer);
+        players[leadingPlayer].GetComponent<PlayerController>().isLeader = true;
+        */
+
+        float leftestPos = 0;
+        float rightestPos = 0;
+
+        for (int i = 0; i < players.Length; i++)
+        {
+            if (players[i] != null)
+            {
+                if (players[i].transform.position.x > rightestPos && players[i].transform.position.x > 0)
+                {
+                    rightestPos = players[i].transform.position.x;
+                }
+                leftestPos = rightestPos;
+                if (players[i].transform.position.x < leftestPos && players[i].transform.position.x > 0)
+                {
+                    leftestPos = players[i].transform.position.x;
+                }
+            }
+
+        }
+        //Debug.Log("Right: " + rightestPos + "Left: " + leftestPos);
+        float x = rightestPos-(rightestPos- leftestPos)/2;
+        Camera.main.transform.position = new Vector3(x, 0f, -10f);
+
         //Debug.Log(SceneManager.GetActiveScene().name);
     }
 
