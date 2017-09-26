@@ -6,10 +6,10 @@ using UnityEngine.SceneManagement;
 public class Manager : MonoBehaviour {
 
     private bool GameOver = false;
-    public GameObject[] characters;
-    public GameObject[] players;
-    public int playerCount = 1;
-    public GameObject currentCheckPoint;
+    public GameObject[] playableCharacters;     //Array of gameobjects which contain playable characters
+    public GameObject[] playerChosenCharacters; //Chosen characters by players
+    public int playerCount = 1;                 //total number of players
+    public GameObject currentCheckPoint;        //current checkpoint at which players can respawn
 
 	// Use this for initialization
 	void Start () {
@@ -45,18 +45,18 @@ public class Manager : MonoBehaviour {
         float leftestPos = 0;
         float rightestPos = 0;
 
-        for (int i = 0; i < players.Length; i++)
+        for (int i = 0; i < playerChosenCharacters.Length; i++)
         {
-            if (players[i] != null)
+            if (playerChosenCharacters[i] != null)
             {
-                if (players[i].transform.position.x > rightestPos && players[i].transform.position.x > 0)
+                if (playerChosenCharacters[i].transform.position.x > rightestPos && playerChosenCharacters[i].transform.position.x > 0)
                 {
-                    rightestPos = players[i].transform.position.x;
+                    rightestPos = playerChosenCharacters[i].transform.position.x;
                 }
                 leftestPos = rightestPos;
-                if (players[i].transform.position.x < leftestPos && players[i].transform.position.x > 0)
+                if (playerChosenCharacters[i].transform.position.x < leftestPos && playerChosenCharacters[i].transform.position.x > 0)
                 {
-                    leftestPos = players[i].transform.position.x;
+                    leftestPos = playerChosenCharacters[i].transform.position.x;
                 }
             }
 
@@ -74,7 +74,7 @@ public class Manager : MonoBehaviour {
 
         for (int i = 0; i < playerCount; i++)
         {
-            GameObject temp = (GameObject)Instantiate(players[i], currentCheckPoint.transform.root);
+            GameObject temp = (GameObject)Instantiate(playerChosenCharacters[i], currentCheckPoint.transform.root);
             temp.SendMessage("SetPlayerID", i);
         }
         //SceneManager.LoadScene(SceneManager.GetActiveScene().name);

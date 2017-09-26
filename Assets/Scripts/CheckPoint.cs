@@ -2,13 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CheckPoint : MonoBehaviour {
+public class CheckPoint : MonoBehaviour
+{
+    bool activated = false;
+    public GameObject flag;
 
     void OnTriggerEnter2D(Collider2D c)
     {
-        if (c.tag == "Player")
+        if (c.tag == "Player" && !activated)
         {
+            iTween.MoveBy(flag, iTween.Hash("y", 2f, "easeType", "linear", "speed", 1f));
+            activated = true;
             GetComponent<AudioSource>().Play();
+
         }
     }
 }
