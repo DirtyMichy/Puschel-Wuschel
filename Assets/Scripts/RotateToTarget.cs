@@ -1,16 +1,17 @@
-﻿using System.Collections;
+﻿//Script used by evil Clouds
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RotateToTarget : MonoBehaviour {
-
+public class RotateToTarget : MonoBehaviour
+{
     public GameObject currentTarget = null;
     public float rotationSpeed = 10f;
     public float range = 32f;
     public float speed = 1f;
-	
-	// Update is called once per frame
-	void Update ()
+    
+    // Update is called once per frame
+    void Update()
     {
         float minimalEnemyDistance = float.MaxValue;
 
@@ -29,7 +30,7 @@ public class RotateToTarget : MonoBehaviour {
         Vector2 point2Target = transform.position;
 
         if (currentTarget != null)
-        point2Target = (Vector2)transform.position - (Vector2)currentTarget.transform.position;
+            point2Target = (Vector2)transform.position - (Vector2)currentTarget.transform.position;
 
         float value = Vector3.Cross(point2Target, transform.right).z;
 

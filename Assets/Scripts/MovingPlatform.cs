@@ -7,6 +7,7 @@ public class MovingPlatform : MonoBehaviour {
     public float rangeX = 4f;
     public float rangeY = 0f;
     public float speed = 4f;
+    public float delay = 1f;
     public bool doesFall = false;
 
     // Update is called once per frame
@@ -37,9 +38,18 @@ public class MovingPlatform : MonoBehaviour {
 
         if (collision.gameObject.tag == "Player" && doesFall)
         {
-            iTween.PunchPosition(gameObject, iTween.Hash("y", rangeY, "easeType", "easeInOutExpo", "time", speed, "delay", 1f));
+            StartCoroutine(ColliderCooldown());
+            iTween.PunchPosition(gameObject, iTween.Hash("y", rangeY, "easeType", "easeInOutExpo", "time", speed, "delay", delay));
         }
         else
             iTween.PunchPosition(gameObject, iTween.Hash("y", .5f, "time", 1f));
+    }
+
+    IEnumerator ColliderCooldown()
+    {
+        yield return new WaitForSeconds(1f);        
+        GetComponent<EdgeCollider2D>().enabled=false;
+        yield return new WaitForSeconds(1f);        
+        GetComponent<EdgeCollider2D>().enabled=true;
     }
 }

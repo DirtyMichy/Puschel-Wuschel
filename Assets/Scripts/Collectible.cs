@@ -23,6 +23,8 @@ public class Collectible : MonoBehaviour {
         {
             collected = true;
             c.GetComponent<PlayerController>().powerUpCount++;
+            if(c.GetComponent<PlayerController>().powerUpCount<10)
+                c.GetComponent<PlayerController>().Body.transform.localScale+=new Vector3(0.025f,0.075f,0f);
             GetComponent<AudioSource>().Play();
             StartCoroutine(Despawn());
         }

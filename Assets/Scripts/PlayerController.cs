@@ -1,5 +1,6 @@
-﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 using GamepadInput;
 
 public class PlayerController : MonoBehaviour
@@ -15,6 +16,7 @@ public class PlayerController : MonoBehaviour
 	public Camera cam;
     public int powerUpCount = 0;
     public int playerID = 0;
+    public bool powerUpActivated = false;
 
     public bool isLeader = false;
     public bool grounded = false;
@@ -24,6 +26,7 @@ public class PlayerController : MonoBehaviour
     GamepadInput.GamePad.Index[] gamePadIndex;
 
     public GameObject Balloons;
+    public GameObject Body;
 
     public void SetPlayerID(int i)
     {
@@ -54,6 +57,13 @@ public class PlayerController : MonoBehaviour
         {
             if (Physics2D.Linecast(transform.position, groundCheck[i].position, 1 << LayerMask.NameToLayer("Ground")))
                 grounded = true;
+        }
+
+        //Powerup
+        if ((Input.GetKeyDown(KeyCode.X) &&  playerID == 0) || GamePad.GetButton(GamePad.Button.X, gamePadIndex[playerID]))
+        {
+            if(powerUpCount >= 1 && !powerUpActivated)
+            StartCoroutine(powerUp());
         }
 
 		//if (Input.GetButton ("Jump") && grounded)
@@ -89,6 +99,28 @@ public class PlayerController : MonoBehaviour
             transform.position = players[leader].transform.position;
         }
 
+        if(powerUpActivated)
+        {
+            GetComponent<Rigidbody2D>().angularVelocity = 640f*-transform.localScale.x ;
+        }
+
+    }
+
+    IEnumerator powerUp()
+    {
+        powerUpActivated = true;
+        GetComponent<Rigidbody2D>().freezeRotation=false;
+        GetComponent<Rigidbody2D>().mass = 100f ;
+        while(powerUpCount > 0)
+        {        
+            yield return new WaitForSeconds(1f);
+            powerUpCount--;
+        }
+        powerUpActivated = false;
+        GetComponent<Rigidbody2D>().freezeRotation=true;
+        GetComponent<Rigidbody2D>().mass = 1f ;
+        transform.rotation=new Quaternion(0f,0f,0f,0f);
+        Body.transform.localScale=new Vector3(1f,1f,1f);
     }
 
     void FixedUpdate()
@@ -119,7 +151,7 @@ public class PlayerController : MonoBehaviour
 		if (jump)
 		{
 //			anim.SetTrigger("Jump");
-			rb2d.AddForce(new Vector2(0f, jumpForce));
+            rb2d.AddForce(new Vector2(0f, jumpForce*GetComponent<Rigidbody2D>().mass));
 			jump = false;
 		}
 

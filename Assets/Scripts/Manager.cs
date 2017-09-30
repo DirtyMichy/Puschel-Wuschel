@@ -7,14 +7,21 @@ public class Manager : MonoBehaviour {
 
     private bool GameOver = false;
     public GameObject[] playableCharacters;     //Array of gameobjects which contain playable characters
-    public GameObject[] playerChosenCharacters; //Chosen characters by players
+    public GameObject[] playerCharactersAlive; //Chosen characters by players
+    public int[] playerChosenCharacter;         //index of playableCharacter, playerChosenCharacter[0]=2 means player 1 has chosen character 3
     public int playerCount = 1;                 //total number of players
     public GameObject currentCheckPoint;        //current checkpoint at which players can respawn
 
 	// Use this for initialization
-	void Start () {
-		
-	}
+    void Start () {
+        for (int playerID = 0; playerID < playerCount; playerID++)
+        {
+            //playerID = 0,playableCharacters[playerChosenCharacter[2]] means player 1 gets character 3
+            GameObject temp = (GameObject)Instantiate(playableCharacters[playerChosenCharacter[playerID]], playableCharacters[playerChosenCharacter[playerID]].transform.position = currentCheckPoint.transform.position, playableCharacters[playerChosenCharacter[playerID]].transform.rotation);
+            temp.SendMessage("SetPlayerID", playerID);
+        }
+        playerCharactersAlive = GameObject.FindGameObjectsWithTag("Player");
+    }
 	
 	// Update is called once per frame
 	void Update ()
@@ -22,7 +29,7 @@ public class Manager : MonoBehaviour {
 		if(CountPlayersAlive() <= 0 && !GameOver)
         {
             GameOver = true;
-            StartCoroutine(RestartScene());
+            StartCoroutine(RespawnPlayers());
         }
         /*
         float playerPos = 0;
@@ -45,44 +52,57 @@ public class Manager : MonoBehaviour {
         float leftestPos = 0;
         float rightestPos = 0;
 
-        for (int i = 0; i < playerChosenCharacters.Length; i++)
+        for (int i = 0; i < playerCharactersAlive.Length; i++)
         {
-            if (playerChosenCharacters[i] != null)
+            if (playerCharactersAlive[i] != null)
             {
-                if (playerChosenCharacters[i].transform.position.x > rightestPos && playerChosenCharacters[i].transform.position.x > 0)
+                if (playerCharactersAlive[i].transform.position.x > rightestPos && playerCharactersAlive[i].transform.position.x > 0)
                 {
-                    rightestPos = playerChosenCharacters[i].transform.position.x;
+                    rightestPos = playerCharactersAlive[i].transform.position.x;
                 }
+
                 leftestPos = rightestPos;
-                if (playerChosenCharacters[i].transform.position.x < leftestPos && playerChosenCharacters[i].transform.position.x > 0)
+
+                if (playerCharactersAlive[i].transform.position.x < leftestPos && playerCharactersAlive[i].transform.position.x > 0)
                 {
-                    leftestPos = playerChosenCharacters[i].transform.position.x;
+                    leftestPos = playerCharactersAlive[i].transform.position.x;
                 }
             }
 
         }
         //Debug.Log("Right: " + rightestPos + "Left: " + leftestPos);
         float x = rightestPos-(rightestPos- leftestPos)/2;
+
+        if(!GameOver)
         Camera.main.transform.position = new Vector3(x, 0f, -10f);
 
         //Debug.Log(SceneManager.GetActiveScene().name);
     }
 
-    IEnumerator RestartScene()
+    IEnumerator RespawnPlayers()
     {
         yield return new WaitForSeconds(3f);
 
-        for (int i = 0; i < playerCount; i++)
+        GameOver = false;
+
+        for (int playerID = 0; playerID < playerCount; playerID++)
         {
-            GameObject temp = (GameObject)Instantiate(playerChosenCharacters[i], currentCheckPoint.transform.root);
-            temp.SendMessage("SetPlayerID", i);
+            //playerID = 0,playableCharacters[playerChosenCharacter[2]] means player 1 gets character 3
+            GameObject temp = (GameObject)Instantiate(playableCharacters[playerChosenCharacter[playerID]], playableCharacters[playerChosenCharacter[playerID]].transform.position = currentCheckPoint.transform.position, playableCharacters[playerChosenCharacter[playerID]].transform.rotation);
+            temp.SendMessage("SetPlayerID", playerID);
         }
+        playerCharactersAlive = GameObject.FindGameObjectsWithTag("Player");
         //SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    public void setCheckPoint(GameObject cp)
+    {
+        currentCheckPoint=cp;
     }
 
     int CountPlayersAlive()
     {
-        GameObject[] playerAlive = GameObject.FindGameObjectsWithTag("Player");
-        return playerAlive.Length;
+        playerCharactersAlive = GameObject.FindGameObjectsWithTag("Player");
+        return playerCharactersAlive.Length;
     }
 }
