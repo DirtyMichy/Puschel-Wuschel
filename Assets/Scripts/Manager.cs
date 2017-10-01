@@ -12,6 +12,7 @@ public class Manager : MonoBehaviour {
     public int playerCount = 1;                 //total number of players
     public GameObject currentCheckPoint;        //current checkpoint at which players can respawn
 
+
 	// Use this for initialization
     void Start () {
         for (int playerID = 0; playerID < playerCount; playerID++)
@@ -21,6 +22,7 @@ public class Manager : MonoBehaviour {
             temp.SendMessage("SetPlayerID", playerID);
         }
         playerCharactersAlive = GameObject.FindGameObjectsWithTag("Player");
+
     }
 	
 	// Update is called once per frame
@@ -31,6 +33,12 @@ public class Manager : MonoBehaviour {
             GameOver = true;
             StartCoroutine(RespawnPlayers());
         }
+
+        if (Input.GetKeyDown(KeyCode.Escape)) 
+        {
+            SceneManager.LoadScene("Menu");
+        }
+
         /*
         float playerPos = 0;
         int leadingPlayer = 0;
