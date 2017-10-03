@@ -10,11 +10,13 @@ public class Manager : MonoBehaviour {
     public GameObject[] playerCharactersAlive; //Chosen characters by players
     public int[] playerChosenCharacter;         //index of playableCharacter, playerChosenCharacter[0]=2 means player 1 has chosen character 3
     public int playerCount = 1;                 //total number of players
+    public int collectedMuffins = 0;
     public GameObject currentCheckPoint;        //current checkpoint at which players can respawn
 
 
 	// Use this for initialization
-    void Start () {
+    void Start () 
+    {
         for (int playerID = 0; playerID < playerCount; playerID++)
         {
             //playerID = 0,playableCharacters[playerChosenCharacter[2]] means player 1 gets character 3
@@ -22,7 +24,6 @@ public class Manager : MonoBehaviour {
             temp.SendMessage("SetPlayerID", playerID);
         }
         playerCharactersAlive = GameObject.FindGameObjectsWithTag("Player");
-
     }
 	
 	// Update is called once per frame
