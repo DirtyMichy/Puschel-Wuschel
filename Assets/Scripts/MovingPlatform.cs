@@ -9,7 +9,12 @@ public class MovingPlatform : MonoBehaviour {
     public float speed = 4f;
     public float delay = 1f;
     public bool doesFall = false;
+    private Transform origin;
 
+    void Awake()
+    {
+        origin = transform;
+    }
     // Update is called once per frame
     void Update ()
     {
@@ -51,5 +56,6 @@ public class MovingPlatform : MonoBehaviour {
         GetComponent<EdgeCollider2D>().enabled=false;
         yield return new WaitForSeconds(1f);        
         GetComponent<EdgeCollider2D>().enabled=true;
+        transform.position = origin.position;
     }
 }
