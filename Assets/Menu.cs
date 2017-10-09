@@ -3,21 +3,24 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using GamepadInput;
-using UnityEngine.UI; 
+using UnityEngine.UI;
 
 public class Menu : MonoBehaviour
 {
     //public int[] campaignCollectedMuffins;      //campaignCollectedMuffins[0] =0; 0= E1M1 0= not finished, 1= finished, 2= everythingFound
     public GameObject playerCountText;
     public GameObject[] Level;
+    public GameObject[] playableCharacters;     //Array of gameobjects which contain playable characters
     public int currentLevelSelection = 0;
     public AudioSource[] UIBeeps;               //Beeps for ButtonFeedBack
     public bool pressedDpad = false;            //prevend fast menu scrolling
     public bool pressedButton = false;          //prefend fast menu selection
     public bool[] playerActive;                 //0 = Player1, ...
+    public int[] playerChosenCharacter;         //index of playableCharacter, playerChosenCharacter[0]=2 means player 1 has chosen character 3
     Vector2[] playerDpad;
     bool[] pressedPlayerDpad;
     bool pressedArrow = false;
+    public bool charSelection = true;
     int MAXPLAYER = 4;
     int playerCount = 1; //player 1 is always avtive at the start
 
@@ -27,18 +30,22 @@ public class Menu : MonoBehaviour
         int[] campaignCollectedMuffins = new int[Level.Length]; //creating an array with the same size as the Levelarray, to avoid nullpointers in forloop
         int[] loadedCampaignCollectedMuffins = PlayerPrefsX.GetIntArray("collectedMuffins"); //
 
+        playerChosenCharacter = new int[4];
+        if(PlayerPrefsX.GetIntArray("playerChosenCharacter").Length > 0)
+        playerChosenCharacter = PlayerPrefsX.GetIntArray("playerChosenCharacter");
+
         //get all saved stats, everything else will be 0 so the levelstats can get initialized below
-        for(int i = 0; i < loadedCampaignCollectedMuffins.Length; i++)
+        for (int i = 0; i < loadedCampaignCollectedMuffins.Length; i++)
         {
-            campaignCollectedMuffins[i] = loadedCampaignCollectedMuffins[i];
+            campaignCollectedMuffins [i] = loadedCampaignCollectedMuffins [i];
         }
 
         Debug.Log("Level: " + Level.Length + "campaignCollectedMuffins: " + campaignCollectedMuffins.Length);
 
         //initiliazing levelstats
-        for(int i = 0; i < Level.Length; i++)
+        for (int i = 0; i < Level.Length; i++)
         {
-            Level[i].GetComponent<LevelStats>().collectedMuffins = campaignCollectedMuffins[i];
+            Level [i].GetComponent<LevelStats>().collectedMuffins = campaignCollectedMuffins [i];
         }
 
         pressedPlayerDpad = new bool[4];
@@ -63,6 +70,7 @@ public class Menu : MonoBehaviour
     //Everything for the menu navigation
     void MenuNavigation()
     {
+        //############################ Activating Players ############################
         GamepadInput.GamePad.Index[] gamePadIndex;
         gamePadIndex = new GamepadInput.GamePad.Index[4];
         gamePadIndex [0] = GamePad.Index.One;
@@ -99,21 +107,19 @@ public class Menu : MonoBehaviour
             }
         }
             
-        //Keyboard
+        //############################ Keyboard ############################
         if ((Input.GetKey(KeyCode.A)) && !playerActive [0])
         {
             playerCount++;
             playerActive [0] = true;
             UIBeepSounds();
         }
-
         if ((Input.GetKey(KeyCode.B)) && playerActive [0])
         {
             playerCount--;
             playerActive [0] = false;
             UIBeepSounds();
         }
-
         if ((Input.GetKey(KeyCode.X)) && playerActive [0])
         {
             UIBeepSounds();
@@ -121,47 +127,91 @@ public class Menu : MonoBehaviour
         }
                
             
-        //PlayerAny          
-        Vector2 playerAnyDpad = GamePad.GetAxis(GamePad.Axis.Dpad, GamePad.Index.Any);
-            
-        //################################Navigate down the MainMenu################################
-        if ((playerAnyDpad.y < 0f) && !pressedDpad) //&& currentMenu==1 ?
-        {                              
-            IterateThroughLevels_Forward(); 
-                
-            Debug.Log("Searching: " + currentLevelSelection);
-                
-            Dpad();
-        }
-            
-        //Navigate up the MainMenu
-        if ((playerAnyDpad.y > 0f) && !pressedDpad)
-        {        
-            IterateThroughLevels_Backward();                        
-                
-            Dpad();
-        }
-            
-        if ((playerAnyDpad.y == 0f) && pressedDpad)
+        if (charSelection)
         {
-            pressedDpad = false;
-        }
+            for (int i = 0; i < MAXPLAYER; i++)
+            {
+                playerDpad [i] = GamePad.GetAxis(GamePad.Axis.Dpad, gamePadIndex [i]);
+
+                if(playerActive [i] && !pressedPlayerDpad [i])
+                {
+                    pressedPlayerDpad [i] = true;
+                    UIBeepSounds();
+                    if ((GamePad.GetAxis(GamePad.Axis.Dpad, gamePadIndex [i]).y < 0f))
+                    {
+                        if(playerChosenCharacter[i] < playableCharacters.Length-1)
+                            playerChosenCharacter[i]++;
+                        else
+                            playerChosenCharacter[i]=0; 
+                    }
+                    if ((GamePad.GetAxis(GamePad.Axis.Dpad, gamePadIndex [i]).y > 0f))
+                    {
+                        if(playerChosenCharacter[i] > 0 )
+                            playerChosenCharacter[i]--;
+                        else
+                            playerChosenCharacter[i]=playableCharacters.Length-1;
+                    }
+                }
+                
+                if (playerDpad [i].y == 0f)
+                {
+                    pressedPlayerDpad [i] = false;
+                }
+
+                if ((GamePad.GetButton(GamePad.Button.A, gamePadIndex [i])) && playerActive [i])
+                {
+                    charSelection=false;
+                    UIBeepSounds();
+                }
+            }
+        } else
+        {
+            //################################Navigate down the MainMenu################################       
+            Vector2 playerAnyDpad = GamePad.GetAxis(GamePad.Axis.Dpad, GamePad.Index.Any);
             
-        //################################Keyboardsupport################################
-        if (Input.GetKey(KeyCode.DownArrow) && !pressedArrow)
-        {                
-            IterateThroughLevels_Backward();
-            Dpad();
-        }
-        
-        //Keyboardsupport
-        //Navigate up the MainMenu
-        if (Input.GetKey(KeyCode.UpArrow) && !pressedArrow) //&& currentMenu==1 ?
-        {       
-            IterateThroughLevels_Forward();                
-            Dpad();
-        }            
+            if ((playerAnyDpad.y < 0f) && !pressedDpad) //&& currentMenu==1 ?
+            {                              
+                IterateThroughLevels_Forward(); 
+                
+                Debug.Log("Searching: " + currentLevelSelection);
+                
+                Dpad();
+            }            
+            //Navigate up the MainMenu
+            if ((playerAnyDpad.y > 0f) && !pressedDpad)
+            {        
+                IterateThroughLevels_Backward();                        
+                
+                Dpad();
+            }
             
+            if ((playerAnyDpad.y == 0f) && pressedDpad)
+            {
+                pressedDpad = false;
+            }
+
+            if (GamePad.GetButton(GamePad.Button.Y, GamePad.Index.Any))
+            {
+                charSelection=true;
+                UIBeepSounds();
+            }
+
+            //################################Keyboardsupport################################
+            if (Input.GetKey(KeyCode.DownArrow) && !pressedArrow)
+            {                
+                IterateThroughLevels_Backward();
+                Dpad();
+            }
+            //Navigate up the MainMenu
+            if (Input.GetKey(KeyCode.UpArrow) && !pressedArrow) //&& currentMenu==1 ?
+            {       
+                IterateThroughLevels_Forward();                
+                Dpad();
+            }
+            
+            
+        }
+
         //Keyboardsupport
         if (Input.GetKeyUp(KeyCode.DownArrow) || Input.GetKeyUp(KeyCode.UpArrow))
         {
@@ -177,7 +227,7 @@ public class Menu : MonoBehaviour
 
     void IterateThroughLevels_Backward()
     {        
-        Level[currentLevelSelection].GetComponent<LevelStats>().currentlySelected = false;
+        Level [currentLevelSelection].GetComponent<LevelStats>().currentlySelected = false;
         
         if (currentLevelSelection < Level.Length - 1)
             currentLevelSelection++;
@@ -185,12 +235,12 @@ public class Menu : MonoBehaviour
             currentLevelSelection = 0;
         //Debug.Log("Searching: " + currentMissionSelection);
         
-        Level[currentLevelSelection].GetComponent<LevelStats>().currentlySelected = true;
+        Level [currentLevelSelection].GetComponent<LevelStats>().currentlySelected = true;
     }
 
     void IterateThroughLevels_Forward()
     {        
-        Level[currentLevelSelection].GetComponent<LevelStats>().currentlySelected = false;
+        Level [currentLevelSelection].GetComponent<LevelStats>().currentlySelected = false;
         
         if (currentLevelSelection < Level.Length - 1)
             currentLevelSelection++;
@@ -198,7 +248,7 @@ public class Menu : MonoBehaviour
             currentLevelSelection = 0;
         //Debug.Log("Searching: " + currentMissionSelection);
 
-        Level[currentLevelSelection].GetComponent<LevelStats>().currentlySelected = true;
+        Level [currentLevelSelection].GetComponent<LevelStats>().currentlySelected = true;
     }
         
     // Update is called once per frame
