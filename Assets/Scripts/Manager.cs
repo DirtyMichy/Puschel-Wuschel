@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using GamepadInput;
 
 public class Manager : MonoBehaviour {
 
@@ -35,7 +36,7 @@ public class Manager : MonoBehaviour {
             StartCoroutine(RespawnPlayers());
         }
 
-        if (Input.GetKeyDown(KeyCode.Escape)) 
+        if (Input.GetKeyDown(KeyCode.Escape) || GamePad.GetButton(GamePad.Button.A, GamePad.Index.Any)) 
         {
             SceneManager.LoadScene("Menu");
         }
