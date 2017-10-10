@@ -10,7 +10,7 @@ public class Menu : MonoBehaviour
     //public int[] campaignCollectedMuffins;      //campaignCollectedMuffins[0] =0; 0= E1M1 0= not finished, 1= finished, 2= everythingFound
     public GameObject playerCountText;
     public GameObject[] Level;
-    public GameObject[] playableCharacters;     //Array of gameobjects which contain playable characters
+    public bool[] unlockedCharacters;           //Array of gameobjects which contain playable characters
     public int currentLevelSelection = 0;
     public AudioSource[] UIBeeps;               //Beeps for ButtonFeedBack
     public bool pressedDpad = false;            //prevend fast menu scrolling
@@ -18,7 +18,7 @@ public class Menu : MonoBehaviour
     public bool[] playerActive;                 //0 = Player1, ...
     public int[] playerChosenCharacter;         //index of playableCharacter, playerChosenCharacter[0]=2 means player 1 has chosen character 3
     Vector2[] playerDpad;
-    bool[] pressedPlayerDpad;
+    public bool[] pressedPlayerDpad;
     bool pressedArrow = false;
     public bool charSelection = true;
     int MAXPLAYER = 4;
@@ -135,17 +135,19 @@ public class Menu : MonoBehaviour
 
                 if(playerActive [i] && !pressedPlayerDpad [i])
                 {
-                    pressedPlayerDpad [i] = true;
-                    UIBeepSounds();
                     if ((GamePad.GetAxis(GamePad.Axis.Dpad, gamePadIndex [i]).y < 0f))
                     {
-                        if(playerChosenCharacter[i] < playableCharacters.Length-1)
+                        pressedPlayerDpad [i] = true;
+                        UIBeepSounds();
+                        if(playerChosenCharacter[i] < playableCharacters.Length-1)      //WIRD AUSGELAGERT IN CHARPREVIEWER; DORT GIBTS EIN DYNAMISCHES ARRAY MIT ALLEN FREIGESCHALTETEN CHARS DURCH DAS MAN ITERIERT
                             playerChosenCharacter[i]++;
                         else
                             playerChosenCharacter[i]=0; 
                     }
                     if ((GamePad.GetAxis(GamePad.Axis.Dpad, gamePadIndex [i]).y > 0f))
                     {
+                        pressedPlayerDpad [i] = true;
+                        UIBeepSounds();
                         if(playerChosenCharacter[i] > 0 )
                             playerChosenCharacter[i]--;
                         else
