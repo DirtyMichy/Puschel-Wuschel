@@ -105,6 +105,7 @@ public class Menu : MonoBehaviour
             {
                 pressedPlayerDpad [i] = false;
             }
+            PlayerPrefs.SetInt("playerCount", playerCount);
         }
             
         //############################ Keyboard ############################
@@ -139,7 +140,7 @@ public class Menu : MonoBehaviour
                     {
                         pressedPlayerDpad [i] = true;
                         UIBeepSounds();
-                        if(playerChosenCharacter[i] < playableCharacters.Length-1)      //WIRD AUSGELAGERT IN CHARPREVIEWER; DORT GIBTS EIN DYNAMISCHES ARRAY MIT ALLEN FREIGESCHALTETEN CHARS DURCH DAS MAN ITERIERT
+                        if(playerChosenCharacter[i] < 3)      //WIRD AUSGELAGERT IN CHARPREVIEWER; DORT GIBTS EIN DYNAMISCHES ARRAY MIT ALLEN FREIGESCHALTETEN CHARS DURCH DAS MAN ITERIERT
                             playerChosenCharacter[i]++;
                         else
                             playerChosenCharacter[i]=0; 
@@ -151,7 +152,7 @@ public class Menu : MonoBehaviour
                         if(playerChosenCharacter[i] > 0 )
                             playerChosenCharacter[i]--;
                         else
-                            playerChosenCharacter[i]=playableCharacters.Length-1;
+                            playerChosenCharacter[i]=3;
                     }
                 }
                 
