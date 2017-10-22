@@ -15,7 +15,6 @@ public class Enemy : MonoBehaviour
         origin = transform;
         web.gameObject.transform.parent = null;
         iTween.MoveAdd(gameObject, iTween.Hash("y", rangeY, "easeType", "easeInOutExpo", "loopType", "pingPong", "time", speed, "delay", delay));
-        StartCoroutine(WebScaler());
     }
 
     void OnTriggerEnter2D(Collider2D c)
@@ -24,13 +23,5 @@ public class Enemy : MonoBehaviour
         {
             Destroy(c.transform.root.gameObject);
         }        
-    }
-
-    IEnumerator WebScaler()
-    {
-        for(int i = 0)
-        {
-
-        }
     }
 }
