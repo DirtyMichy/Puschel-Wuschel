@@ -13,7 +13,7 @@ public class LevelStats : MonoBehaviour
 
     void Awake ()
     {
-        if(muffinText.GetComponent<Text>())
+        if(muffinText)
         muffinText.GetComponent<Text>().text = collectedMuffins + "/" + MAXMUFFINS;
     }
 

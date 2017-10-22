@@ -19,6 +19,8 @@ public class Manager : MonoBehaviour {
     void Awake () 
     {
         playerCount = PlayerPrefs.GetInt("playerCount");
+        playerChosenCharacter = new int[playerCount];
+
         for (int playerID = 0; playerID < playerCount; playerID++)
         {
             //playerID = 0,playableCharacters[playerChosenCharacter[2]] means player 1 gets character 3
