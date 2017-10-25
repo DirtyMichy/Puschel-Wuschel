@@ -12,10 +12,13 @@ public class Enemy : MonoBehaviour
     
     void Awake()
     {
-        origin = transform;
-        web.gameObject.transform.parent = null;
-        iTween.MoveAdd(gameObject, iTween.Hash("y", rangeY, "easeType", "easeInOutExpo", "loopType", "pingPong", "time", speed, "delay", delay));
-        iTween.ScaleAdd(web, iTween.Hash("y", 80, "easeType", "easeInOutExpo", "loopType", "pingPong", "time", speed, "delay", delay));
+        if(web)
+        {
+            origin = transform;
+            web.gameObject.transform.parent = null;
+            iTween.MoveAdd(gameObject, iTween.Hash("y", rangeY, "easeType", "easeInOutExpo", "loopType", "pingPong", "time", speed, "delay", delay));
+            iTween.ScaleAdd(web, iTween.Hash("y", 80, "easeType", "easeInOutExpo", "loopType", "pingPong", "time", speed, "delay", delay));
+        }
     }
 
     void OnTriggerEnter2D(Collider2D c)

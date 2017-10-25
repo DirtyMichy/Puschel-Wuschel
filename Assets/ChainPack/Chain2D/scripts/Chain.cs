@@ -737,7 +737,7 @@ public class Chain : MonoBehaviour
             p = links[i];
 
             //удалить второй HingeJoint2D, если он есть
-            if (p.hingleJoint_2 != null) DestroyImmediate(p.hingleJoint_2);
+            //if (p.hingleJoint_2 != null) DestroyImmediate(p.hingleJoint_2);
 
             // обновить hindleJoints привязать к пред.звену
             if (i > 0)
