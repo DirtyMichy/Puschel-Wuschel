@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class Enemy : MonoBehaviour 
 {
@@ -17,10 +18,10 @@ public class Enemy : MonoBehaviour
             origin = transform;
             web.gameObject.transform.parent = null;
             iTween.MoveAdd(gameObject, iTween.Hash("y", rangeY, "easeType", "easeInOutExpo", "loopType", "pingPong", "time", speed, "delay", delay));
-            iTween.ScaleAdd(web, iTween.Hash("y", 80, "easeType", "easeInOutExpo", "loopType", "pingPong", "time", speed, "delay", delay));
+            iTween.ScaleAdd(web, iTween.Hash("y", 45*Math.Abs(rangeY), "easeType", "easeInOutExpo", "loopType", "pingPong", "time", speed, "delay", delay));
         }
     }
-
+    /*
     void OnTriggerEnter2D(Collider2D c)
     {
         if (c.tag == "Player")
@@ -28,4 +29,5 @@ public class Enemy : MonoBehaviour
             Destroy(c.transform.root.gameObject);
         }        
     }
+    */
 }

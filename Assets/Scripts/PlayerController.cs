@@ -7,6 +7,7 @@ public class PlayerController : MonoBehaviour
 {
 	public bool facingRight = true;
 	public bool jump = true;
+    private bool alive = true;
 
 	public float moveForce = 365f;
 	public float maxSpeed = 5f;
@@ -53,6 +54,7 @@ public class PlayerController : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
     {
+
         for(int i = 0; i < groundCheck.Length; i++)
         {
             if (Physics2D.Linecast(transform.position, groundCheck[i].position, 1 << LayerMask.NameToLayer("Ground")))
@@ -67,7 +69,7 @@ public class PlayerController : MonoBehaviour
         }
 
 		//if (Input.GetButton ("Jump") && grounded)
-        if ((((Input.GetKeyDown(KeyCode.Space) || Input.GetKey(KeyCode.W)) &&  playerID == 0) || GamePad.GetButton(GamePad.Button.A, gamePadIndex[playerID])) && grounded)
+        if ((((Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.W)) &&  playerID == 0) || GamePad.GetButton(GamePad.Button.A, gamePadIndex[playerID])) && alive && grounded)
         {
 			jump = true;
             GetComponent<AudioSource>().Play();
@@ -125,6 +127,7 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (alive){
 		//h = Input.GetAxis ("Horizontal");
 
         Vector2 directionCurrent = GamePad.GetAxis(GamePad.Axis.LeftStick, gamePadIndex[playerID]);
@@ -160,6 +163,8 @@ public class PlayerController : MonoBehaviour
 		}else{
 			anim.SetBool ("isWalking", false);
 		}
+
+        }
 	}
 
 	void Flip()
@@ -177,6 +182,33 @@ public class PlayerController : MonoBehaviour
             Physics2D.IgnoreCollision(GetComponent<Collider2D>(), collision.gameObject.GetComponent<Collider2D>());
         }
     }
+
+    void OnTriggerEnter2D(Collider2D c)
+    {
+        if (alive && c.tag == "Enemy")
+        {
+            alive = false;
+            StartCoroutine(Die());
+        }        
+    }
+
+    public IEnumerator Die()
+    {
+        AudioSource[] sounds = GetComponents<AudioSource>();
+        sounds[1].Play();
+        SpriteRenderer[] childComps = GetComponentsInChildren<SpriteRenderer>();        
+        for(int i = 255; i > 0; i-=4)
+        {
+            for(int j = 0; j < childComps.Length; j++)
+            {
+                childComps[j].GetComponent<SpriteRenderer>().color = new Color(1f,0f,0f,i/255f); 
+            }
+            yield return new WaitForSeconds(.0001f);
+        }
+        yield return new WaitForSeconds(1.2f);
+        Destroy(gameObject);
+    }
+
     /*
     public IEnumerator BalloonFly()
     {

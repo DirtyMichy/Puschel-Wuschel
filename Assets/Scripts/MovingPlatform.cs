@@ -18,7 +18,7 @@ public class MovingPlatform : MonoBehaviour {
     // Update is called once per frame
     void Update ()
     {
-        if(!doesFall)
+        if(!doesFall && speed != 0 )
         iTween.MoveBy(gameObject, iTween.Hash("y", rangeY, "x", rangeX, "loopType", "pingPong", "easeType", "easeInOutExpo", "speed", speed));
     }
 
@@ -40,8 +40,8 @@ public class MovingPlatform : MonoBehaviour {
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-
-        if (collision.gameObject.tag == "Player" && doesFall)
+        if (collision.gameObject.tag == "Player")
+        if (doesFall)
         {
             StartCoroutine(ColliderCooldown());
             iTween.PunchPosition(gameObject, iTween.Hash("y", rangeY, "easeType", "easeInOutExpo", "time", speed, "delay", delay));
