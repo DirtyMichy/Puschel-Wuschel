@@ -10,11 +10,13 @@ public class Menu : MonoBehaviour
     //public int[] campaignCollectedMuffins;      //campaignCollectedMuffins[0] =0; 0= E1M1 0= not finished, 1= finished, 2= everythingFound
     public GameObject playerCountText;
     public GameObject[] Level;
-    public bool[] unlockedCharacters;           //Array of gameobjects which contain playable characters
+    public GameObject[] charPreviewers;
+    public GameObject[] allCharacters;            //contains all playable characters
+    //public bool[] unlockedCharacters;           //Array of gameobjects which contain playable characters
     public int currentLevelSelection = 0;
     public AudioSource[] UIBeeps;               //Beeps for ButtonFeedBack
     public bool pressedDpad = false;            //prevend fast menu scrolling
-    public bool pressedButton = false;          //prefend fast menu selection
+    public bool pressedButton = false;          //prevend fast menu selection
     public bool[] playerActive;                 //0 = Player1, ...
     public int[] playerChosenCharacter;         //index of playableCharacter, playerChosenCharacter[0]=2 means player 1 has chosen character 3
     Vector2[] playerDpad;
@@ -22,17 +24,61 @@ public class Menu : MonoBehaviour
     bool pressedArrow = false;
     public bool charSelection = true;
     int MAXPLAYER = 4;
-    int playerCount = 1; //player 1 is always avtive at the start
+    public int playerCount = 1; //player 1 is always avtive at the start
+    public bool[] isUnlocked;
+    GameObject[] levelUI, charUI;
+
+    void toggleLevelUI()
+    {
+        for (int i = 0; i < levelUI.Length; i++)
+        {
+            levelUI [i].SetActive(!charSelection);
+        }
+        for (int i = 0; i < charUI.Length; i++)
+        {
+            charUI [i].SetActive(charSelection);
+        }
+        charSelection = !levelUI [0].activeSelf;
+    }
 
     // Use this for initialization
     void Awake()
-    {
+    {        
+        levelUI = GameObject.FindGameObjectsWithTag("LevelUI");
+        charUI = GameObject.FindGameObjectsWithTag("CharUI");
+
+        if(PlayerPrefsX.GetBoolArray("unlockedCharacters").Length > 0)
+            isUnlocked = PlayerPrefsX.GetBoolArray("unlockedCharacters");
+        else
+        {
+            isUnlocked = new bool[allCharacters.Length];
+            for(int i = 0; i < allCharacters.Length; i++)
+                isUnlocked[i]=true;
+        }
+
+        for(int i = 0; i < MAXPLAYER; i++)
+        {
+            for(int j = 0; j < allCharacters.Length; j++)
+            {
+                if(isUnlocked[j])
+                {
+                    GameObject spawnedChar = Instantiate(allCharacters[j]);
+                    Destroy(spawnedChar.GetComponent<Rigidbody2D>());
+                    Destroy(spawnedChar.GetComponent<PlayerController>());
+                    spawnedChar.transform.position = charPreviewers[i].transform.position;
+                    spawnedChar.transform.parent = charPreviewers[i].transform;
+                    spawnedChar.SetActive(false);
+                }
+            }
+        }
+
+        toggleLevelUI();
         int[] campaignCollectedMuffins = new int[Level.Length]; //creating an array with the same size as the Levelarray, to avoid nullpointers in forloop
         int[] loadedCampaignCollectedMuffins = PlayerPrefsX.GetIntArray("collectedMuffins"); //
 
         playerChosenCharacter = new int[4];
-        if(PlayerPrefsX.GetIntArray("playerChosenCharacter").Length > 0)
-        playerChosenCharacter = PlayerPrefsX.GetIntArray("playerChosenCharacter");
+        if (PlayerPrefsX.GetIntArray("playerChosenCharacter").Length > 0)
+            playerChosenCharacter = PlayerPrefsX.GetIntArray("playerChosenCharacter");
 
         //get all saved stats, everything else will be 0 so the levelstats can get initialized below
         for (int i = 0; i < loadedCampaignCollectedMuffins.Length; i++)
@@ -62,9 +108,20 @@ public class Menu : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Alpha1))
             Startlevel();
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+            Startlevel();
 
         MenuNavigation();
         playerCountText.GetComponent<Text>().text = playerCount + "/4 Spielern";
+
+        for(int i = 0; i < charPreviewers.Length; i++)
+        {
+            Vector2 min = Camera.main.ViewportToWorldPoint(new Vector2(0, 0));
+            Vector2 max = Camera.main.ViewportToWorldPoint(new Vector2(1, 1));
+            Vector3 pos = new Vector3(0f,0f,0f);
+            pos.x = min.x + ((max.x*2)/(playerCount+1))+((max.x*2)/(playerCount+1)*i);
+            charPreviewers[i].transform.position = pos;
+        }
     }
 
     //Everything for the menu navigation
@@ -96,7 +153,7 @@ public class Menu : MonoBehaviour
                 UIBeepSounds();
             }   
 
-            if ((GamePad.GetButton(GamePad.Button.X, gamePadIndex [i])) && !playerActive [i])
+            if ((GamePad.GetButton(GamePad.Button.X, gamePadIndex [i])) && playerActive [i])
             {
                 Startlevel();
             }
@@ -132,28 +189,32 @@ public class Menu : MonoBehaviour
         {
             for (int i = 0; i < MAXPLAYER; i++)
             {
+                charPreviewers[i].SetActive(playerActive [i]);
+
                 playerDpad [i] = GamePad.GetAxis(GamePad.Axis.Dpad, gamePadIndex [i]);
 
-                if(playerActive [i] && !pressedPlayerDpad [i])
+                if (playerActive [i] && !pressedPlayerDpad [i])
                 {
                     if ((GamePad.GetAxis(GamePad.Axis.Dpad, gamePadIndex [i]).y < 0f))
                     {
                         pressedPlayerDpad [i] = true;
                         UIBeepSounds();
-                        if(playerChosenCharacter[i] < 3)      //WIRD AUSGELAGERT IN CHARPREVIEWER; DORT GIBTS EIN DYNAMISCHES ARRAY MIT ALLEN FREIGESCHALTETEN CHARS DURCH DAS MAN ITERIERT
-                            playerChosenCharacter[i]++;
+                        if (playerChosenCharacter [i] < 2)      //WIRD AUSGELAGERT IN CHARPREVIEWER; DORT GIBTS EIN DYNAMISCHES ARRAY MIT ALLEN FREIGESCHALTETEN CHARS DURCH DAS MAN ITERIERT
+                            playerChosenCharacter [i]++;
                         else
-                            playerChosenCharacter[i]=0; 
+                            playerChosenCharacter [i] = 0; 
                     }
                     if ((GamePad.GetAxis(GamePad.Axis.Dpad, gamePadIndex [i]).y > 0f))
                     {
                         pressedPlayerDpad [i] = true;
                         UIBeepSounds();
-                        if(playerChosenCharacter[i] > 0 )
-                            playerChosenCharacter[i]--;
+                        if (playerChosenCharacter [i] > 0)
+                            playerChosenCharacter [i]--;
                         else
-                            playerChosenCharacter[i]=3;
+                            playerChosenCharacter [i] = 2;
                     }
+
+                    charPreviewers[i].GetComponent<CharPreviewer>().SelectChar(playerChosenCharacter[i]);
                 }
                 
                 if (playerDpad [i].y == 0f)
@@ -163,10 +224,12 @@ public class Menu : MonoBehaviour
 
                 if ((GamePad.GetButton(GamePad.Button.A, gamePadIndex [i])) && playerActive [i])
                 {
-                    charSelection=false;
+                    charSelection = false;
                     UIBeepSounds();
+                    toggleLevelUI();
                 }
             }
+            PlayerPrefsX.SetIntArray("playerChosenCharacter", playerChosenCharacter);
         } else
         {
             //################################Navigate down the MainMenu################################       
@@ -195,8 +258,9 @@ public class Menu : MonoBehaviour
 
             if (GamePad.GetButton(GamePad.Button.Y, GamePad.Index.Any))
             {
-                charSelection=true;
+                charSelection = true;
                 UIBeepSounds();
+                toggleLevelUI();
             }
 
             //################################Keyboardsupport################################

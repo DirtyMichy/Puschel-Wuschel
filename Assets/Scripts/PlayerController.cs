@@ -127,7 +127,8 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (alive){
+        if (alive)
+        {
 		//h = Input.GetAxis ("Horizontal");
 
         Vector2 directionCurrent = GamePad.GetAxis(GamePad.Axis.LeftStick, gamePadIndex[playerID]);

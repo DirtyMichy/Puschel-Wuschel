@@ -19,7 +19,7 @@ public class Manager : MonoBehaviour {
     void Awake () 
     {
         playerCount = PlayerPrefs.GetInt("playerCount");
-        playerChosenCharacter = new int[playerCount];
+        playerChosenCharacter = PlayerPrefsX.GetIntArray("playerChosenCharacter");
 
         for (int playerID = 0; playerID < playerCount; playerID++)
         {
