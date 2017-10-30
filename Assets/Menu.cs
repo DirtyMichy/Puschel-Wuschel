@@ -18,6 +18,7 @@ public class Menu : MonoBehaviour
     public bool pressedDpad = false;            //prevend fast menu scrolling
     public bool pressedButton = false;          //prevend fast menu selection
     public bool[] playerActive;                 //0 = Player1, ...
+    public bool[] playerRDY;
     public int[] playerChosenCharacter;         //index of playableCharacter, playerChosenCharacter[0]=2 means player 1 has chosen character 3
     Vector2[] playerDpad;
     public bool[] pressedPlayerDpad;
@@ -47,26 +48,26 @@ public class Menu : MonoBehaviour
         levelUI = GameObject.FindGameObjectsWithTag("LevelUI");
         charUI = GameObject.FindGameObjectsWithTag("CharUI");
 
-        if(PlayerPrefsX.GetBoolArray("unlockedCharacters").Length > 0)
+        if (PlayerPrefsX.GetBoolArray("unlockedCharacters").Length > 0)
             isUnlocked = PlayerPrefsX.GetBoolArray("unlockedCharacters");
         else
         {
             isUnlocked = new bool[allCharacters.Length];
-            for(int i = 0; i < allCharacters.Length; i++)
-                isUnlocked[i]=true;
+            for (int i = 0; i < allCharacters.Length; i++)
+                isUnlocked [i] = true;
         }
 
-        for(int i = 0; i < MAXPLAYER; i++)
+        for (int i = 0; i < MAXPLAYER; i++)
         {
-            for(int j = 0; j < allCharacters.Length; j++)
+            for (int j = 0; j < allCharacters.Length; j++)
             {
-                if(isUnlocked[j])
+                if (isUnlocked [j])
                 {
-                    GameObject spawnedChar = Instantiate(allCharacters[j]);
+                    GameObject spawnedChar = Instantiate(allCharacters [j]);
                     Destroy(spawnedChar.GetComponent<Rigidbody2D>());
                     Destroy(spawnedChar.GetComponent<PlayerController>());
-                    spawnedChar.transform.position = charPreviewers[i].transform.position;
-                    spawnedChar.transform.parent = charPreviewers[i].transform;
+                    spawnedChar.transform.position = charPreviewers [i].transform.position;
+                    spawnedChar.transform.parent = charPreviewers [i].transform;
                     spawnedChar.SetActive(false);
                 }
             }
@@ -76,26 +77,38 @@ public class Menu : MonoBehaviour
         int[] campaignCollectedMuffins = new int[Level.Length]; //creating an array with the same size as the Levelarray, to avoid nullpointers in forloop
         int[] loadedCampaignCollectedMuffins = PlayerPrefsX.GetIntArray("collectedMuffins"); //
 
-        playerChosenCharacter = new int[4];
+        playerRDY = new bool[MAXPLAYER];
+        playerActive = new bool[MAXPLAYER];
+        playerChosenCharacter = new int[MAXPLAYER];
+
+        //Player 1 (int i = 0) is always active and is choosing a character which means he isnt ready at the start
+        for (int i = 1; i < playerRDY.Length; i++)
+            playerRDY [i] = true;
+        if (playerActive.Length > 0)
+            playerActive [0] = true;
+
         if (PlayerPrefsX.GetIntArray("playerChosenCharacter").Length > 0)
             playerChosenCharacter = PlayerPrefsX.GetIntArray("playerChosenCharacter");
 
         //get all saved stats, everything else will be 0 so the levelstats can get initialized below
+        campaignCollectedMuffins = loadedCampaignCollectedMuffins;
+        /*
         for (int i = 0; i < loadedCampaignCollectedMuffins.Length; i++)
         {
             campaignCollectedMuffins [i] = loadedCampaignCollectedMuffins [i];
         }
-
+*/
         Debug.Log("Level: " + Level.Length + "campaignCollectedMuffins: " + campaignCollectedMuffins.Length);
 
         //initiliazing levelstats
+        if( campaignCollectedMuffins.Length > 0)
         for (int i = 0; i < Level.Length; i++)
         {
             Level [i].GetComponent<LevelStats>().collectedMuffins = campaignCollectedMuffins [i];
         }
 
-        pressedPlayerDpad = new bool[4];
-        playerDpad = new Vector2[4];
+        pressedPlayerDpad = new bool[MAXPLAYER];
+        playerDpad = new Vector2[MAXPLAYER];
         UIBeeps = GetComponents<AudioSource>();
     }
 
@@ -113,15 +126,15 @@ public class Menu : MonoBehaviour
 
         MenuNavigation();
         playerCountText.GetComponent<Text>().text = playerCount + "/4 Spielern";
-
-        for(int i = 0; i < charPreviewers.Length; i++)
-        {
-            Vector2 min = Camera.main.ViewportToWorldPoint(new Vector2(0, 0));
-            Vector2 max = Camera.main.ViewportToWorldPoint(new Vector2(1, 1));
-            Vector3 pos = new Vector3(0f,0f,0f);
-            pos.x = min.x + ((max.x*2)/(playerCount+1))+((max.x*2)/(playerCount+1)*i);
-            charPreviewers[i].transform.position = pos;
-        }
+        if (playerCount > 0)
+            for (int i = 0; i < charPreviewers.Length; i++)
+            {
+                Vector2 min = Camera.main.ViewportToWorldPoint(new Vector2(0, 0));
+                Vector2 max = Camera.main.ViewportToWorldPoint(new Vector2(1, 1));
+                Vector3 pos = new Vector3(0f, 0f, 0f);
+                pos.x = min.x + ((max.x * 2) / (playerCount + 1)) + ((max.x * 2) / (playerCount + 1) * i);
+                charPreviewers [i].transform.position = pos;
+            }
     }
 
     //Everything for the menu navigation
@@ -137,25 +150,38 @@ public class Menu : MonoBehaviour
             
         for (int i = 0; i < MAXPLAYER; i++)
         {
-            playerDpad [i] = GamePad.GetAxis(GamePad.Axis.Dpad, gamePadIndex [i]);
-                
+            playerDpad [i] = GamePad.GetAxis(GamePad.Axis.Dpad, gamePadIndex [i]);      
+
             if ((GamePad.GetButton(GamePad.Button.A, gamePadIndex [i])) && !playerActive [i])
             {
-                playerCount++;
-                playerActive [i] = true;
                 UIBeepSounds();
+                if (charSelection)
+                {                    
+                    if (!playerActive [i])
+                    {
+                        playerCount++;
+                        playerActive [i] = true;
+                    }                    
+                }
             }
 
             if ((GamePad.GetButton(GamePad.Button.B, gamePadIndex [i])) && playerActive [i])
             {
-                playerCount--;
-                playerActive [i] = false;
                 UIBeepSounds();
+                if (charSelection)
+                {                    
+                    if (playerActive [i] && !playerRDY [i])
+                    {
+                        playerCount--;
+                        playerActive [i] = false;
+                    }
+                }
             }   
 
             if ((GamePad.GetButton(GamePad.Button.X, gamePadIndex [i])) && playerActive [i])
             {
-                Startlevel();
+                if (!charSelection)           
+                    Startlevel();
             }
             
             if (playerDpad [i].y == 0f)
@@ -164,34 +190,47 @@ public class Menu : MonoBehaviour
             }
             PlayerPrefs.SetInt("playerCount", playerCount);
         }
-            
-        //############################ Keyboard ############################
-        if ((Input.GetKey(KeyCode.A)) && !playerActive [0])
-        {
-            playerCount++;
-            playerActive [0] = true;
-            UIBeepSounds();
-        }
-        if ((Input.GetKey(KeyCode.B)) && playerActive [0])
-        {
-            playerCount--;
-            playerActive [0] = false;
-            UIBeepSounds();
-        }
-        if ((Input.GetKey(KeyCode.X)) && playerActive [0])
-        {
-            UIBeepSounds();
-            Startlevel();
-        }
-               
-            
+
+        //Iterate through cars or levels
+
+        //Iterate through characters
         if (charSelection)
         {
             for (int i = 0; i < MAXPLAYER; i++)
             {
-                charPreviewers[i].SetActive(playerActive [i]);
+                charPreviewers [i].SetActive(playerActive [i]);
 
                 playerDpad [i] = GamePad.GetAxis(GamePad.Axis.Dpad, gamePadIndex [i]);
+                
+                if ((GamePad.GetButton(GamePad.Button.A, gamePadIndex [i])) && playerActive [i])
+                {
+                    if (playerRDY [0] && playerRDY [1] && playerRDY [2] && playerRDY [3] && playerCount > 0)
+                    {
+                        charSelection = false;
+                        UIBeepSounds();
+                        toggleLevelUI();
+                    }
+                }
+
+                if ((GamePad.GetButton(GamePad.Button.A, gamePadIndex [i])) && playerActive [i])
+                {
+                    UIBeepSounds();
+                  
+                    if (!playerActive [i])
+                        playerRDY [i] = false;
+                    if (playerActive [i] && !playerRDY [i])
+                        playerRDY [i] = true;  
+                }
+                
+                if ((GamePad.GetButton(GamePad.Button.B, gamePadIndex [i])) && playerActive [i])
+                {
+                    UIBeepSounds();
+                       
+                    if (playerActive [i] && !playerRDY [i])
+                        playerRDY [i] = true;
+                    if (playerActive [i])
+                        playerRDY [i] = false; 
+                }
 
                 if (playerActive [i] && !pressedPlayerDpad [i])
                 {
@@ -199,7 +238,7 @@ public class Menu : MonoBehaviour
                     {
                         pressedPlayerDpad [i] = true;
                         UIBeepSounds();
-                        if (playerChosenCharacter [i] < 2)      //WIRD AUSGELAGERT IN CHARPREVIEWER; DORT GIBTS EIN DYNAMISCHES ARRAY MIT ALLEN FREIGESCHALTETEN CHARS DURCH DAS MAN ITERIERT
+                        if (playerChosenCharacter [i] < 2)
                             playerChosenCharacter [i]++;
                         else
                             playerChosenCharacter [i] = 0; 
@@ -214,25 +253,19 @@ public class Menu : MonoBehaviour
                             playerChosenCharacter [i] = 2;
                     }
 
-                    charPreviewers[i].GetComponent<CharPreviewer>().SelectChar(playerChosenCharacter[i]);
+                    charPreviewers [i].GetComponent<CharPreviewer>().SelectChar(playerChosenCharacter [i]);
                 }
                 
                 if (playerDpad [i].y == 0f)
                 {
                     pressedPlayerDpad [i] = false;
                 }
-
-                if ((GamePad.GetButton(GamePad.Button.A, gamePadIndex [i])) && playerActive [i])
-                {
-                    charSelection = false;
-                    UIBeepSounds();
-                    toggleLevelUI();
-                }
             }
             PlayerPrefsX.SetIntArray("playerChosenCharacter", playerChosenCharacter);
         } else
         {
-            //################################Navigate down the MainMenu################################       
+            //Iterate through levels because charselection is false
+
             Vector2 playerAnyDpad = GamePad.GetAxis(GamePad.Axis.Dpad, GamePad.Index.Any);
             
             if ((playerAnyDpad.y < 0f) && !pressedDpad) //&& currentMenu==1 ?
@@ -262,33 +295,6 @@ public class Menu : MonoBehaviour
                 UIBeepSounds();
                 toggleLevelUI();
             }
-
-            //################################Keyboardsupport################################
-            if (Input.GetKey(KeyCode.DownArrow) && !pressedArrow)
-            {                
-                IterateThroughLevels_Backward();
-                Dpad();
-            }
-            //Navigate up the MainMenu
-            if (Input.GetKey(KeyCode.UpArrow) && !pressedArrow) //&& currentMenu==1 ?
-            {       
-                IterateThroughLevels_Forward();                
-                Dpad();
-            }
-            
-            
-        }
-
-        //Keyboardsupport
-        if (Input.GetKeyUp(KeyCode.DownArrow) || Input.GetKeyUp(KeyCode.UpArrow))
-        {
-            pressedArrow = false;
-        }   
-            
-        //Setting to false after Button pressed to prefend fast menu scrolling
-        if (GamePad.GetButtonUp(GamePad.Button.A, GamePad.Index.Any) || GamePad.GetButtonUp(GamePad.Button.Y, GamePad.Index.Any) || Input.GetKeyUp(KeyCode.A) || Input.GetKeyUp(KeyCode.Y))
-        {
-            pressedButton = false;
         }
     }
 
