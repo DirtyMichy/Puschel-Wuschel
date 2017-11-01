@@ -36,7 +36,7 @@ public class PlayerController : MonoBehaviour
             cam = Camera.main;
     }
 
-	// Use this for initialization
+    // Use this for initialization
 	void Start ()
     {
         cam = Camera.main;
@@ -105,7 +105,6 @@ public class PlayerController : MonoBehaviour
         {
             GetComponent<Rigidbody2D>().angularVelocity = 640f*-transform.localScale.x ;
         }
-
     }
 
     IEnumerator powerUp()
@@ -133,11 +132,11 @@ public class PlayerController : MonoBehaviour
 
         Vector2 directionCurrent = GamePad.GetAxis(GamePad.Axis.LeftStick, gamePadIndex[playerID]);
 
-        if (Input.GetKey(KeyCode.A) && playerID == 0)
+            if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow) && playerID == 0)
             directionCurrent.x = -1f;
-        if (Input.GetKey(KeyCode.D) && playerID == 0)
+            if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow) && playerID == 0)
             directionCurrent.x = 1f;
-        
+
         //		anim.SetFloat("Speed", Mathf.Abs(h));
         //Debug.Log(directionCurrent.x);
         if (directionCurrent.x * rb2d.velocity.x < maxSpeed)

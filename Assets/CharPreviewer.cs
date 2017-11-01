@@ -10,14 +10,16 @@ public class CharPreviewer : MonoBehaviour {
     //public List<GameObject> unlockedCharacters = new List<GameObject>(); 
 	
     public void SelectChar(int selection)
-    {   
+    {  
         if(transform.childCount > 0)
         {
-        for(int i = 0; i < transform.childCount; i++)
-        {
-            transform.GetChild(i).gameObject.SetActive(false);
-        }
-            transform.GetChild(selection).gameObject.SetActive(true);
+            for(int i = 0; i < transform.childCount; i++)
+            {
+                if(i != selection)
+                    transform.GetChild(i).gameObject.SetActive(false);
+                else
+                    transform.GetChild(selection).gameObject.SetActive(true);
+            }
         }
     }
 }

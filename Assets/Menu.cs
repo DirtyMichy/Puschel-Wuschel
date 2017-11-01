@@ -28,6 +28,7 @@ public class Menu : MonoBehaviour
     public int playerCount = 1; //player 1 is always avtive at the start
     public bool[] isUnlocked;
     GameObject[] levelUI, charUI;
+    public GameObject Arrow;
 
     void toggleLevelUI()
     {
@@ -44,10 +45,10 @@ public class Menu : MonoBehaviour
 
     // Use this for initialization
     void Awake()
-    {        
+    { 
         levelUI = GameObject.FindGameObjectsWithTag("LevelUI");
         charUI = GameObject.FindGameObjectsWithTag("CharUI");
-
+        
         if (PlayerPrefsX.GetBoolArray("unlockedCharacters").Length > 0)
             isUnlocked = PlayerPrefsX.GetBoolArray("unlockedCharacters");
         else
@@ -69,6 +70,23 @@ public class Menu : MonoBehaviour
                     spawnedChar.transform.position = charPreviewers [i].transform.position;
                     spawnedChar.transform.parent = charPreviewers [i].transform;
                     spawnedChar.SetActive(false);
+
+                    //DownArrow
+                    GameObject temp = (GameObject)Instantiate(Arrow);
+                    Vector3 pos = temp.transform.position;
+                    pos.y-=1;
+                    temp.transform.position = pos;
+                    temp.gameObject.transform.parent = spawnedChar.gameObject.transform;
+                    
+                    //UpArrow
+                    temp = (GameObject)Instantiate(Arrow);
+                    pos.y+=2;
+                    temp.transform.position = pos;
+                    temp.GetComponent<MovingPlatform>().rangeY = 1;
+                    Vector3 scale = temp.transform.localScale;
+                    scale.y*=-1;
+                    temp.transform.localScale = scale;
+                    temp.gameObject.transform.parent = spawnedChar.gameObject.transform;
                 }
             }
         }
@@ -126,15 +144,6 @@ public class Menu : MonoBehaviour
 
         MenuNavigation();
         playerCountText.GetComponent<Text>().text = playerCount + "/4 Spielern";
-        if (playerCount > 0)
-            for (int i = 0; i < charPreviewers.Length; i++)
-            {
-                Vector2 min = Camera.main.ViewportToWorldPoint(new Vector2(0, 0));
-                Vector2 max = Camera.main.ViewportToWorldPoint(new Vector2(1, 1));
-                Vector3 pos = new Vector3(0f, 0f, 0f);
-                pos.x = min.x + ((max.x * 2) / (playerCount + 1)) + ((max.x * 2) / (playerCount + 1) * i);
-                charPreviewers [i].transform.position = pos;
-            }
     }
 
     //Everything for the menu navigation
@@ -178,16 +187,47 @@ public class Menu : MonoBehaviour
                 }
             }   
 
-            if ((GamePad.GetButton(GamePad.Button.X, gamePadIndex [i])) && playerActive [i])
-            {
-                if (!charSelection)           
-                    Startlevel();
-            }
+
             
             if (playerDpad [i].y == 0f)
             {
                 pressedPlayerDpad [i] = false;
             }
+
+            //###################### KeyBoardSupport for player 1 ######################
+
+            if ((Input.GetKeyDown(KeyCode.A)) && !playerActive [0])
+            {
+                UIBeepSounds();
+                if (charSelection)
+                {                    
+                    if (!playerActive [i])
+                    {
+                        playerCount++;
+                        playerActive [i] = true;
+                    }                    
+                }
+            }
+            
+            if ((Input.GetKeyDown(KeyCode.B)) && !playerActive [0])
+            {
+                UIBeepSounds();
+                if (charSelection)
+                {                    
+                    if (playerActive [i] && !playerRDY [i])
+                    {
+                        playerCount--;
+                        playerActive [i] = false;
+                    }
+                }
+            }   
+            
+            if ((Input.GetKeyDown(KeyCode.X)) && !playerActive [0])
+            {
+                if (!charSelection)           
+                    Startlevel();
+            }
+
             PlayerPrefs.SetInt("playerCount", playerCount);
         }
 
@@ -260,9 +300,61 @@ public class Menu : MonoBehaviour
                 {
                     pressedPlayerDpad [i] = false;
                 }
+                
+                //###################### KeyBoardSupport for player 1 ######################
+
+                if ((Input.GetKeyDown(KeyCode.A)) && playerActive [0])
+                {
+                    if (playerRDY [0] && playerRDY [1] && playerRDY [2] && playerRDY [3] && playerCount > 0)
+                    {
+                        charSelection = false;
+                        UIBeepSounds();
+                        toggleLevelUI();
+                    }
+                }
+
+                if ((Input.GetKeyDown(KeyCode.A)) && playerActive [0])
+                {
+                    UIBeepSounds();
+                  
+                    if (!playerActive [0])
+                        playerRDY [0] = false;
+                    if (playerActive [0] && !playerRDY [0])
+                        playerRDY [0] = true;  
+                }
+                
+                if ((Input.GetKeyDown(KeyCode.B)) && playerActive [0])
+                {
+                    UIBeepSounds();
+                       
+                    if (playerActive [0] && !playerRDY [0])
+                        playerRDY [0] = true;
+                    if (playerActive [0])
+                        playerRDY [0] = false; 
+                }
+
+                if (Input.GetKeyUp(KeyCode.UpArrow) && !pressedArrow)
+                {
+                    pressedArrow = true;
+                    UIBeepSounds();
+                    if (playerChosenCharacter [0] < allCharacters.Length-1)
+                        playerChosenCharacter [0]++;
+                    else
+                        playerChosenCharacter [0] = 0; 
+                }
+                if (Input.GetKeyUp(KeyCode.DownArrow) && !pressedArrow)
+                {
+                    pressedArrow = true;
+                    UIBeepSounds();
+                    if (playerChosenCharacter [0] > 0)
+                        playerChosenCharacter [0]--;
+                    else
+                        playerChosenCharacter [0] = allCharacters.Length-1;
+                }
             }
             PlayerPrefsX.SetIntArray("playerChosenCharacter", playerChosenCharacter);
-        } else
+        } 
+        else
         {
             //Iterate through levels because charselection is false
 
@@ -295,6 +387,57 @@ public class Menu : MonoBehaviour
                 UIBeepSounds();
                 toggleLevelUI();
             }
+            
+            //###################### KeyBoardSupport for player 1 ######################
+            
+            if ((Input.GetKeyDown(KeyCode.A)) && playerActive [0])
+            {           
+                    Startlevel();
+            }
+
+            if ((Input.GetKeyUp(KeyCode.DownArrow) && !pressedArrow))
+            {                              
+                IterateThroughLevels_Forward(); 
+                
+                Debug.Log("Searching: " + currentLevelSelection);
+                
+                Dpad();
+            }            
+            //Navigate up the MainMenu
+            if ((Input.GetKeyUp(KeyCode.UpArrow)) && !pressedArrow)
+            {        
+                IterateThroughLevels_Backward();                        
+                
+                Dpad();
+            }
+
+
+            if (Input.GetKeyUp(KeyCode.Y))
+            {
+                charSelection = true;
+                UIBeepSounds();
+                toggleLevelUI();
+            }
+        }
+
+        //###################### KeyBoardSupport for player 1 ######################
+
+        if (Input.GetKeyUp(KeyCode.DownArrow) || Input.GetKeyUp(KeyCode.UpArrow))
+        {
+            pressedArrow = false;
+        }
+    }
+
+    void CharPreviewers()
+    {        
+        if (playerCount > 0)
+            for (int i = 0; i < charPreviewers.Length; i++)
+        {
+            Vector2 min = Camera.main.ViewportToWorldPoint(new Vector2(0, 0));
+            Vector2 max = Camera.main.ViewportToWorldPoint(new Vector2(1, 1));
+            Vector3 pos = new Vector3(0f, 0f, 0f);
+            pos.x = min.x + ((max.x * 2) / (playerCount + 1)) + ((max.x * 2) / (playerCount + 1) * i);
+            charPreviewers [i].transform.position = pos;
         }
     }
 
@@ -341,6 +484,7 @@ public class Menu : MonoBehaviour
         {
             currentLevelSelection = Level.Length - 1;         //if so set the number to the last index
         }
-        UIBeepSounds();       
+        UIBeepSounds();  
+        CharPreviewers();
     }
 }

@@ -30,4 +30,27 @@ public class Exit : MonoBehaviour
             SceneManager.LoadScene("Menu");
         }
     }
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.O) && !exited)
+        {
+            exited = true;
+            
+            if(PlayerPrefsX.GetIntArray("collectedMuffins").Length > 0)
+                campaignCollectedMuffins = PlayerPrefsX.GetIntArray("collectedMuffins");
+            else
+            {
+                campaignCollectedMuffins = new int[SceneManager.sceneCountInBuildSettings];
+            }
+            
+            int sceneNameAsInt = int.Parse(SceneManager.GetActiveScene().name);
+            
+            campaignCollectedMuffins[sceneNameAsInt]=Camera.main.GetComponent<Manager>().collectedMuffins;
+            PlayerPrefsX.SetIntArray("collectedMuffins", campaignCollectedMuffins);
+            
+            PlayerPrefs.Save();
+            SceneManager.LoadScene("Menu");
+        }  
+    }
 }
