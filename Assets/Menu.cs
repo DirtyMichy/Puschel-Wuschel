@@ -8,7 +8,7 @@ using UnityEngine.UI;
 public class Menu : MonoBehaviour
 {
     //public int[] campaignCollectedMuffins;      //campaignCollectedMuffins[0] =0; 0= E1M1 0= not finished, 1= finished, 2= everythingFound
-    public GameObject playerCountText;
+    public GameObject playerCountText, backGround;
     public GameObject[] Level;
     public GameObject[] charPreviewers;
     public GameObject[] allCharacters;            //contains all playable characters
@@ -29,6 +29,7 @@ public class Menu : MonoBehaviour
     public bool[] isUnlocked;
     GameObject[] levelUI, charUI;
     public GameObject Arrow;
+    public Sprite menuCharSelection, menuLevelSelection;
 
     void toggleLevelUI()
     {
@@ -41,6 +42,10 @@ public class Menu : MonoBehaviour
             charUI [i].SetActive(charSelection);
         }
         charSelection = !levelUI [0].activeSelf;
+        if(charSelection)
+            backGround.GetComponent<SpriteRenderer>().sprite = menuCharSelection;
+        else
+            backGround.GetComponent<SpriteRenderer>().sprite = menuLevelSelection;
     }
 
     // Use this for initialization
