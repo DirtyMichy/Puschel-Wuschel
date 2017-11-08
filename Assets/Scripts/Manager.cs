@@ -81,13 +81,39 @@ public class Manager : MonoBehaviour {
                     leftestPos = playerCharactersAlive[i].transform.position.x;
                 }
             }
+            
+            float distance = (Mathf.Abs(leftestPos) + Mathf.Abs(rightestPos));
+            float x = Mathf.Abs(rightestPos)-(Mathf.Abs(rightestPos)- Mathf.Abs(leftestPos))/2;
+
+            if(distance > 15f )
+            {
+                Debug.Log("Distance: " + distance);
+                
+                Camera.main.orthographicSize=distance/3f;
+
+                Vector3 pos = new Vector3(x, (Camera.main.orthographicSize-5f), -10f);
+
+                Camera.main.transform.position = pos;
+                
+                Vector3 scale = new Vector3(distance/15f , distance/15f, 1f);
+
+                Camera.main.transform.localScale = scale;
+            }
+            else
+            {                
+                Camera.main.transform.localScale = new Vector3(1f,1f,1f);
+                
+                Camera.main.orthographicSize=5f;
+
+                Camera.main.transform.position = new Vector3(x, 0f, -10f);
+            }
 
         }
         //Debug.Log("Right: " + rightestPos + "Left: " + leftestPos);
-        float x = rightestPos-(rightestPos- leftestPos)/2;
+        //float x = rightestPos-(rightestPos- leftestPos)/2;
 
-        if(!GameOver)
-        Camera.main.transform.position = new Vector3(x, 0f, -10f);
+        //if(!GameOver)
+        //Camera.main.transform.position = new Vector3(x, 0f, -10f);
 
         //Debug.Log(SceneManager.GetActiveScene().name);
     }
@@ -111,6 +137,14 @@ public class Manager : MonoBehaviour {
     public void setCheckPoint(GameObject cp)
     {
         currentCheckPoint=cp;
+        for (int playerID = 0; playerID < playerCount; playerID++)
+        {
+            if(!playerCharactersAlive[playerID])
+            {
+                GameObject temp = (GameObject)Instantiate(playableCharacters[playerChosenCharacter[playerID]], playableCharacters[playerChosenCharacter[playerID]].transform.position = currentCheckPoint.transform.position, playableCharacters[playerChosenCharacter[playerID]].transform.rotation);
+                temp.SendMessage("SetPlayerID", playerID);
+            }
+        }
     }
 
     int CountPlayersAlive()

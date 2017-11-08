@@ -96,11 +96,12 @@ public class PlayerController : MonoBehaviour
                 leader = i;
             }
         }
+        /*
         if ((players[leader].transform.position.x - transform.position.x) >= 14)
         {
             transform.position = players[leader].transform.position;
         }
-
+*/
         if(powerUpActivated)
         {
             GetComponent<Rigidbody2D>().angularVelocity = 640f*-transform.localScale.x ;

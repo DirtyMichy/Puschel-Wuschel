@@ -200,7 +200,7 @@ public class Menu : MonoBehaviour
         
         //###################### KeyBoardSupport for player 1 ######################
         
-        if ((Input.GetKeyDown(KeyCode.A)) && !playerActive [0])
+        if ((Input.GetKeyDown(KeyCode.A)) && playerActive [0])
         {
             UIBeepSounds();
             
@@ -211,7 +211,7 @@ public class Menu : MonoBehaviour
             }  
         }
         
-        if ((Input.GetKeyDown(KeyCode.B)) && !playerActive [0])
+        if ((Input.GetKeyDown(KeyCode.B)) && playerActive [0])
         {
             UIBeepSounds();
             if (charSelection)
@@ -224,7 +224,7 @@ public class Menu : MonoBehaviour
             }
         }   
         
-        if ((Input.GetKeyDown(KeyCode.X)) && !playerActive [0])
+        if ((Input.GetKeyDown(KeyCode.X)) && playerActive [0])
         {
             if (!charSelection)           
                 Startlevel();
