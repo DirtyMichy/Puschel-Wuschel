@@ -62,59 +62,68 @@ public class Manager : MonoBehaviour {
         players[leadingPlayer].GetComponent<PlayerController>().isLeader = true;
         */
 
-        float leftestPos = 0;
-        float rightestPos = 0;
-
-        for (int i = 0; i < playerCharactersAlive.Length; i++)
+        //if the distance between the leftest and the rightest player gets greater than 15, the camera starts to zoom out
+        if(playerCount > 1)
         {
-            if (playerCharactersAlive[i] != null)
+            float leftestPos = 0;
+            float rightestPos = 0;
+
+            for (int i = 0; i < playerCharactersAlive.Length; i++)
             {
-                if (playerCharactersAlive[i].transform.position.x > rightestPos && playerCharactersAlive[i].transform.position.x > 0)
+                if (playerCharactersAlive[i] != null)
                 {
-                    rightestPos = playerCharactersAlive[i].transform.position.x;
-                }
+                    if (playerCharactersAlive[i].transform.position.x > rightestPos && playerCharactersAlive[i].transform.position.x > 0)
+                    {
+                        rightestPos = playerCharactersAlive[i].transform.position.x;
+                    }
 
-                leftestPos = rightestPos;
+                    leftestPos = rightestPos;
 
-                if (playerCharactersAlive[i].transform.position.x < leftestPos && playerCharactersAlive[i].transform.position.x > 0)
-                {
-                    leftestPos = playerCharactersAlive[i].transform.position.x;
+                    if (playerCharactersAlive[i].transform.position.x < leftestPos && playerCharactersAlive[i].transform.position.x > 0)
+                    {
+                        leftestPos = playerCharactersAlive[i].transform.position.x;
+                    }
                 }
             }
+        
+        
+        float distance = (Mathf.Abs(leftestPos) + Mathf.Abs(rightestPos));
+        float x = Mathf.Abs(rightestPos)-(Mathf.Abs(rightestPos)- Mathf.Abs(leftestPos))/2;
+        
+        if(distance > 15f )
+        {
+            Debug.Log("Distance: " + distance + "Left: " + Mathf.Abs(leftestPos) + "Right: " + Mathf.Abs(rightestPos));
             
-            float distance = (Mathf.Abs(leftestPos) + Mathf.Abs(rightestPos));
-            float x = Mathf.Abs(rightestPos)-(Mathf.Abs(rightestPos)- Mathf.Abs(leftestPos))/2;
-
-            if(distance > 15f )
-            {
-                Debug.Log("Distance: " + distance);
-                
-                Camera.main.orthographicSize=distance/3f;
-
-                Vector3 pos = new Vector3(x, (Camera.main.orthographicSize-5f), -10f);
-
-                Camera.main.transform.position = pos;
-                
-                Vector3 scale = new Vector3(distance/15f , distance/15f, 1f);
-
-                Camera.main.transform.localScale = scale;
-            }
-            else
-            {                
-                Camera.main.transform.localScale = new Vector3(1f,1f,1f);
-                
-                Camera.main.orthographicSize=5f;
-
-                Camera.main.transform.position = new Vector3(x, 0f, -10f);
-            }
-
+            Camera.main.orthographicSize=distance/3f;
+            
+            Vector3 pos = new Vector3(x, (Camera.main.orthographicSize-5f), -10f);
+            
+            Camera.main.transform.position = pos;
+            
+            Vector3 scale = new Vector3(distance/15f , distance/15f, 1f);
+            
+            Camera.main.transform.localScale = scale;
+        }
+        else
+        {                
+            Camera.main.transform.localScale = new Vector3(1f,1f,1f);
+            
+            Camera.main.orthographicSize=5f;
+            
+            Camera.main.transform.position = new Vector3(x, 0f, -10f);
         }
         //Debug.Log("Right: " + rightestPos + "Left: " + leftestPos);
         //float x = rightestPos-(rightestPos- leftestPos)/2;
-
+        
         //if(!GameOver)
         //Camera.main.transform.position = new Vector3(x, 0f, -10f);
-
+        }
+        else
+        {
+            if(playerCharactersAlive[0])
+                if(playerCharactersAlive[0].transform.position.x > 0f)
+                Camera.main.transform.position = new Vector3(playerCharactersAlive[0].transform.position.x,0f,-10f);
+        }
         //Debug.Log(SceneManager.GetActiveScene().name);
     }
 
