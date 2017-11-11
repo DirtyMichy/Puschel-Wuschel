@@ -41,7 +41,9 @@ public class Menu : MonoBehaviour
         {
             charUI [i].SetActive(charSelection);
         }
+
         charSelection = !levelUI [0].activeSelf;
+
         if (charSelection)
             backGround.GetComponent<SpriteRenderer>().sprite = menuCharSelection;
         else
@@ -223,13 +225,6 @@ public class Menu : MonoBehaviour
                 }
             }
         }   
-        
-        if ((Input.GetKeyDown(KeyCode.X)) && playerActive [0])
-        {
-            if (!charSelection)           
-                Startlevel();
-        }
-
         //Iterate through cars or levels
 
         //Iterate through characters
@@ -384,6 +379,11 @@ public class Menu : MonoBehaviour
                 pressedDpad = false;
             }
 
+            if (GamePad.GetButton(GamePad.Button.A, GamePad.Index.Any))
+            {
+                Startlevel(); 
+            }
+
             if (GamePad.GetButton(GamePad.Button.Y, GamePad.Index.Any))
             {
                 charSelection = true;
@@ -393,7 +393,7 @@ public class Menu : MonoBehaviour
             
             //###################### KeyBoardSupport for player 1 ######################
             
-            if ((Input.GetKeyDown(KeyCode.A)) && playerActive [0])
+            if ((Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.Return)) && playerActive [0])
             {           
                 Startlevel();
             }

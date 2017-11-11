@@ -71,9 +71,10 @@ public class PlayerController : MonoBehaviour
 		//if (Input.GetButton ("Jump") && grounded)
         if ((((Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.W)) &&  playerID == 0) || GamePad.GetButton(GamePad.Button.A, gamePadIndex[playerID])) && alive && grounded)
         {
+            Debug.Log(rb2d.velocity.y);
 			jump = true;
             GetComponent<AudioSource>().Play();
-		}
+        }
 
         grounded = false;
         /*
@@ -82,9 +83,9 @@ public class PlayerController : MonoBehaviour
             float x = transform.position.x;
             cam.transform.position = new Vector3(x,0f,-10f);
 		}
-        */
+        //old cam Control
         GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
-        
+
         float rightestPos = 0;
         int leader = 0;
 
@@ -96,7 +97,7 @@ public class PlayerController : MonoBehaviour
                 leader = i;
             }
         }
-        /*
+
         if ((players[leader].transform.position.x - transform.position.x) >= 14)
         {
             transform.position = players[leader].transform.position;
@@ -133,9 +134,9 @@ public class PlayerController : MonoBehaviour
 
         Vector2 directionCurrent = GamePad.GetAxis(GamePad.Axis.LeftStick, gamePadIndex[playerID]);
 
-            if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow) && playerID == 0)
+            if ((Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow)) && playerID == 0)
             directionCurrent.x = -1f;
-            if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow) && playerID == 0)
+            if ((Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow)) && playerID == 0)
             directionCurrent.x = 1f;
 
         //		anim.SetFloat("Speed", Mathf.Abs(h));
@@ -156,6 +157,7 @@ public class PlayerController : MonoBehaviour
 		{
 //			anim.SetTrigger("Jump");
             rb2d.AddForce(new Vector2(0f, jumpForce*GetComponent<Rigidbody2D>().mass));
+                rb2d.velocity = new Vector2 (0f, 0f);;
 			jump = false;
 		}
 
@@ -186,7 +188,7 @@ public class PlayerController : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D c)
     {
-        if (alive && c.tag == "Enemy")
+        if (alive && ((c.tag == "Enemy" && !powerUpActivated) ||  alive && c.tag == "KillZone"))
         {
             alive = false;
             StartCoroutine(Die());

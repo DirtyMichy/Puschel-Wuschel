@@ -4,7 +4,8 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using GamepadInput;
 
-public class Manager : MonoBehaviour {
+public class Manager : MonoBehaviour
+{
 
     private bool GameOver = false;
     public GameObject[] playableCharacters;     //Array of gameobjects which contain playable characters
@@ -13,10 +14,10 @@ public class Manager : MonoBehaviour {
     public int playerCount = 1;                 //total number of players
     public int collectedMuffins = 0;
     public GameObject currentCheckPoint;        //current checkpoint at which players can respawn
+    public float zoomStart = 15f;
 
-
-	// Use this for initialization
-    void Awake () 
+    // Use this for initialization
+    void Awake()
     {
         playerCount = PlayerPrefs.GetInt("playerCount");
         playerChosenCharacter = PlayerPrefsX.GetIntArray("playerChosenCharacter");
@@ -24,22 +25,22 @@ public class Manager : MonoBehaviour {
         for (int playerID = 0; playerID < playerCount; playerID++)
         {
             //playerID = 0,playableCharacters[playerChosenCharacter[2]] means player 1 gets character 3
-            GameObject temp = (GameObject)Instantiate(playableCharacters[playerChosenCharacter[playerID]], playableCharacters[playerChosenCharacter[playerID]].transform.position = currentCheckPoint.transform.position, playableCharacters[playerChosenCharacter[playerID]].transform.rotation);
+            GameObject temp = (GameObject)Instantiate(playableCharacters [playerChosenCharacter [playerID]], playableCharacters [playerChosenCharacter [playerID]].transform.position = currentCheckPoint.transform.position, playableCharacters [playerChosenCharacter [playerID]].transform.rotation);
             temp.SendMessage("SetPlayerID", playerID);
         }
         playerCharactersAlive = GameObject.FindGameObjectsWithTag("Player");
     }
-	
-	// Update is called once per frame
-	void Update ()
+    
+    // Update is called once per frame
+    void Update()
     {
-		if(CountPlayersAlive() <= 0 && !GameOver)
+        if (CountPlayersAlive() <= 0 && !GameOver)
         {
             GameOver = true;
             StartCoroutine(RespawnPlayers());
         }
 
-        if (Input.GetKeyDown(KeyCode.Escape) || GamePad.GetButton(GamePad.Button.Y, GamePad.Index.Any)) 
+        if (Input.GetKeyDown(KeyCode.Escape) || GamePad.GetButton(GamePad.Button.Y, GamePad.Index.Any))
         {
             SceneManager.LoadScene("Menu");
         }
@@ -63,66 +64,81 @@ public class Manager : MonoBehaviour {
         */
 
         //if the distance between the leftest and the rightest player gets greater than 15, the camera starts to zoom out
-        if(playerCount > 1)
+        if (CountPlayersAlive() > 1)
         {
             float leftestPos = 0;
             float rightestPos = 0;
 
             for (int i = 0; i < playerCharactersAlive.Length; i++)
             {
-                if (playerCharactersAlive[i] != null)
+                if (playerCharactersAlive [i] != null)
                 {
-                    if (playerCharactersAlive[i].transform.position.x > rightestPos && playerCharactersAlive[i].transform.position.x > 0)
+                    if (playerCharactersAlive [i].transform.position.x > rightestPos)
                     {
-                        rightestPos = playerCharactersAlive[i].transform.position.x;
+                        rightestPos = playerCharactersAlive [i].transform.position.x;
                     }
 
                     leftestPos = rightestPos;
 
-                    if (playerCharactersAlive[i].transform.position.x < leftestPos && playerCharactersAlive[i].transform.position.x > 0)
+                    if (playerCharactersAlive [i].transform.position.x < leftestPos)
                     {
-                        leftestPos = playerCharactersAlive[i].transform.position.x;
+                        leftestPos = playerCharactersAlive [i].transform.position.x;
                     }
                 }
             }
         
         
-        float distance = (Mathf.Abs(leftestPos) + Mathf.Abs(rightestPos));
-        float x = Mathf.Abs(rightestPos)-(Mathf.Abs(rightestPos)- Mathf.Abs(leftestPos))/2;
-        
-        if(distance > 15f )
-        {
+            float distance = Mathf.Abs(leftestPos - rightestPos);
+            float x = 0;
+
             Debug.Log("Distance: " + distance + "Left: " + Mathf.Abs(leftestPos) + "Right: " + Mathf.Abs(rightestPos));
+
+
+
+            if (distance > zoomStart)
+            {
+                Debug.Log("Scaling");
+
+                Camera.main.orthographicSize = distance / (zoomStart / 5f);
+                
+                x = rightestPos - distance / (zoomStart / 7.5f);
+
+                if (x > 0)
+                    Camera.main.transform.position = new Vector3(x, (Camera.main.orthographicSize - 5f), -10f);
+
+                Vector3 scale = new Vector3(distance / zoomStart, distance / zoomStart, 1f);
             
-            Camera.main.orthographicSize=distance/3f;
+                Camera.main.transform.localScale = scale;
+            } else
+            {                
+                Camera.main.transform.localScale = new Vector3(1f, 1f, 1f);
             
-            Vector3 pos = new Vector3(x, (Camera.main.orthographicSize-5f), -10f);
-            
-            Camera.main.transform.position = pos;
-            
-            Vector3 scale = new Vector3(distance/15f , distance/15f, 1f);
-            
-            Camera.main.transform.localScale = scale;
-        }
-        else
-        {                
-            Camera.main.transform.localScale = new Vector3(1f,1f,1f);
-            
-            Camera.main.orthographicSize=5f;
-            
-            Camera.main.transform.position = new Vector3(x, 0f, -10f);
-        }
-        //Debug.Log("Right: " + rightestPos + "Left: " + leftestPos);
-        //float x = rightestPos-(rightestPos- leftestPos)/2;
+                Camera.main.orthographicSize = 5f;
+
+                x = rightestPos - distance / (zoomStart / 7.5f);
+
+                if (x > 0)
+                    Camera.main.transform.position = new Vector3(x, 0f, -10f);
+                else
+                    Camera.main.transform.position = new Vector3(0f, 0f, -10f);
+            }
+            //Debug.Log("Right: " + rightestPos + "Left: " + leftestPos);
+            //float x = rightestPos-(rightestPos- leftestPos)/2;
         
-        //if(!GameOver)
-        //Camera.main.transform.position = new Vector3(x, 0f, -10f);
-        }
-        else
+            //if(!GameOver)
+            //Camera.main.transform.position = new Vector3(x, 0f, -10f);
+        } else
         {
-            if(playerCharactersAlive[0])
-                if(playerCharactersAlive[0].transform.position.x > 0f)
-                Camera.main.transform.position = new Vector3(playerCharactersAlive[0].transform.position.x,0f,-10f);
+            if (CountPlayersAlive() == 1)
+            if (playerCharactersAlive [0].transform.position.x > 0f)
+                Camera.main.transform.position = new Vector3(playerCharactersAlive [0].transform.position.x, 0f, -10f);
+            else
+                Camera.main.transform.position = new Vector3(0f, 0f, -10f);
+            else
+            if (currentCheckPoint.transform.position.x > 0f)
+                Camera.main.transform.position = new Vector3(currentCheckPoint.transform.position.x, 0f, -10f);
+            else
+                Camera.main.transform.position = new Vector3(0f, 0f, -10f);
         }
         //Debug.Log(SceneManager.GetActiveScene().name);
     }
@@ -136,7 +152,7 @@ public class Manager : MonoBehaviour {
         for (int playerID = 0; playerID < playerCount; playerID++)
         {
             //playerID = 0,playableCharacters[playerChosenCharacter[2]] means player 1 gets character 3
-            GameObject temp = (GameObject)Instantiate(playableCharacters[playerChosenCharacter[playerID]], playableCharacters[playerChosenCharacter[playerID]].transform.position = currentCheckPoint.transform.position, playableCharacters[playerChosenCharacter[playerID]].transform.rotation);
+            GameObject temp = (GameObject)Instantiate(playableCharacters [playerChosenCharacter [playerID]], playableCharacters [playerChosenCharacter [playerID]].transform.position = currentCheckPoint.transform.position, playableCharacters [playerChosenCharacter [playerID]].transform.rotation);
             temp.SendMessage("SetPlayerID", playerID);
         }
         playerCharactersAlive = GameObject.FindGameObjectsWithTag("Player");
@@ -145,12 +161,12 @@ public class Manager : MonoBehaviour {
 
     public void setCheckPoint(GameObject cp)
     {
-        currentCheckPoint=cp;
+        currentCheckPoint = cp;
         for (int playerID = 0; playerID < playerCount; playerID++)
         {
-            if(!playerCharactersAlive[playerID])
+            if (!playerCharactersAlive [playerID])
             {
-                GameObject temp = (GameObject)Instantiate(playableCharacters[playerChosenCharacter[playerID]], playableCharacters[playerChosenCharacter[playerID]].transform.position = currentCheckPoint.transform.position, playableCharacters[playerChosenCharacter[playerID]].transform.rotation);
+                GameObject temp = (GameObject)Instantiate(playableCharacters [playerChosenCharacter [playerID]], playableCharacters [playerChosenCharacter [playerID]].transform.position = currentCheckPoint.transform.position, playableCharacters [playerChosenCharacter [playerID]].transform.rotation);
                 temp.SendMessage("SetPlayerID", playerID);
             }
         }
