@@ -27,7 +27,10 @@ public class Exit : MonoBehaviour
             PlayerPrefsX.SetIntArray("collectedMuffins", campaignCollectedMuffins);
 
             PlayerPrefs.Save();
-            SceneManager.LoadScene("Menu");
+            if((sceneNameAsInt+1) < ((SceneManager.sceneCountInBuildSettings)-1))
+                SceneManager.LoadScene((sceneNameAsInt+1).ToString());
+            else                
+                SceneManager.LoadScene("Menu");
         }
     }
 

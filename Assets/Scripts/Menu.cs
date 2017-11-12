@@ -30,6 +30,7 @@ public class Menu : MonoBehaviour
     GameObject[] levelUI, charUI;
     public GameObject Arrow;
     public Sprite menuCharSelection, menuLevelSelection;
+    int showCharSelection = 1;
 
     void toggleLevelUI()
     {
@@ -53,6 +54,8 @@ public class Menu : MonoBehaviour
     // Use this for initialization
     void Awake()
     { 
+        showCharSelection = PlayerPrefs.GetInt("showCharSelection");
+
         levelUI = GameObject.FindGameObjectsWithTag("LevelUI");
         charUI = GameObject.FindGameObjectsWithTag("CharUI");
         
@@ -97,8 +100,8 @@ public class Menu : MonoBehaviour
                 }
             }
         }
-
         toggleLevelUI();
+
         int[] campaignCollectedMuffins = new int[Level.Length]; //creating an array with the same size as the Levelarray, to avoid nullpointers in forloop
         int[] loadedCampaignCollectedMuffins = PlayerPrefsX.GetIntArray("collectedMuffins"); //
 
@@ -135,6 +138,13 @@ public class Menu : MonoBehaviour
         pressedPlayerDpad = new bool[MAXPLAYER];
         playerDpad = new Vector2[MAXPLAYER];
         UIBeeps = GetComponents<AudioSource>();
+        
+        if(showCharSelection == 0)
+        {
+            charSelection = false;
+            toggleLevelUI();
+        }
+
     }
 
     void UIBeepSounds()
@@ -202,7 +212,7 @@ public class Menu : MonoBehaviour
         
         //###################### KeyBoardSupport for player 1 ######################
         
-        if ((Input.GetKeyDown(KeyCode.A)) && playerActive [0])
+        if ((Input.GetKeyDown(KeyCode.A) || (Input.GetKeyDown(KeyCode.Return))) && playerActive [0])
         {
             UIBeepSounds();
             
@@ -213,7 +223,7 @@ public class Menu : MonoBehaviour
             }  
         }
         
-        if ((Input.GetKeyDown(KeyCode.B)) && playerActive [0])
+        if ((Input.GetKeyDown(KeyCode.B) || (Input.GetKeyDown(KeyCode.Backspace))) && playerActive [0])
         {
             UIBeepSounds();
             if (charSelection)
@@ -225,7 +235,7 @@ public class Menu : MonoBehaviour
                 }
             }
         }   
-        //Iterate through cars or levels
+        //Iterate through chars or levels
 
         //Iterate through characters
         if (charSelection)
@@ -295,58 +305,68 @@ public class Menu : MonoBehaviour
                 {
                     pressedPlayerDpad [i] = false;
                 }
-                
-                //###################### KeyBoardSupport for player 1 ######################
 
-                if ((Input.GetKeyDown(KeyCode.A)) && playerActive [0])
+                if ((GamePad.GetButton(GamePad.Button.Y, gamePadIndex [i])) && playerActive [i])
                 {
-                    if (playerRDY [0] && playerRDY [1] && playerRDY [2] && playerRDY [3] && playerCount > 0)
-                    {
-                        charSelection = false;
-                        UIBeepSounds();
-                        toggleLevelUI();
-                    }
-                }
-
-                if ((Input.GetKeyDown(KeyCode.A)) && playerActive [0])
-                {
-                    UIBeepSounds();
-                  
-                    if (!playerActive [0])
-                        playerRDY [0] = false;
-                    if (playerActive [0] && !playerRDY [0])
-                        playerRDY [0] = true;  
-                }
-                
-                if ((Input.GetKeyDown(KeyCode.B)) && playerActive [0])
-                {
-                    UIBeepSounds();
-                       
-                    if (playerActive [0] && !playerRDY [0])
-                        playerRDY [0] = true;
-                    if (playerActive [0])
-                        playerRDY [0] = false; 
-                }
-
-                if (Input.GetKeyUp(KeyCode.UpArrow) && !pressedArrow)
-                {
-                    pressedArrow = true;
-                    UIBeepSounds();
-                    if (playerChosenCharacter [0] < allCharacters.Length - 1)
-                        playerChosenCharacter [0]++;
-                    else
-                        playerChosenCharacter [0] = 0; 
-                }
-                if (Input.GetKeyUp(KeyCode.DownArrow) && !pressedArrow)
-                {
-                    pressedArrow = true;
-                    UIBeepSounds();
-                    if (playerChosenCharacter [0] > 0)
-                        playerChosenCharacter [0]--;
-                    else
-                        playerChosenCharacter [0] = allCharacters.Length - 1;
+                    Application.Quit();
                 }
             }
+            //###################### KeyBoardSupport for player 1 ######################
+            
+            if ((Input.GetKeyDown(KeyCode.A)) && playerActive [0])
+            {
+                if (playerRDY [0] && playerRDY [1] && playerRDY [2] && playerRDY [3] && playerCount > 0)
+                {
+                    charSelection = false;
+                    UIBeepSounds();
+                    toggleLevelUI();
+                }
+            }
+            
+            if ((Input.GetKeyDown(KeyCode.A)) && playerActive [0])
+            {
+                UIBeepSounds();
+                
+                if (!playerActive [0])
+                    playerRDY [0] = false;
+                if (playerActive [0] && !playerRDY [0])
+                    playerRDY [0] = true;  
+            }
+            
+            if ((Input.GetKeyDown(KeyCode.B)) && playerActive [0])
+            {
+                UIBeepSounds();
+                
+                if (playerActive [0] && !playerRDY [0])
+                    playerRDY [0] = true;
+                if (playerActive [0])
+                    playerRDY [0] = false; 
+            }
+            
+            if ((Input.GetKeyDown(KeyCode.Y) || Input.GetKeyDown(KeyCode.Escape)) && playerActive [0])
+            {
+                Application.Quit();
+            }
+            
+            if (Input.GetKeyUp(KeyCode.UpArrow) && !pressedArrow)
+            {
+                pressedArrow = true;
+                UIBeepSounds();
+                if (playerChosenCharacter [0] < allCharacters.Length - 1)
+                    playerChosenCharacter [0]++;
+                else
+                    playerChosenCharacter [0] = 0; 
+            }
+            if (Input.GetKeyUp(KeyCode.DownArrow) && !pressedArrow)
+            {
+                pressedArrow = true;
+                UIBeepSounds();
+                if (playerChosenCharacter [0] > 0)
+                    playerChosenCharacter [0]--;
+                else
+                    playerChosenCharacter [0] = allCharacters.Length - 1;
+            }
+
             PlayerPrefsX.SetIntArray("playerChosenCharacter", playerChosenCharacter);
         } else
         {
@@ -379,7 +399,7 @@ public class Menu : MonoBehaviour
                 pressedDpad = false;
             }
 
-            if (GamePad.GetButton(GamePad.Button.A, GamePad.Index.Any))
+            if (GamePad.GetButtonDown(GamePad.Button.A, GamePad.Index.Any))
             {
                 Startlevel(); 
             }
@@ -414,8 +434,7 @@ public class Menu : MonoBehaviour
                 Dpad();
             }
 
-
-            if (Input.GetKeyUp(KeyCode.Y))
+            if (Input.GetKeyUp(KeyCode.Y) || Input.GetKeyDown(KeyCode.Escape))
             {
                 charSelection = true;
                 UIBeepSounds();
@@ -472,7 +491,9 @@ public class Menu : MonoBehaviour
         
     // Update is called once per frame
     public void Startlevel()
-    {
+    {        
+        PlayerPrefs.SetInt("showCharSelection", 0);
+        PlayerPrefs.Save();
         SceneManager.LoadScene(currentLevelSelection.ToString());
     }
         

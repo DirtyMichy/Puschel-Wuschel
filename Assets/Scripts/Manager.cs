@@ -40,7 +40,7 @@ public class Manager : MonoBehaviour
             StartCoroutine(RespawnPlayers());
         }
 
-        if (Input.GetKeyDown(KeyCode.Escape) || GamePad.GetButton(GamePad.Button.Y, GamePad.Index.Any))
+        if (Input.GetKeyDown(KeyCode.Escape) || GamePad.GetButton(GamePad.Button.Start, GamePad.Index.Any))
         {
             SceneManager.LoadScene("Menu");
         }
