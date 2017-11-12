@@ -32,16 +32,16 @@ public class Enemy : MonoBehaviour
 
     public IEnumerator Die()
     {
-        iTween.Stop();
         killable = false;
+        iTween.Stop(web);
         AudioSource[] sounds = GetComponents<AudioSource>();
-        sounds[0].Play();
-        SpriteRenderer spriteComp = GetComponent<SpriteRenderer>();        
-        for(int i = 255; i > 0; i-=4)
-        {
-            spriteComp.GetComponent<SpriteRenderer>().color = new Color(1f,0f,0f,i/255f);
-            yield return new WaitForSeconds(.0001f);
-        }
+        sounds[0].Play();   
+        gameObject.AddComponent<Rigidbody2D>();
+        gameObject.GetComponent<Rigidbody2D>().gravityScale = 0;
+        gameObject.GetComponent<Rigidbody2D>().AddForce(Vector2.right * 1000f);
+
+        yield return new WaitForSeconds(1f);
+        
         Destroy(gameObject);
     }
 }

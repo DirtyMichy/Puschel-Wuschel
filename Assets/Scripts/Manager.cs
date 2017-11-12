@@ -105,6 +105,8 @@ public class Manager : MonoBehaviour
 
                 if (x > 0)
                     Camera.main.transform.position = new Vector3(x, (Camera.main.orthographicSize - 5f), -10f);
+                else                    
+                    Camera.main.transform.position = new Vector3(0f, (Camera.main.orthographicSize - 5f), -10f);
 
                 Vector3 scale = new Vector3(distance / zoomStart, distance / zoomStart, 1f);
             

@@ -25,7 +25,7 @@ public class Collectible : MonoBehaviour {
             Camera.main.GetComponent<Manager>().collectedMuffins++;
             c.GetComponent<PlayerController>().powerUpCount++;
             if(c.GetComponent<PlayerController>().powerUpCount<10)
-                c.GetComponent<PlayerController>().Body.transform.localScale+=new Vector3(0.025f,0.075f,0f);
+                c.GetComponent<PlayerController>().Body.transform.localScale+=new Vector3(0.05f,0.15f,0f);
             GetComponent<AudioSource>().Play();
             StartCoroutine(Despawn());
         }
