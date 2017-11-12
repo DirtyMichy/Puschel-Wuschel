@@ -188,7 +188,7 @@ public class PlayerController : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D c)
     {
-        if (alive && ((c.tag == "Enemy" && !powerUpActivated) ||  alive && c.tag == "KillZone"))
+        if (alive && ((c.tag == "Enemy" && !powerUpActivated) || c.tag == "KillZone"))
         {
             alive = false;
             StartCoroutine(Die());

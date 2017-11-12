@@ -10,6 +10,6 @@ public class KillZone : MonoBehaviour {
             {
                 GetComponent<AudioSource>().Play();
                 Destroy(c.transform.root.gameObject);
-            }        
+            }
     }
 }
