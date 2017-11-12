@@ -69,7 +69,7 @@ public class PlayerController : MonoBehaviour
         }
 
 		//if (Input.GetButton ("Jump") && grounded)
-        if ((((Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.W)) &&  playerID == 0) || GamePad.GetButton(GamePad.Button.A, gamePadIndex[playerID])) && alive && grounded)
+        if ((((Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow)) &&  playerID == 0) || GamePad.GetButton(GamePad.Button.A, gamePadIndex[playerID])) && alive && grounded)
         {
             Debug.Log(rb2d.velocity.y);
 			jump = true;

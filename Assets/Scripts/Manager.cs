@@ -132,11 +132,13 @@ public class Manager : MonoBehaviour
         } else
         {
             if (CountPlayersAlive() == 1)
-            if (playerCharactersAlive [0].transform.position.x > 0f)
-                Camera.main.transform.position = new Vector3(playerCharactersAlive [0].transform.position.x, 0f, -10f);
-            else
-                Camera.main.transform.position = new Vector3(0f, 0f, -10f);
-            else
+            {
+                Camera.main.orthographicSize = 5f;
+                if (playerCharactersAlive [0].transform.position.x > 0f)
+                    Camera.main.transform.position = new Vector3(playerCharactersAlive [0].transform.position.x, 0f, -10f);
+                else
+                    Camera.main.transform.position = new Vector3(0f, 0f, -10f);
+            } else//zoom towards the last checkpoint if all players are dead
             if (currentCheckPoint.transform.position.x > 0f)
                 Camera.main.transform.position = new Vector3(currentCheckPoint.transform.position.x, 0f, -10f);
             else

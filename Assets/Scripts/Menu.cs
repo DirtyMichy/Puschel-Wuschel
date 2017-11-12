@@ -32,6 +32,7 @@ public class Menu : MonoBehaviour
     public Sprite menuCharSelection, menuLevelSelection;
     int showCharSelection = 1;
 
+    // Toggle between the char- and levelSelectionScreen
     void toggleLevelUI()
     {
         for (int i = 0; i < levelUI.Length; i++)
@@ -348,7 +349,7 @@ public class Menu : MonoBehaviour
                 Application.Quit();
             }
             
-            if (Input.GetKeyUp(KeyCode.UpArrow) && !pressedArrow)
+            if ((Input.GetKeyUp(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W))  && !pressedArrow)
             {
                 pressedArrow = true;
                 UIBeepSounds();
@@ -357,7 +358,7 @@ public class Menu : MonoBehaviour
                 else
                     playerChosenCharacter [0] = 0; 
             }
-            if (Input.GetKeyUp(KeyCode.DownArrow) && !pressedArrow)
+            if ((Input.GetKeyUp(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S))  && !pressedArrow)
             {
                 pressedArrow = true;
                 UIBeepSounds();
@@ -418,7 +419,7 @@ public class Menu : MonoBehaviour
                 Startlevel();
             }
 
-            if ((Input.GetKeyUp(KeyCode.DownArrow) && !pressedArrow))
+            if (((Input.GetKeyUp(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S)) && !pressedArrow))
             {                              
                 IterateThroughLevels_Forward(); 
                 
@@ -427,7 +428,7 @@ public class Menu : MonoBehaviour
                 Dpad();
             }            
             //Navigate up the MainMenu
-            if ((Input.GetKeyUp(KeyCode.UpArrow)) && !pressedArrow)
+            if (((Input.GetKeyUp(KeyCode.UpArrow)) || Input.GetKeyDown(KeyCode.W))  && !pressedArrow)
             {        
                 IterateThroughLevels_Backward();                        
                 
@@ -444,7 +445,7 @@ public class Menu : MonoBehaviour
 
         //###################### KeyBoardSupport for player 1 ######################
 
-        if (Input.GetKeyUp(KeyCode.DownArrow) || Input.GetKeyUp(KeyCode.UpArrow))
+        if (Input.GetKeyUp(KeyCode.DownArrow) || Input.GetKeyUp(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.S))
         {
             pressedArrow = false;
         }
