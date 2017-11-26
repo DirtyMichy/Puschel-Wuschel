@@ -3,6 +3,7 @@
 public class ParallaxScrolling : MonoBehaviour
 {
     public float speed = 100f;
+    public float offsetY = -3f;
 
     private void Start()
     {
@@ -16,7 +17,7 @@ public class ParallaxScrolling : MonoBehaviour
         //float x = Mathf.Repeat(Time.time * Camera.main.transform.position.x, 1);
 
         //Create the offset
-        Vector2 offset = new Vector2(Camera.main.transform.position.x/ speed, 1f);
+        Vector2 offset = new Vector2(Camera.main.transform.position.x/ speed, offsetY);
 
         //Apply the offset to the material
         GetComponent<Renderer>().sharedMaterial.SetTextureOffset("_MainTex", offset);

@@ -284,7 +284,7 @@ public class Menu : MonoBehaviour
                     {
                         pressedPlayerDpad [i] = true;
                         UIBeepSounds();
-                        if (playerChosenCharacter [i] < 2)
+                        if (playerChosenCharacter [i] < allCharacters.Length-1)
                             playerChosenCharacter [i]++;
                         else
                             playerChosenCharacter [i] = 0; 
@@ -296,7 +296,7 @@ public class Menu : MonoBehaviour
                         if (playerChosenCharacter [i] > 0)
                             playerChosenCharacter [i]--;
                         else
-                            playerChosenCharacter [i] = 2;
+                            playerChosenCharacter [i] = allCharacters.Length-1;
                     }
 
                     charPreviewers [i].GetComponent<CharPreviewer>().SelectChar(playerChosenCharacter [i]);
