@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour
 	public float moveForce = 365f;
 	public float maxSpeed = 5f;
 	public float jumpForce = 1000f;
+    public float iceForce = 1f;
 	public Transform[] groundCheck;
 	//public float h;
 	public Camera cam;
@@ -142,12 +143,17 @@ public class PlayerController : MonoBehaviour
         //		anim.SetFloat("Speed", Mathf.Abs(h));
         //Debug.Log(directionCurrent.x);
         if (directionCurrent.x * rb2d.velocity.x < maxSpeed)
-			rb2d.AddForce(Vector2.right * directionCurrent.x * moveForce);
+                rb2d.AddForce(Vector2.right * directionCurrent.x * moveForce * iceForce);
 
 		
 		if (Mathf.Abs (rb2d.velocity.x) > maxSpeed)
-			rb2d.velocity = new Vector2(Mathf.Sign (rb2d.velocity.x) * maxSpeed, rb2d.velocity.y);
+                rb2d.velocity = new Vector2(Mathf.Sign (rb2d.velocity.x) * maxSpeed  * iceForce, rb2d.velocity.y);
 		
+        /*
+        if(icyFloor)
+            rb2d.velocity = new Vector2(Mathf.Sign (rb2d.velocity.x) * maxSpeed, rb2d.velocity.y);
+        */
+
 		if (directionCurrent.x > 0 && !facingRight)
 			Flip ();
 		else if (directionCurrent.x < 0 && facingRight)
