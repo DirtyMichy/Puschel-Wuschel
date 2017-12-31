@@ -23,6 +23,15 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Enemy")
+        {
+            Physics2D.IgnoreCollision(GetComponent<Collider2D>(), collision.gameObject.GetComponent<Collider2D>());
+        }
+    }
+
+    //Some enemies can be killed by superpowers
     void OnTriggerEnter2D(Collider2D c)
     {
             if(c.tag == "Player" && killable)
@@ -30,13 +39,21 @@ public class Enemy : MonoBehaviour
                     StartCoroutine(Die());
     }
 
+    //Enemy getting killed
     public IEnumerator Die()
     {
         killable = false;
-        iTween.Stop(web);
+        if(web)
+            iTween.Stop(web);
         AudioSource[] sounds = GetComponents<AudioSource>();
-        sounds[0].Play();   
-        gameObject.AddComponent<Rigidbody2D>();
+
+        if(sounds.Length > 0)
+            sounds[0].Play();
+
+        if(!GetComponent<Rigidbody2D>())
+            gameObject.AddComponent<Rigidbody2D>();
+
+        gameObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
         gameObject.GetComponent<Rigidbody2D>().gravityScale = 0;
         gameObject.GetComponent<Rigidbody2D>().AddForce(Vector2.right * 1000f);
 

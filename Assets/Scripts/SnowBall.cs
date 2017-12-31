@@ -8,11 +8,13 @@ public class SnowBall : MonoBehaviour {
     public float rotationSpeed = 10f;
     public float range = 32f;
     public float speed = 1f;
-    public bool canKill = true;
-    
+    public float lifeTime = 2f;
+
     // Update is called once per frame
     void Awake()
     {        
+        iTween.PunchScale(gameObject, iTween.Hash("amount", new Vector3(1f,1f,1f), "time", 1f));
+
         float minimalEnemyDistance = float.MaxValue;
         GameObject[] playerAlive = null;
         
@@ -52,10 +54,41 @@ public class SnowBall : MonoBehaviour {
     void OnCollisionEnter2D(Collision2D c)
     {
         Debug.Log("Collision");
-        if(c.gameObject.tag == "Player" && canKill)
-            Destroy(gameObject);
+
+        //Snowballs cant hit enemies
+        if (c.gameObject.tag == "Enemy")
+        {
+            Physics2D.IgnoreCollision(GetComponent<Collider2D>(), c.gameObject.GetComponent<Collider2D>());
+        }
         else
-            canKill = false;
+        {
+            if (c.gameObject.tag == "Player")
+            {
+                if(c.gameObject.GetComponent<PlayerController>().alive)
+                {                
+                    Invoke ("Die", 1f);
+                }
+            }
+            else
+            {
+                //if it doesnt hit a character, it can disappear
+                Invoke ("PrepareToDie", lifeTime);   
+            }
+
+            gameObject.tag = "Untagged";
+        }
+    }
+
+    void PrepareToDie()
+    {       
+        iTween.ScaleTo(gameObject, iTween.Hash("scale", new Vector3(0f,0f,0f), "time", 1f));
+        Invoke ("Die", 1f);
+
+    }
+
+    void Die()
+    {
+        Destroy(gameObject);
     }
 
     /*
