@@ -11,6 +11,13 @@ public class SnowManShooting : MonoBehaviour
     public bool shooting = false;
     public GameObject bullet;
 
+    Animator animator;
+
+    void Start()
+    {
+        animator = GetComponentInParent<Animator>();
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -41,25 +48,22 @@ public class SnowManShooting : MonoBehaviour
     IEnumerator Shoot()
     {
         shooting = true;
-        //Find the screen limits to the player's movement
-        Vector2 min = new Vector2(0, 0);
-                
-        //Loop indefinitely
-        while (true)
-        {
+
             Debug.Log("Shooting");
-            //Find the screen limits to the player's movement
-            min = Camera.main.ViewportToWorldPoint(new Vector2(0, 0));
-            //Vector2 max = Camera.main.ViewportToWorldPoint(new Vector2(1, 1));
 
             //If there is an acompanying audio, play it
             if (GetComponent<AudioSource>())
                 GetComponent<AudioSource>().Play();
+            
+            animator.SetTrigger("Attack");
 
+            yield return new WaitForSeconds(1f);
+            
             Instantiate(bullet, transform.position, transform.rotation);
 
             //Wait for it to be time to fire another shot
             yield return new WaitForSeconds(shotDelay);
-        }
+        
+        shooting = false;
     }
 }
