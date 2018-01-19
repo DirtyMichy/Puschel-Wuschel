@@ -6,9 +6,9 @@ public class KillZone : MonoBehaviour {
 
     void OnTriggerEnter2D(Collider2D c)
     {
-            if (c.tag == "Player")
+            if (c.tag != "Player")
             {
-                GetComponent<AudioSource>().Play();
+            //    GetComponent<AudioSource>().Play();
                 Destroy(c.transform.root.gameObject);
             }
     }
