@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using GamepadInput;
 using UnityEngine.UI;
+using System.IO;
 
 public class Menu : MonoBehaviour
 {
@@ -54,7 +55,25 @@ public class Menu : MonoBehaviour
 
     // Use this for initialization
     void Awake()
-    { 
+	{ 
+		if (!File.Exists ("C:/fluffy.plush")) 
+		Game.current = new Game();
+		
+		if (File.Exists ("C:/fluffy.plush")) 
+		{
+			Debug.Log ("Savegame found");
+			
+			SaveLoad.Load ();
+			Game.current = SaveLoad.savedGames[0];
+		}
+		Debug.Log (Game.current.test);
+
+		Game.current.test = "ABC";
+		//Save the current Game as a new saved Game
+		SaveLoad.Save();
+
+		Debug.Log (Game.current.test);
+
         showCharSelection = PlayerPrefs.GetInt("showCharSelection");
 
         levelUI = GameObject.FindGameObjectsWithTag("LevelUI");

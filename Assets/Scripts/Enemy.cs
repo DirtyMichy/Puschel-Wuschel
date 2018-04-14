@@ -13,10 +13,10 @@ public class Enemy : MonoBehaviour
     public bool killable = true;
 
     void Awake()
-    {
+	{
+		origin = transform;
         if(web)
         {
-            origin = transform;
             web.gameObject.transform.parent = null;
             iTween.MoveAdd(gameObject, iTween.Hash("y", rangeY, "easeType", "easeInOutExpo", "loopType", "pingPong", "time", speed, "delay", delay));
             iTween.ScaleAdd(web, iTween.Hash("y", 45*Math.Abs(rangeY), "easeType", "easeInOutExpo", "loopType", "pingPong", "time", speed, "delay", delay));
