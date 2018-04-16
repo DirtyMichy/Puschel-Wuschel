@@ -15,6 +15,7 @@ public class Manager : MonoBehaviour
     public int collectedMuffins = 0;
     public GameObject currentCheckPoint;        //current checkpoint at which players can respawn
     public float zoomStart = 15f;
+	private float cameraOffsetY = -0.76f;
 
     // Use this for initialization
     void Awake()
@@ -104,9 +105,9 @@ public class Manager : MonoBehaviour
                 x = rightestPos - distance / (zoomStart / 7.5f);
 
                 if (x > 0)
-					Camera.main.transform.position = new Vector3(x, (Camera.main.orthographicSize - 5f)-0.76f, -10f);
+					Camera.main.transform.position = new Vector3(x, (Camera.main.orthographicSize - 5f)+cameraOffsetY, -10f);
                 else                    
-					Camera.main.transform.position = new Vector3(0f, (Camera.main.orthographicSize - 5f)-0.76f, -10f);
+					Camera.main.transform.position = new Vector3(0f, (Camera.main.orthographicSize - 5f)+cameraOffsetY, -10f);
 
                 Vector3 scale = new Vector3(distance / zoomStart, distance / zoomStart, 1f);
             
@@ -120,9 +121,9 @@ public class Manager : MonoBehaviour
                 x = rightestPos - distance / (zoomStart / 7.5f);
 
                 if (x > 0)
-					Camera.main.transform.position = new Vector3(x, 0f-0.76f, -10f);
+					Camera.main.transform.position = new Vector3(x, cameraOffsetY, -10f);
                 else
-					Camera.main.transform.position = new Vector3(0f, 0f-0.76f, -10f);
+					Camera.main.transform.position = new Vector3(0f, cameraOffsetY, -10f);
             }
             //Debug.Log("Right: " + rightestPos + "Left: " + leftestPos);
             //float x = rightestPos-(rightestPos- leftestPos)/2;
@@ -135,14 +136,14 @@ public class Manager : MonoBehaviour
             {
                 Camera.main.orthographicSize = 5f;
                 if (playerCharactersAlive [0].transform.position.x > 0f)
-                    Camera.main.transform.position = new Vector3(playerCharactersAlive [0].transform.position.x, 0f, -10f);
+					Camera.main.transform.position = new Vector3(playerCharactersAlive [0].transform.position.x, cameraOffsetY, -10f);
                 else
-                    Camera.main.transform.position = new Vector3(0f, 0f, -10f);
+					Camera.main.transform.position = new Vector3(0f, cameraOffsetY, -10f);
             } else//zoom towards the last checkpoint if all players are dead
             if (currentCheckPoint.transform.position.x > 0f)
-                Camera.main.transform.position = new Vector3(currentCheckPoint.transform.position.x, 0f, -10f);
+					Camera.main.transform.position = new Vector3(currentCheckPoint.transform.position.x, cameraOffsetY, -10f);
             else
-                Camera.main.transform.position = new Vector3(0f, 0f, -10f);
+					Camera.main.transform.position = new Vector3(0f, cameraOffsetY, -10f);
         }
         //Debug.Log(SceneManager.GetActiveScene().name);
     }
