@@ -20,8 +20,11 @@ public class Manager : MonoBehaviour
     // Use this for initialization
     void Awake()
     {
-        playerCount = PlayerPrefs.GetInt("playerCount");
-        playerChosenCharacter = PlayerPrefsX.GetIntArray("playerChosenCharacter");
+
+		playerCount = Game.current.playerCount;
+		playerChosenCharacter = Game.current.playerChosenCharacter;
+        //playerCount = PlayerPrefs.GetInt("playerCount");
+        //playerChosenCharacter = PlayerPrefsX.GetIntArray("playerChosenCharacter");
 
         for (int playerID = 0; playerID < playerCount; playerID++)
         {

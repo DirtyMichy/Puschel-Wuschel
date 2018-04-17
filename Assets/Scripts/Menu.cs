@@ -27,7 +27,7 @@ public class Menu : MonoBehaviour
     public bool charSelection = true;
     int MAXPLAYER = 4;
     public int playerCount = 1; //player 1 is always avtive at the start
-    public bool[] isUnlocked;
+    //public bool[] isUnlocked;
     GameObject[] levelUI, charUI;
     public GameObject Arrow;
     public Sprite menuCharSelection, menuLevelSelection;
@@ -56,10 +56,12 @@ public class Menu : MonoBehaviour
     // Use this for initialization
     void Awake()
 	{ 
-		if (!File.Exists ("C:/fluffy.plush")) 
+		Debug.Log (Application.dataPath);
+
+		if (!File.Exists (Application.dataPath + "/fluffy.plush")) 
 		Game.current = new Game();
 		
-		if (File.Exists ("C:/fluffy.plush")) 
+		if (File.Exists (Application.dataPath + "/fluffy.plush")) 
 		{
 			Debug.Log ("Savegame found");
 			
@@ -74,11 +76,11 @@ public class Menu : MonoBehaviour
 
 		Debug.Log (Game.current.test);
 
-        showCharSelection = PlayerPrefs.GetInt("showCharSelection");
+        //showCharSelection = PlayerPrefs.GetInt("showCharSelection");
 
         levelUI = GameObject.FindGameObjectsWithTag("LevelUI");
         charUI = GameObject.FindGameObjectsWithTag("CharUI");
-        
+        /*
         if (PlayerPrefsX.GetBoolArray("unlockedCharacters").Length > 0)
             isUnlocked = PlayerPrefsX.GetBoolArray("unlockedCharacters");
         else
@@ -87,13 +89,12 @@ public class Menu : MonoBehaviour
             for (int i = 0; i < allCharacters.Length; i++)
                 isUnlocked [i] = true;
         }
-
+		*/
         for (int i = 0; i < MAXPLAYER; i++)
         {
             for (int j = 0; j < allCharacters.Length; j++)
             {
-                if (isUnlocked [j])
-                {
+
                     GameObject spawnedChar = Instantiate(allCharacters [j]);
                     Destroy(spawnedChar.GetComponent<Rigidbody2D>());
                     Destroy(spawnedChar.GetComponent<PlayerController>());
@@ -117,13 +118,14 @@ public class Menu : MonoBehaviour
                     scale.y *= -1;
                     temp.transform.localScale = scale;
                     temp.gameObject.transform.parent = spawnedChar.gameObject.transform;
-                }
+                
             }
         }
         toggleLevelUI();
 
         int[] campaignCollectedMuffins = new int[Level.Length]; //creating an array with the same size as the Levelarray, to avoid nullpointers in forloop
-        int[] loadedCampaignCollectedMuffins = PlayerPrefsX.GetIntArray("collectedMuffins"); //
+        //int[] loadedCampaignCollectedMuffins = PlayerPrefsX.GetIntArray("collectedMuffins"); //
+		int[] loadedCampaignCollectedMuffins = Game.current.collected;
 
         playerRDY = new bool[MAXPLAYER];
         playerActive = new bool[MAXPLAYER];
@@ -135,8 +137,11 @@ public class Menu : MonoBehaviour
         if (playerActive.Length > 0)
             playerActive [0] = true;
 
-        if (PlayerPrefsX.GetIntArray("playerChosenCharacter").Length > 0)
-            playerChosenCharacter = PlayerPrefsX.GetIntArray("playerChosenCharacter");
+		//if (PlayerPrefsX.GetIntArray("playerChosenCharacter").Length > 0)
+		//    playerChosenCharacter = PlayerPrefsX.GetIntArray("playerChosenCharacter");
+
+		if (Game.current.playerChosenCharacter.Length > 0)
+			playerChosenCharacter = Game.current.playerChosenCharacter;
 
         //get all saved stats, everything else will be 0 so the levelstats can get initialized below
         campaignCollectedMuffins = loadedCampaignCollectedMuffins;
@@ -226,8 +231,8 @@ public class Menu : MonoBehaviour
                 pressedPlayerDpad [i] = false;
             }
 
-
-            PlayerPrefs.SetInt("playerCount", playerCount);
+			Game.current.playerCount = playerCount;
+            //PlayerPrefs.SetInt("playerCount", playerCount);
         }
         
         //###################### KeyBoardSupport for player 1 ######################
@@ -387,7 +392,10 @@ public class Menu : MonoBehaviour
                     playerChosenCharacter [0] = allCharacters.Length - 1;
             }
 
-            PlayerPrefsX.SetIntArray("playerChosenCharacter", playerChosenCharacter);
+
+			playerChosenCharacter = Game.current.playerChosenCharacter;
+			SaveLoad.Save();
+            //PlayerPrefsX.SetIntArray("playerChosenCharacter", playerChosenCharacter);
         } else
         {
             //Iterate through levels because charselection is false

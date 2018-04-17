@@ -6,9 +6,12 @@ public class Game {
 
 	public static Game current;
 	public string test;
+	public int playerCount;
+	public int campaignStatus;
+	public int[] collected;
+	public int[] playerChosenCharacter;
 
 	public Game () {
-		test = "empy";
 	}
 
 }

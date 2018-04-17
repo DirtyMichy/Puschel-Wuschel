@@ -13,15 +13,15 @@ public static class SaveLoad {
 		SaveLoad.savedGames.Add(Game.current);
 		BinaryFormatter bf = new BinaryFormatter();
 		//Application.persistentDataPath is a string, so if you wanted you can put that into debug.log if you want to know where save games are located
-		FileStream file = File.Create ("C:/fluffy.plush"); //you can call it anything you want
+		FileStream file = File.Create (Application.dataPath + "/fluffy.plush"); //you can call it anything you want
 		bf.Serialize(file, SaveLoad.savedGames);
 		file.Close();
 	}   
 
 	public static void Load() {
-		if(File.Exists("C:/fluffy.plush")) {
+		if(File.Exists(Application.dataPath + "/fluffy.plush")) {
 			BinaryFormatter bf = new BinaryFormatter();
-			FileStream file = File.Open("C:/fluffy.plush", FileMode.Open);
+			FileStream file = File.Open(Application.dataPath + "/fluffy.plush", FileMode.Open);
 			SaveLoad.savedGames = (List<Game>)bf.Deserialize(file);
 			file.Close();
 		}
