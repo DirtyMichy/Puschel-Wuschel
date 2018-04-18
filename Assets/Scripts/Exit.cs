@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 public class Exit : MonoBehaviour 
 {
     private bool exited = false;
-    private int[] campaignCollectedMuffins;
+    //private int[] campaignCollectedMuffins;
 
     void OnTriggerEnter2D(Collider2D c)
     {

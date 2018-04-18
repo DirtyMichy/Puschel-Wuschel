@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using GamepadInput;
+using System.IO;
 
 public class Manager : MonoBehaviour
 {
@@ -20,6 +21,13 @@ public class Manager : MonoBehaviour
     // Use this for initialization
     void Awake()
     {
+		if (!File.Exists (Application.dataPath + "/fluffy.plush")) 
+			Game.current = new Game();
+		else
+		{
+			SaveLoad.Load ();
+			Game.current = SaveLoad.savedGames[0];
+		}
 
 		playerCount = Game.current.playerCount;
 		playerChosenCharacter = Game.current.playerChosenCharacter;

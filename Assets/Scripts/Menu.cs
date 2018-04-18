@@ -8,7 +8,7 @@ using System.IO;
 
 public class Menu : MonoBehaviour
 {
-    //public int[] campaignCollectedMuffins;      //campaignCollectedMuffins[0] =0; 0= E1M1 0= not finished, 1= finished, 2= everythingFound
+    public int[] campaignCollectedMuffins;      //campaignCollectedMuffins[0] =0; 0= E1M1 0= not finished, 1= finished, 2= everythingFound
     public GameObject playerCountText, backGround;
     public GameObject[] Level;
     public GameObject[] charPreviewers;
@@ -60,7 +60,9 @@ public class Menu : MonoBehaviour
 
 		if (!File.Exists (Application.dataPath + "/fluffy.plush")) 
 		Game.current = new Game();
-		
+		Game.current.playerChosenCharacter = new int[MAXPLAYER];
+		Game.current.collected = new int[Level.Length]; 
+
 		if (File.Exists (Application.dataPath + "/fluffy.plush")) 
 		{
 			Debug.Log ("Savegame found");
@@ -139,7 +141,7 @@ public class Menu : MonoBehaviour
 
 		//if (PlayerPrefsX.GetIntArray("playerChosenCharacter").Length > 0)
 		//    playerChosenCharacter = PlayerPrefsX.GetIntArray("playerChosenCharacter");
-
+		Game.current.playerChosenCharacter = new int[MAXPLAYER];
 		if (Game.current.playerChosenCharacter.Length > 0)
 			playerChosenCharacter = Game.current.playerChosenCharacter;
 
@@ -151,7 +153,8 @@ public class Menu : MonoBehaviour
             campaignCollectedMuffins [i] = loadedCampaignCollectedMuffins [i];
         }
 */
-        Debug.Log("Level: " + Level.Length + "campaignCollectedMuffins: " + campaignCollectedMuffins.Length);
+        //Debug.Log("Level: " + Level.Length + "campaignCollectedMuffins: " + campaignCollectedMuffins.Length);
+		Debug.Log("Level: " + Level.Length + "campaignCollectedMuffins: " + Game.current.collected.Length);
 
         //initiliazing levelstats
         if (campaignCollectedMuffins.Length > 0)

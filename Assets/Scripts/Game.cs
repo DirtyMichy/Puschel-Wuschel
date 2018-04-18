@@ -12,6 +12,8 @@ public class Game {
 	public int[] playerChosenCharacter;
 
 	public Game () {
+		collected = new int[10];
+		playerChosenCharacter = new int[4];
 	}
 
 }
