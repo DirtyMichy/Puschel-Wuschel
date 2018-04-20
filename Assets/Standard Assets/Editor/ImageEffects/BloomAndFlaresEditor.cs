@@ -73,7 +73,7 @@ namespace UnityStandardAssets.ImageEffects
             EditorGUILayout.PropertyField (tweakMode, new GUIContent("Tweak mode"));
             EditorGUILayout.PropertyField (screenBlendMode, new GUIContent("Blend mode"));
             EditorGUILayout.PropertyField (hdr, new GUIContent("HDR"));
-
+			#pragma warning disable 0618
             // display info text when screen blend mode cannot be used
             Camera cam = (target as BloomAndFlares).GetComponent<Camera>();
             if (cam != null) {

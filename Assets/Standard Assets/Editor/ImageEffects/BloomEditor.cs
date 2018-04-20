@@ -81,7 +81,7 @@ namespace UnityStandardAssets.ImageEffects
             EditorGUILayout.PropertyField (hdr, new GUIContent("HDR"));
 
             EditorGUILayout.Separator ();
-
+			#pragma warning disable 0618
             // display info text when screen blend mode cannot be used
             Camera cam = (target as Bloom).GetComponent<Camera>();
             if (cam != null) {

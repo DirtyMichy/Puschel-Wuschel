@@ -88,7 +88,7 @@ namespace UnityStandardAssets.ImageEffects
             sunShaftsMaterial.SetVector ("_BlurRadius4", new Vector4 (1.0f, 1.0f, 0.0f, 0.0f) * sunShaftBlurRadius );
             sunShaftsMaterial.SetVector ("_SunPosition", new Vector4 (v.x, v.y, v.z, maxRadius));
             sunShaftsMaterial.SetVector ("_SunThreshold", sunThreshold);
-
+			#pragma warning disable 0618
             if (!useDepthTexture) {
                 var format= GetComponent<Camera>().hdr ? RenderTextureFormat.DefaultHDR: RenderTextureFormat.Default;
                 RenderTexture tmpBuffer = RenderTexture.GetTemporary (source.width, source.height, 0, format);

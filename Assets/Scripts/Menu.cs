@@ -6,8 +6,11 @@ using GamepadInput;
 using UnityEngine.UI;
 using System.IO;
 
+
 public class Menu : MonoBehaviour
 {
+	public static Menu current;
+
     public int[] campaignCollectedMuffins;      //campaignCollectedMuffins[0] =0; 0= E1M1 0= not finished, 1= finished, 2= everythingFound
     public GameObject playerCountText, backGround;
     public GameObject[] Level;
@@ -25,7 +28,7 @@ public class Menu : MonoBehaviour
     public bool[] pressedPlayerDpad;
     bool pressedArrow = false;
     public bool charSelection = true;
-    int MAXPLAYER = 4;
+	public int MAXPLAYER = 4;
     public int playerCount = 1; //player 1 is always avtive at the start
     //public bool[] isUnlocked;
     GameObject[] levelUI, charUI;
@@ -60,6 +63,7 @@ public class Menu : MonoBehaviour
 
 		if (!File.Exists (Application.dataPath + "/fluffy.plush")) 
 		Game.current = new Game();
+		
 		Game.current.playerChosenCharacter = new int[MAXPLAYER];
 		Game.current.collected = new int[Level.Length]; 
 

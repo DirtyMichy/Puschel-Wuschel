@@ -9,12 +9,12 @@ public class Enemy : MonoBehaviour
     public float speed = 4f;
     public float delay = 1f;
     public GameObject web;
-    private Transform origin;
+//    private Transform origin;
     public bool killable = true;
 
     void Awake()
 	{
-		origin = transform;
+//		origin = transform;
         if(web)
         {
             web.gameObject.transform.parent = null;

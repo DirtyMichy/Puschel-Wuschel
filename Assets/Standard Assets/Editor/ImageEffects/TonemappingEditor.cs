@@ -39,7 +39,7 @@ namespace UnityStandardAssets.ImageEffects
             serObj.Update ();
 
             GUILayout.Label("Mapping HDR to LDR ranges since 1982", EditorStyles.miniLabel);
-
+			#pragma warning disable 0618
             Camera cam = (target as Tonemapping).GetComponent<Camera>();
             if (cam != null) {
                 if (!cam.hdr) {
