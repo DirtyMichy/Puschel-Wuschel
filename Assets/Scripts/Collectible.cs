@@ -4,11 +4,6 @@ using UnityEngine;
 
 public class Collectible : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-
     private bool collected = false;
 
 	// Update is called once per frame

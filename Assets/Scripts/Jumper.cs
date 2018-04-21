@@ -7,10 +7,6 @@ public class Jumper : MonoBehaviour {
 	public float yForce = 1000f, xForce = 0f, delay = 1f;
 	private bool isJumping = false;
 
-	void Awake () {
-		//Invoke ("Jumping", delay);
-	}
-
 	void Update () {
 		if(transform.rotation.eulerAngles.z < 1 && transform.rotation.eulerAngles.z > -1 && GetComponent<Rigidbody2D> ().velocity.y == 0f && !isJumping)
 		{
