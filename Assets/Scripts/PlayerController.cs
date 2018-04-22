@@ -29,6 +29,7 @@ public class PlayerController : MonoBehaviour
 
     public GameObject Balloons;
     public GameObject Body;
+	public GameObject Name;
 
     public void SetPlayerID(int i)
     {
@@ -186,7 +187,7 @@ public class PlayerController : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.tag == "Player")
+		if (collision.gameObject.tag == "Player" || LayerMask.LayerToName(collision.gameObject.layer) == "Player")
         {
             Physics2D.IgnoreCollision(GetComponent<Collider2D>(), collision.gameObject.GetComponent<Collider2D>());
         }

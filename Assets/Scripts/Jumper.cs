@@ -8,7 +8,7 @@ public class Jumper : MonoBehaviour {
 	private bool isJumping = false;
 
 	void Update () {
-		if(transform.rotation.eulerAngles.z < 1 && transform.rotation.eulerAngles.z > -1 && GetComponent<Rigidbody2D> ().velocity.y == 0f && !isJumping)
+		if(GetComponent<Rigidbody2D> ().velocity.y == 0f && !isJumping)
 		{
 			Debug.Log (GetComponent<Rigidbody2D> ().velocity);
 			Debug.Log (transform.rotation);

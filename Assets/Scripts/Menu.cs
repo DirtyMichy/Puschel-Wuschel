@@ -62,10 +62,11 @@ public class Menu : MonoBehaviour
 		Debug.Log (Application.dataPath);
 
 		if (!File.Exists (Application.dataPath + "/fluffy.plush")) 
-		Game.current = new Game();
-		
-		Game.current.playerChosenCharacter = new int[MAXPLAYER];
-		Game.current.collected = new int[Level.Length]; 
+		{
+			Game.current = new Game ();		
+			Game.current.playerChosenCharacter = new int[MAXPLAYER];
+			Game.current.collected = new int[Level.Length]; 
+		}
 
 		if (File.Exists (Application.dataPath + "/fluffy.plush")) 
 		{
@@ -102,8 +103,10 @@ public class Menu : MonoBehaviour
             {
 
                     GameObject spawnedChar = Instantiate(allCharacters [j]);
+					spawnedChar.GetComponent<PlayerController> ().Name.SetActive (true);
                     Destroy(spawnedChar.GetComponent<Rigidbody2D>());
                     Destroy(spawnedChar.GetComponent<PlayerController>());
+					
                     spawnedChar.transform.position = charPreviewers [i].transform.position;
                     spawnedChar.transform.parent = charPreviewers [i].transform;
                     spawnedChar.SetActive(false);
