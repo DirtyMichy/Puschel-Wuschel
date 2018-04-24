@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using GamepadInput;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -30,6 +31,19 @@ public class PlayerController : MonoBehaviour
     public GameObject Balloons;
     public GameObject Body;
 	public GameObject Name;
+
+	public void Awake()
+	{
+		//0 = Forest
+		//1 = Halloween
+		//2 = Xmas
+		//3 = Western
+		Transform hat = transform.Find ("CowBoyHat");
+		if (hat != null) {
+			if (SceneManager.GetActiveScene ().buildIndex - 1 == 3)
+				hat.GetComponent<SpriteRenderer> ().enabled = true;			
+		}
+	}
 
     public void SetPlayerID(int i)
     {
