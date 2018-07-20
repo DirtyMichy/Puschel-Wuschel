@@ -8,8 +8,8 @@ public class KillZone : MonoBehaviour {
     {
             if (c.tag != "Player")
             {
-            //    GetComponent<AudioSource>().Play();
-                Destroy(c.transform.root.gameObject);
+                //Destroy(c.transform.root.gameObject);
+				Destroy(c.transform.gameObject);
             }
     }
 }

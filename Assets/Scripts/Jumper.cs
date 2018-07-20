@@ -10,8 +10,8 @@ public class Jumper : MonoBehaviour {
 	void Update () {
 		if(GetComponent<Rigidbody2D> ().velocity.y == 0f && !isJumping)
 		{
-			Debug.Log (GetComponent<Rigidbody2D> ().velocity);
-			Debug.Log (transform.rotation);
+//			Debug.Log (GetComponent<Rigidbody2D> ().velocity);
+//			Debug.Log (transform.rotation);
 			isJumping = true;
 			Invoke ("Jumping", delay);	
 		}

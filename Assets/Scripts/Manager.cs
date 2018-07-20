@@ -4,23 +4,31 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using GamepadInput;
 using System.IO;
+using UnityEditor;
 
 public class Manager : MonoBehaviour
 {
-
     private bool GameOver = false;
     public GameObject[] playableCharacters;     //Array of gameobjects which contain playable characters
-    public GameObject[] playerCharactersAlive; //Chosen characters by players
+    public GameObject[] playerCharactersAlive; 	//Chosen characters by players
     public int[] playerChosenCharacter;         //index of playableCharacter, playerChosenCharacter[0]=2 means player 1 has chosen character 3
     public int playerCount = 1;                 //total number of players
     public int collectedMuffins = 0;
     public GameObject currentCheckPoint;        //current checkpoint at which players can respawn
     public float zoomStart = 15f;
 	private float cameraOffsetY = -0.76f;
+	public GameObject spawnParticles;
+
+	public static Manager currentGameManager;
 
     // Use this for initialization
     void Awake()
-    {
+	{
+		currentGameManager = this;
+
+		//First checkpoint will be the start Sprite
+		currentCheckPoint = GameObject.Find("Misc/Start");
+
 		if (!File.Exists (Application.dataPath + "/fluffy.plush")) 
 			Game.current = new Game();
 		else
@@ -31,14 +39,13 @@ public class Manager : MonoBehaviour
 
 		playerCount = Game.current.playerCount;
 		playerChosenCharacter = Game.current.playerChosenCharacter;
-        //playerCount = PlayerPrefs.GetInt("playerCount");
-        //playerChosenCharacter = PlayerPrefsX.GetIntArray("playerChosenCharacter");
 
         for (int playerID = 0; playerID < playerCount; playerID++)
         {
             //playerID = 0,playableCharacters[playerChosenCharacter[2]] means player 1 gets character 3
             GameObject temp = (GameObject)Instantiate(playableCharacters [playerChosenCharacter [playerID]], playableCharacters [playerChosenCharacter [playerID]].transform.position = currentCheckPoint.transform.position, playableCharacters [playerChosenCharacter [playerID]].transform.rotation);
-            temp.SendMessage("SetPlayerID", playerID);
+			temp.SendMessage("SetPlayerID", playerID);
+			Instantiate(spawnParticles, temp.transform.position, temp.transform.rotation);
         }
         playerCharactersAlive = GameObject.FindGameObjectsWithTag("Player");
     }
@@ -56,24 +63,6 @@ public class Manager : MonoBehaviour
         {
             SceneManager.LoadScene("Menu");
         }
-
-        /*
-        float playerPos = 0;
-        int leadingPlayer = 0;
-
-        for (int i = 0; i < players.Length; i++)
-        {
-            if(players[i].transform.position.x > playerPos && players[i].transform.position.x > 0)
-            {
-                players[i].GetComponent<PlayerController>().isLeader = false;
-                playerPos = players[i].transform.position.x;
-                leadingPlayer = i;
-            }
-        }
-
-        Debug.Log(leadingPlayer);
-        players[leadingPlayer].GetComponent<PlayerController>().isLeader = true;
-        */
 
         //if the distance between the leftest and the rightest player gets greater than 15, the camera starts to zoom out
         if (CountPlayersAlive() > 1)
@@ -98,14 +87,11 @@ public class Manager : MonoBehaviour
                     }
                 }
             }
-        
-        
+                
             float distance = Mathf.Abs(leftestPos - rightestPos);
             float x = 0;
 
-            Debug.Log("Distance: " + distance + "Left: " + Mathf.Abs(leftestPos) + "Right: " + Mathf.Abs(rightestPos));
-
-
+//          Debug.Log("Distance: " + distance + "Left: " + Mathf.Abs(leftestPos) + "Right: " + Mathf.Abs(rightestPos));
 
             if (distance > zoomStart)
             {
@@ -136,11 +122,7 @@ public class Manager : MonoBehaviour
                 else
 					Camera.main.transform.position = new Vector3(0f, cameraOffsetY, -10f);
             }
-            //Debug.Log("Right: " + rightestPos + "Left: " + leftestPos);
-            //float x = rightestPos-(rightestPos- leftestPos)/2;
-        
-            //if(!GameOver)
-            //Camera.main.transform.position = new Vector3(x, 0f, -10f);
+
         } else
         {
             if (CountPlayersAlive() == 1)
@@ -156,12 +138,11 @@ public class Manager : MonoBehaviour
             else
 					Camera.main.transform.position = new Vector3(0f, cameraOffsetY, -10f);
         }
-        //Debug.Log(SceneManager.GetActiveScene().name);
     }
 
     IEnumerator RespawnPlayers()
     {
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(2f);
 
         GameOver = false;
 
@@ -169,10 +150,10 @@ public class Manager : MonoBehaviour
         {
             //playerID = 0,playableCharacters[playerChosenCharacter[2]] means player 1 gets character 3
             GameObject temp = (GameObject)Instantiate(playableCharacters [playerChosenCharacter [playerID]], playableCharacters [playerChosenCharacter [playerID]].transform.position = currentCheckPoint.transform.position, playableCharacters [playerChosenCharacter [playerID]].transform.rotation);
-            temp.SendMessage("SetPlayerID", playerID);
+			temp.SendMessage("SetPlayerID", playerID);
+			Instantiate(spawnParticles, temp.transform.position, temp.transform.rotation);
         }
         playerCharactersAlive = GameObject.FindGameObjectsWithTag("Player");
-        //SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     public void setCheckPoint(GameObject cp)
@@ -180,10 +161,11 @@ public class Manager : MonoBehaviour
         currentCheckPoint = cp;
         for (int playerID = 0; playerID < playerCount; playerID++)
         {
-            if (!playerCharactersAlive [playerID])
+			if (playerCharactersAlive [playerID] == null)
             {
                 GameObject temp = (GameObject)Instantiate(playableCharacters [playerChosenCharacter [playerID]], playableCharacters [playerChosenCharacter [playerID]].transform.position = currentCheckPoint.transform.position, playableCharacters [playerChosenCharacter [playerID]].transform.rotation);
                 temp.SendMessage("SetPlayerID", playerID);
+				Instantiate(spawnParticles, temp.transform.position, temp.transform.rotation);
             }
         }
     }

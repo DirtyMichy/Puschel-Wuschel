@@ -9,8 +9,8 @@ public class Enemy : MonoBehaviour
     public float speed = 4f;
     public float delay = 1f;
     public GameObject web;
-//    private Transform origin;
-    public bool killable = true;
+	public bool killable = true;
+	public GameObject spawnParticles;
 
     void Awake()
 	{
@@ -41,7 +41,8 @@ public class Enemy : MonoBehaviour
 
     //Enemy getting killed
     public IEnumerator Die()
-    {
+	{
+		Instantiate(spawnParticles, transform.position, transform.rotation);
         killable = false;
         if(web)
             iTween.Stop(web);

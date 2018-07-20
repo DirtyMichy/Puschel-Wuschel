@@ -14,8 +14,8 @@ public class CheckPoint : MonoBehaviour
             iTween.MoveBy(flag, iTween.Hash("y", 2f, "easeType", "linear", "speed", 1f));
             activated = true;
             GetComponent<AudioSource>().Play();
-            Camera.main.GetComponent<Manager>().setCheckPoint(gameObject);
 
+			Manager.currentGameManager.GetComponent<Manager>().setCheckPoint(gameObject);
         }
     }
 }

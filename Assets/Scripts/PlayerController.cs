@@ -15,7 +15,7 @@ public class PlayerController : MonoBehaviour
 	public float jumpForce = 1000f;
     public float iceForce = 1f;
 	public Transform[] groundCheck;
-	//public float h;
+
 	public Camera cam;
     public int powerUpCount = 0;
     public int playerID = 0;
@@ -87,38 +87,12 @@ public class PlayerController : MonoBehaviour
 		//if (Input.GetButton ("Jump") && grounded)
         if ((((Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow)) &&  playerID == 0) || GamePad.GetButton(GamePad.Button.A, gamePadIndex[playerID])) && alive && grounded)
         {
-//            Debug.Log(rb2d.velocity.y);
 			jump = true;
             GetComponent<AudioSource>().Play();
         }
 
         grounded = false;
-        /*
-		if (isLeader)
-        {
-            float x = transform.position.x;
-            cam.transform.position = new Vector3(x,0f,-10f);
-		}
-        //old cam Control
-        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
 
-        float rightestPos = 0;
-        int leader = 0;
-
-        for (int i = 0; i < players.Length; i++)
-        {
-            if (players[i].transform.position.x > rightestPos && players[i].transform.position.x > 0)
-            {
-                rightestPos = players[i].transform.position.x;
-                leader = i;
-            }
-        }
-
-        if ((players[leader].transform.position.x - transform.position.x) >= 14)
-        {
-            transform.position = players[leader].transform.position;
-        }
-*/
         if(powerUpActivated)
         {
             GetComponent<Rigidbody2D>().angularVelocity = 640f*-transform.localScale.x ;
@@ -146,8 +120,6 @@ public class PlayerController : MonoBehaviour
     {
         if (alive)
         {
-		//h = Input.GetAxis ("Horizontal");
-
         Vector2 directionCurrent = GamePad.GetAxis(GamePad.Axis.LeftStick, gamePadIndex[playerID]);
 
             if ((Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow)) && playerID == 0)
@@ -155,7 +127,6 @@ public class PlayerController : MonoBehaviour
             if ((Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow)) && playerID == 0)
             directionCurrent.x = 1f;
 
-        //		anim.SetFloat("Speed", Mathf.Abs(h));
         //Debug.Log(directionCurrent.x);
         if (directionCurrent.x * rb2d.velocity.x < maxSpeed)
                 rb2d.AddForce(Vector2.right * directionCurrent.x * moveForce * iceForce);
@@ -164,10 +135,6 @@ public class PlayerController : MonoBehaviour
 		if (Mathf.Abs (rb2d.velocity.x) > maxSpeed)
                 rb2d.velocity = new Vector2(Mathf.Sign (rb2d.velocity.x) * maxSpeed  * iceForce, rb2d.velocity.y);
 		
-        /*
-        if(icyFloor)
-            rb2d.velocity = new Vector2(Mathf.Sign (rb2d.velocity.x) * maxSpeed, rb2d.velocity.y);
-        */
 
 		if (directionCurrent.x > 0 && !facingRight)
 			Flip ();
@@ -176,7 +143,6 @@ public class PlayerController : MonoBehaviour
 		
 		if (jump)
 		{
-//			anim.SetTrigger("Jump");
             rb2d.AddForce(new Vector2(0f, jumpForce*GetComponent<Rigidbody2D>().mass));
                 rb2d.velocity = new Vector2 (0f, 0f);;
 			jump = false;
@@ -232,13 +198,4 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(1.2f);
         Destroy(gameObject);
     }
-
-    /*
-    public IEnumerator BalloonFly()
-    {
-        GetComponent<Rigidbody2D>().gravityScale = - 0.5f;
-        yield return new WaitForSeconds(3f);
-        GetComponent<Rigidbody2D>().gravityScale = 8f;
-    }
-    */
 }
