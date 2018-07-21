@@ -24,10 +24,10 @@ public class Manager : MonoBehaviour
     // Use this for initialization
     void Awake()
 	{
-		currentGameManager = this;
-
 		//First checkpoint will be the start Sprite
 		currentCheckPoint = GameObject.Find("Misc/Start");
+
+		currentGameManager = this;
 
 		if (!File.Exists (Application.dataPath + "/fluffy.plush")) 
 			Game.current = new Game();

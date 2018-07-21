@@ -9,7 +9,7 @@ public class Balloon : MonoBehaviour
     {
         if (c.GetComponent<Rigidbody2D>().gravityScale > 0f)
         {
-            if(c.tag == "Player")
+			if(c.tag == "Player" && !c.GetComponent<PlayerController>().powerUpActivated)
             StartCoroutine(Fly(c));
         }
     }

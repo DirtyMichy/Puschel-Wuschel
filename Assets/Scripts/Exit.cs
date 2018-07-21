@@ -26,7 +26,7 @@ public class Exit : MonoBehaviour
 
 			int sceneNameAsInt = int.Parse(SceneManager.GetActiveScene().name);
 
-			Game.current.collected[sceneNameAsInt]=Camera.main.GetComponent<Manager>().collectedMuffins; 
+			Game.current.collected[sceneNameAsInt]=Manager.currentGameManager.GetComponent<Manager>().collectedMuffins; 
 
 			/*
             if(PlayerPrefsX.GetIntArray("collectedMuffins").Length > 0)

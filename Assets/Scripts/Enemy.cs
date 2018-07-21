@@ -10,6 +10,7 @@ public class Enemy : MonoBehaviour
     public float delay = 1f;
     public GameObject web;
 	public bool killable = true;
+	public bool resetPositionAfterKill = false;
 	public GameObject spawnParticles;
 
     void Awake()
@@ -22,6 +23,11 @@ public class Enemy : MonoBehaviour
             iTween.ScaleAdd(web, iTween.Hash("y", 45*Math.Abs(rangeY), "easeType", "easeInOutExpo", "loopType", "pingPong", "time", speed, "delay", delay));
         }
     }
+
+	public void SpawnParticle()
+	{
+		Instantiate(spawnParticles, transform.position, transform.rotation);		
+	}
 
     void OnCollisionEnter2D(Collision2D collision)
     {

@@ -53,7 +53,7 @@ public class SnowBall : MonoBehaviour {
 
     void OnCollisionEnter2D(Collision2D c)
     {
-        Debug.Log("Collision");
+//        Debug.Log("Collision");
 
         //Snowballs cant hit enemies
         if (c.gameObject.tag == "Enemy")

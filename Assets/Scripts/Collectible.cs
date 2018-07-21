@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Collectible : MonoBehaviour {
-
+public class Collectible : MonoBehaviour 
+{
 	private bool collected = false;
 	public GameObject spawnParticles;
 
@@ -17,16 +17,18 @@ public class Collectible : MonoBehaviour {
     {
         if(!collected && c.tag == "Player")
         {
-            collected = true;
+			if (c.gameObject.GetComponent<PlayerController> ().alive) {
+				collected = true;
 
-			Manager.currentGameManager.GetComponent<Manager>().collectedMuffins++;
+				Manager.currentGameManager.GetComponent<Manager> ().collectedMuffins++;
 
-            c.GetComponent<PlayerController>().powerUpCount++;
-            if(c.GetComponent<PlayerController>().powerUpCount<10)
-                c.GetComponent<PlayerController>().Body.transform.localScale+=new Vector3(0.05f,0.15f,0f);
-            GetComponent<AudioSource>().Play();
+				c.GetComponent<PlayerController> ().powerUpCount++;
+				if (c.GetComponent<PlayerController> ().powerUpCount < 10)
+					c.GetComponent<PlayerController> ().Body.transform.localScale += new Vector3 (0.05f, 0.15f, 0f);
+				GetComponent<AudioSource> ().Play ();
 
-            StartCoroutine(Despawn());
+				StartCoroutine (Despawn ());
+			}
         }
     }
 
