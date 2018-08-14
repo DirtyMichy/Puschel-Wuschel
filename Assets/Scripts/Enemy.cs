@@ -10,6 +10,7 @@ public class Enemy : MonoBehaviour
     public float delay = 1f;
     public GameObject web;
 	public bool killable = true;
+	public bool flipX = false;
 	public bool resetPositionAfterKill = false;
 	public GameObject spawnParticles;
 
@@ -22,6 +23,8 @@ public class Enemy : MonoBehaviour
             iTween.MoveAdd(gameObject, iTween.Hash("y", rangeY, "easeType", "easeInOutExpo", "loopType", "pingPong", "time", speed, "delay", delay));
             iTween.ScaleAdd(web, iTween.Hash("y", 45*Math.Abs(rangeY), "easeType", "easeInOutExpo", "loopType", "pingPong", "time", speed, "delay", delay));
         }
+		if(flipX)
+			StartCoroutine(Dance());
     }
 
 	public void SpawnParticle()
@@ -68,4 +71,13 @@ public class Enemy : MonoBehaviour
         
         Destroy(gameObject);
     }
+
+	public IEnumerator Dance()
+	{
+		while (true) 
+		{
+			yield return new WaitForSeconds(1f);
+			GetComponent<SpriteRenderer> ().flipX = !GetComponent<SpriteRenderer> ().flipX;
+		}
+	}
 }
