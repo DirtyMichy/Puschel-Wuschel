@@ -4,85 +4,60 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.IO;
 
-public class Exit : MonoBehaviour 
+public class Exit : MonoBehaviour
 {
-    private bool exited = false;
-    //private int[] campaignCollectedMuffins;
+	private bool exited = false;
 
-    void OnTriggerEnter2D(Collider2D c)
-    {
-        if(!exited && c.tag == "Player")
-        {
-            exited = true;
+	void OnTriggerEnter2D (Collider2D c)
+	{
+		if (!exited && c.tag == "Player") {
+			exited = true;
 
 			//A saveFile should exist because its being created in the menu before a mission
-			if (File.Exists (Application.dataPath + "/fluffy.plush")) 
-			{
+			if (File.Exists (Application.dataPath + "/fluffy.plush")) {
 				Debug.Log ("Savegame found");
 
 				SaveLoad.Load ();
-				Game.current = SaveLoad.savedGames[0];
+				Game.current = SaveLoad.savedGames [0];
 			}
 
-			int sceneNameAsInt = int.Parse(SceneManager.GetActiveScene().name);
+			int sceneNameAsInt = int.Parse (SceneManager.GetActiveScene ().name);
 
-			Game.current.collected[sceneNameAsInt]=Manager.currentGameManager.GetComponent<Manager>().collectedMuffins; 
+			Game.current.collected [sceneNameAsInt] = Manager.currentGameManager.GetComponent<Manager> ().collectedMuffins; 
 
-			/*
-            if(PlayerPrefsX.GetIntArray("collectedMuffins").Length > 0)
-                campaignCollectedMuffins = PlayerPrefsX.GetIntArray("collectedMuffins");
-            else
-            {
-                campaignCollectedMuffins = new int[SceneManager.sceneCountInBuildSettings];
-            }
-			*/
+			SaveLoad.Save ();
+			if ((sceneNameAsInt + 1) < ((SceneManager.sceneCountInBuildSettings) - 1)) {
+				Debug.Log ((sceneNameAsInt + 1) + " less than " + (SceneManager.sceneCountInBuildSettings - 1));
+				SceneManager.LoadScene ((sceneNameAsInt + 1).ToString ());
+			} else
+				SceneManager.LoadScene ("Menu");
+		}
+	}
 
-            //campaignCollectedMuffins[sceneNameAsInt]=Camera.main.GetComponent<Manager>().collectedMuffins;
-            //PlayerPrefsX.SetIntArray("collectedMuffins", campaignCollectedMuffins);
-
-            //PlayerPrefs.Save();
-			SaveLoad.Save();
-            if((sceneNameAsInt+1) < ((SceneManager.sceneCountInBuildSettings)-1))
-                SceneManager.LoadScene((sceneNameAsInt+1).ToString());
-            else                
-                SceneManager.LoadScene("Menu");
-        }
-    }
-
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.O) && !exited)
-        {
-            exited = true;
+	void Update ()
+	{
+		//Cheat for debugging
+		if (Input.GetKeyDown (KeyCode.O) && !exited) {
+			exited = true;
 
 			//A saveFile should exist because its being created in the menu before a mission
-			if (File.Exists (Application.dataPath + "/fluffy.plush")) 
-			{
+			if (File.Exists (Application.dataPath + "/fluffy.plush")) {
 				Debug.Log ("Savegame found");
 
 				SaveLoad.Load ();
-				Game.current = SaveLoad.savedGames[0];
+				Game.current = SaveLoad.savedGames [0];
 			}
 
-			int sceneNameAsInt = int.Parse(SceneManager.GetActiveScene().name);
+			int sceneNameAsInt = int.Parse (SceneManager.GetActiveScene ().name);
 
-			Game.current.collected[sceneNameAsInt]=Camera.main.GetComponent<Manager>().collectedMuffins; 
-            /*
-            if(PlayerPrefsX.GetIntArray("collectedMuffins").Length > 0)
-                campaignCollectedMuffins = PlayerPrefsX.GetIntArray("collectedMuffins");
-            else
-            {
-                campaignCollectedMuffins = new int[SceneManager.sceneCountInBuildSettings];
-            }
-            
-            int sceneNameAsInt = int.Parse(SceneManager.GetActiveScene().name);
-            
-            campaignCollectedMuffins[sceneNameAsInt]=Camera.main.GetComponent<Manager>().collectedMuffins;
-            PlayerPrefsX.SetIntArray("collectedMuffins", campaignCollectedMuffins);
-            
-            PlayerPrefs.Save();
-            SceneManager.LoadScene("Menu");
-            */
-        }  
-    }
+			Game.current.collected [sceneNameAsInt] = Manager.currentGameManager.GetComponent<Manager> ().collectedMuffins; 
+
+			SaveLoad.Save ();
+			if ((sceneNameAsInt + 1) < ((SceneManager.sceneCountInBuildSettings) - 1)) {
+				Debug.Log ((sceneNameAsInt + 1) + " less than " + (SceneManager.sceneCountInBuildSettings - 1));
+				SceneManager.LoadScene ((sceneNameAsInt + 1).ToString ());
+			} else
+				SceneManager.LoadScene ("Menu");
+		}
+	}
 }

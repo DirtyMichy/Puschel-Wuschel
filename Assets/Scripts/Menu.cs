@@ -29,6 +29,7 @@ public class Menu : MonoBehaviour
     bool pressedArrow = false;
     public bool charSelection = true;
 	public int MAXPLAYER = 4;
+	public int MAXLEVELS = 100;
     public int playerCount = 1; //player 1 is always avtive at the start
     //public bool[] isUnlocked;
     GameObject[] levelUI, charUI;
@@ -65,7 +66,9 @@ public class Menu : MonoBehaviour
 		{
 			Game.current = new Game ();		
 			Game.current.playerChosenCharacter = new int[MAXPLAYER];
-			Game.current.collected = new int[Level.Length]; 
+			//Errors happen when we increase the amount of levels after a savefile has been created. So we will create an Array with a size of 100 so there will be no problems in the future (atleast when we don't create over 100 levels)
+			//Game.current.collected = new int[Level.Length]; 
+			Game.current.collected = new int[MAXLEVELS]; 
 		}
 
 		if (File.Exists (Application.dataPath + "/fluffy.plush")) 
@@ -75,7 +78,8 @@ public class Menu : MonoBehaviour
 			SaveLoad.Load ();
 			Game.current = SaveLoad.savedGames[0];
 		}
-		Debug.Log (Game.current.test);
+		Debug.Log ("Test: " + Game.current.test + " Collected.Length" + Game.current.collected.Length);
+		Debug.Log ("Collected[0] " + Game.current.collected[0]);
 
 		Game.current.test = "ABC";
 		//Save the current Game as a new saved Game
@@ -83,20 +87,11 @@ public class Menu : MonoBehaviour
 
 		Debug.Log (Game.current.test);
 
-        //showCharSelection = PlayerPrefs.GetInt("showCharSelection");
-
         levelUI = GameObject.FindGameObjectsWithTag("LevelUI");
         charUI = GameObject.FindGameObjectsWithTag("CharUI");
-        /*
-        if (PlayerPrefsX.GetBoolArray("unlockedCharacters").Length > 0)
-            isUnlocked = PlayerPrefsX.GetBoolArray("unlockedCharacters");
-        else
-        {
-            isUnlocked = new bool[allCharacters.Length];
-            for (int i = 0; i < allCharacters.Length; i++)
-                isUnlocked [i] = true;
-        }
-		*/
+       
+
+		//Inside the selectionScreen the playable characters are being spawned and modified, this could be improved in the future
         for (int i = 0; i < MAXPLAYER; i++)
         {
             for (int j = 0; j < allCharacters.Length; j++)
@@ -133,7 +128,6 @@ public class Menu : MonoBehaviour
         toggleLevelUI();
 
         int[] campaignCollectedMuffins = new int[Level.Length]; //creating an array with the same size as the Levelarray, to avoid nullpointers in forloop
-        //int[] loadedCampaignCollectedMuffins = PlayerPrefsX.GetIntArray("collectedMuffins"); //
 		int[] loadedCampaignCollectedMuffins = Game.current.collected;
 
         playerRDY = new bool[MAXPLAYER];
@@ -146,21 +140,13 @@ public class Menu : MonoBehaviour
         if (playerActive.Length > 0)
             playerActive [0] = true;
 
-		//if (PlayerPrefsX.GetIntArray("playerChosenCharacter").Length > 0)
-		//    playerChosenCharacter = PlayerPrefsX.GetIntArray("playerChosenCharacter");
 		Game.current.playerChosenCharacter = new int[MAXPLAYER];
 		if (Game.current.playerChosenCharacter.Length > 0)
 			playerChosenCharacter = Game.current.playerChosenCharacter;
 
         //get all saved stats, everything else will be 0 so the levelstats can get initialized below
         campaignCollectedMuffins = loadedCampaignCollectedMuffins;
-        /*
-        for (int i = 0; i < loadedCampaignCollectedMuffins.Length; i++)
-        {
-            campaignCollectedMuffins [i] = loadedCampaignCollectedMuffins [i];
-        }
-*/
-        //Debug.Log("Level: " + Level.Length + "campaignCollectedMuffins: " + campaignCollectedMuffins.Length);
+
 		Debug.Log("Level: " + Level.Length + "campaignCollectedMuffins: " + Game.current.collected.Length);
 
         //initiliazing levelstats
@@ -179,11 +165,11 @@ public class Menu : MonoBehaviour
             charSelection = false;
             toggleLevelUI();
         }
-
     }
 
     void UIBeepSounds()
     {
+		if(UIBeeps.Length > 1)
         UIBeeps [1].Play();
     }
 
@@ -242,7 +228,6 @@ public class Menu : MonoBehaviour
             }
 
 			Game.current.playerCount = playerCount;
-            //PlayerPrefs.SetInt("playerCount", playerCount);
         }
         
         //###################### KeyBoardSupport for player 1 ######################
@@ -405,7 +390,6 @@ public class Menu : MonoBehaviour
 
 			playerChosenCharacter = Game.current.playerChosenCharacter;
 			SaveLoad.Save();
-            //PlayerPrefsX.SetIntArray("playerChosenCharacter", playerChosenCharacter);
         } else
         {
             //Iterate through levels because charselection is false
@@ -530,8 +514,6 @@ public class Menu : MonoBehaviour
     // Update is called once per frame
     public void Startlevel()
     {        
-        PlayerPrefs.SetInt("showCharSelection", 0);
-        PlayerPrefs.Save();
         SceneManager.LoadScene(currentLevelSelection.ToString());
     }
         
