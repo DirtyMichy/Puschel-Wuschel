@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using GamepadInput;
 using System.IO;
-using UnityEditor;
+//using UnityEditor;
 
 public class Manager : MonoBehaviour
 {
