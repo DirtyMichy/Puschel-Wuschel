@@ -1,4 +1,4 @@
-﻿//Script used by evil Clouds
+﻿//Script used by evil clouds and cactus enemies
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -35,6 +35,5 @@ public class RotateToTarget : MonoBehaviour
         float value = Vector3.Cross(point2Target, transform.right).z;
 
         GetComponent<Rigidbody2D>().angularVelocity = 200f * value;
-
     }
 }

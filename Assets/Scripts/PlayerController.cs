@@ -33,6 +33,9 @@ public class PlayerController : MonoBehaviour
 	public GameObject Name;
 	public GameObject spawnParticles;
 
+	bool directionRight = false;
+	bool directionLeft = false;
+
 	public void Awake ()
 	{
 		//0 = Forest
@@ -61,14 +64,14 @@ public class PlayerController : MonoBehaviour
 
 		anim = GetComponent<Animator> ();
 		rb2d = GetComponent<Rigidbody2D> ();
-        
+
 		gamePadIndex = new GamepadInput.GamePad.Index[4];
 		gamePadIndex [0] = GamePad.Index.One;
 		gamePadIndex [1] = GamePad.Index.Two;
 		gamePadIndex [2] = GamePad.Index.Three;
 		gamePadIndex [3] = GamePad.Index.Four;
 	}
-	
+
 	// Update is called once per frame
 	void Update ()
 	{
@@ -103,6 +106,22 @@ public class PlayerController : MonoBehaviour
 		}
 	}
 
+	public void Jump()
+	{
+		for (int i = 0; i < groundCheck.Length; i++) 
+		{
+			if (Physics2D.Linecast (transform.position, groundCheck [i].position, 1 << LayerMask.NameToLayer ("Ground")))
+				grounded = true;
+		}
+
+		if (!jump  && alive && grounded) 
+		{
+			jump = true;
+			GetComponent<AudioSource> ().Play ();
+			grounded = false;
+		}
+	}
+
 	IEnumerator powerUp ()
 	{
 		powerUpActivated = true;
@@ -120,39 +139,57 @@ public class PlayerController : MonoBehaviour
 		Body.transform.localScale = new Vector3 (1f, 1f, 1f);
 	}
 
+	public void GoRight()
+	{
+		directionLeft = false;
+		directionRight = true;
+	}
+
+	public void GoLeft()
+	{		
+		directionRight = false;
+		directionLeft = true;
+	}
+
 	void FixedUpdate ()
 	{
 		if (alive) {
 			Vector2 directionCurrent = GamePad.GetAxis (GamePad.Axis.LeftStick, gamePadIndex [playerID]);
 
-			if ((Input.GetKey (KeyCode.A) || Input.GetKey (KeyCode.LeftArrow)) && playerID == 0)
+			if ((Input.GetKey (KeyCode.A) || directionLeft || Input.GetKey (KeyCode.LeftArrow)) && playerID == 0)
 				directionCurrent.x = -1f;
-			if ((Input.GetKey (KeyCode.D) || Input.GetKey (KeyCode.RightArrow)) && playerID == 0)
+			if ((Input.GetKey (KeyCode.D) || directionRight || Input.GetKey (KeyCode.RightArrow)) && playerID == 0)
 				directionCurrent.x = 1f;
 
 			//Debug.Log(directionCurrent.x);
 			if (directionCurrent.x * rb2d.velocity.x < maxSpeed)
 				rb2d.AddForce (Vector2.right * directionCurrent.x * moveForce * iceForce);
-					
+
 			if (Mathf.Abs (rb2d.velocity.x) > maxSpeed)
 				rb2d.velocity = new Vector2 (Mathf.Sign (rb2d.velocity.x) * maxSpeed * iceForce, rb2d.velocity.y);
-		
+
 			if (directionCurrent.x > 0 && !facingRight)
 				Flip ();
 			else if (directionCurrent.x < 0 && facingRight)
 				Flip ();
-		
-			if (jump) {
+
+			if (jump) 
+			{
 				rb2d.AddForce (new Vector2 (0f, jumpForce * GetComponent<Rigidbody2D> ().mass));
 				rb2d.velocity = new Vector2 (0f, 0f);
 				jump = false;
 			}
 
-			if (directionCurrent.x != 0) {
+			if (directionCurrent.x != 0) 
+			{
 				anim.SetBool ("isWalking", true);
-			} else {
+			} else 
+			{
 				anim.SetBool ("isWalking", false);
 			}
+
+			directionRight = false;
+			directionLeft = false;
 		}
 	}
 
@@ -177,11 +214,11 @@ public class PlayerController : MonoBehaviour
 		if (alive && ((c.tag == "Enemy" && !powerUpActivated) || c.tag == "KillZone")) 
 		{
 			if (c.gameObject.GetComponent<Enemy> ())
-				if (c.gameObject.GetComponent<Enemy> ().resetPositionAfterKill) 
-				{
-					c.gameObject.GetComponent<Enemy> ().SpawnParticle ();
-					c.gameObject.transform.position += new Vector3 (16f,0f, 0f);
-				}
+			if (c.gameObject.GetComponent<Enemy> ().resetPositionAfterKill) 
+			{
+				c.gameObject.GetComponent<Enemy> ().SpawnParticle ();
+				c.gameObject.transform.position += new Vector3 (16f,0f, 0f);
+			}
 			StartCoroutine (Die ());
 		}        
 	}
