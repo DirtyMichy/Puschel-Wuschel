@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//Snail Wanted trigger
 public class WesternSpecialTrigger : MonoBehaviour 
 {
 	[SerializeField]

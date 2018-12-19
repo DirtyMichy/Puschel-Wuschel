@@ -8,7 +8,6 @@ public class KillZone : MonoBehaviour {
     {
             if (c.tag != "Player")
             {
-                //Destroy(c.transform.root.gameObject);
 				Destroy(c.transform.gameObject);
             }
     }

@@ -49,9 +49,7 @@ public class SnowManShooting : MonoBehaviour
     {
         shooting = true;
 
-//            Debug.Log("Shooting");
-
-            //If there is an acompanying audio, play it
+		//If there is an acompanying audio, play it
             if (GetComponent<AudioSource>())
                 GetComponent<AudioSource>().Play();
             

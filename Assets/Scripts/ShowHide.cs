@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ShowHide : MonoBehaviour {
-
+public class ShowHide : MonoBehaviour 
+{
 	public GameObject objectToShow;
 
 	void OnTriggerEnter2D(Collider2D c)

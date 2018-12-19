@@ -13,9 +13,6 @@ public class ParallaxScrolling : MonoBehaviour
     
     void Update()
     {
-        //Keep looping between 0 and 1
-        //float x = Mathf.Repeat(Time.time * Camera.main.transform.position.x, 1);
-
         //Create the offset
         Vector2 offset = new Vector2(Camera.main.transform.position.x/ speed, offsetY);
 

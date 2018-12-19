@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class SpriteRandomizer : MonoBehaviour
 {
-
     public Sprite[] AllSprites;
 
 	// Use this for initialization

@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SnowBall : MonoBehaviour {
-
+public class SnowBall : MonoBehaviour 
+{
     public GameObject currentTarget = null;
     public float rotationSpeed = 10f;
     public float range = 32f;
@@ -53,8 +53,6 @@ public class SnowBall : MonoBehaviour {
 
     void OnCollisionEnter2D(Collision2D c)
     {
-//        Debug.Log("Collision");
-
         //Snowballs cant hit enemies
         if (c.gameObject.tag == "Enemy")
         {
@@ -90,11 +88,4 @@ public class SnowBall : MonoBehaviour {
     {
         Destroy(gameObject);
     }
-
-    /*
-    void Update()
-    {
-        Debug.Log("AngularVelocity: " +  GetComponent<Rigidbody2D>().angularVelocity);
-    }
-    */
 }

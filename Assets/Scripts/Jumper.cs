@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//Used by jumping dudes in the xmas level
 public class Jumper : MonoBehaviour {
 
 	public float yForce = 1000f, xForce = 0f, delay = 1f;
@@ -10,8 +11,6 @@ public class Jumper : MonoBehaviour {
 	void Update () {
 		if(GetComponent<Rigidbody2D> ().velocity.y == 0f && !isJumping)
 		{
-//			Debug.Log (GetComponent<Rigidbody2D> ().velocity);
-//			Debug.Log (transform.rotation);
 			isJumping = true;
 			Invoke ("Jumping", delay);	
 		}
@@ -19,7 +18,6 @@ public class Jumper : MonoBehaviour {
 
 	void Jumping () {
 		GetComponent<Rigidbody2D> ().AddForce ( new Vector2 (xForce, yForce));
-		isJumping = false;
-		//Invoke ("Jumping", delay);		
+		isJumping = false;		
 	}
 }

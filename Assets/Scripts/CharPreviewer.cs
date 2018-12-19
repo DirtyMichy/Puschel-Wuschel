@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//Used in menu scrren to show the chosen character
 public class CharPreviewer : MonoBehaviour {
 
     //public int playerNumber = 0;        //Owner of this charPreviewer
     public GameObject[] allCharacters;
-    public bool[] isUnlocked;
-    //public List<GameObject> unlockedCharacters = new List<GameObject>(); 
+    public bool[] isUnlocked; 
 	
     public void SelectChar(int selection)
     {  
