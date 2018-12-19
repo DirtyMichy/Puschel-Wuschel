@@ -88,7 +88,6 @@ public class PlayerController : MonoBehaviour
 				StartCoroutine (powerUp ());
 		}
 
-		//if (Input.GetButton ("Jump") && grounded)
 		if ((((Input.GetKeyDown (KeyCode.Space) 
 			|| Input.GetKeyDown (KeyCode.W) 
 			|| Input.GetKeyDown (KeyCode.UpArrow)) && playerID == 0) 
@@ -96,9 +95,9 @@ public class PlayerController : MonoBehaviour
 		{
 			jump = true;
 			GetComponent<AudioSource> ().Play ();
+			grounded = false;
 		}
 
-		grounded = false;
 
 		if (powerUpActivated) 
 		{
@@ -156,17 +155,28 @@ public class PlayerController : MonoBehaviour
 		if (alive) {
 			Vector2 directionCurrent = GamePad.GetAxis (GamePad.Axis.LeftStick, gamePadIndex [playerID]);
 
+
+
 			if ((Input.GetKey (KeyCode.A) || directionLeft || Input.GetKey (KeyCode.LeftArrow)) && playerID == 0)
 				directionCurrent.x = -1f;
 			if ((Input.GetKey (KeyCode.D) || directionRight || Input.GetKey (KeyCode.RightArrow)) && playerID == 0)
 				directionCurrent.x = 1f;
+			
+			//if (grounded || !(rb2d.velocity.x == 0 && rb2d.velocity.y == 0)) 
+			{
+				//Debug.Log(directionCurrent.x);
+				if (directionCurrent.x * rb2d.velocity.x < maxSpeed)
+					rb2d.AddForce (Vector2.right * directionCurrent.x * moveForce * iceForce);
 
-			//Debug.Log(directionCurrent.x);
-			if (directionCurrent.x * rb2d.velocity.x < maxSpeed)
-				rb2d.AddForce (Vector2.right * directionCurrent.x * moveForce * iceForce);
+				//???
+				if (Mathf.Abs (rb2d.velocity.x) > maxSpeed)
+					rb2d.velocity = new Vector2 (Mathf.Sign (rb2d.velocity.x) * maxSpeed * iceForce, rb2d.velocity.y);
+			}
 
-			if (Mathf.Abs (rb2d.velocity.x) > maxSpeed)
-				rb2d.velocity = new Vector2 (Mathf.Sign (rb2d.velocity.x) * maxSpeed * iceForce, rb2d.velocity.y);
+
+			if (rb2d.velocity.x == 0 && directionCurrent.x != 0)
+					rb2d.AddForce (new Vector2 (0f, -0.1f * jumpForce * GetComponent<Rigidbody2D> ().mass));
+
 
 			if (directionCurrent.x > 0 && !facingRight)
 				Flip ();
@@ -176,7 +186,7 @@ public class PlayerController : MonoBehaviour
 			if (jump) 
 			{
 				rb2d.AddForce (new Vector2 (0f, jumpForce * GetComponent<Rigidbody2D> ().mass));
-				rb2d.velocity = new Vector2 (0f, 0f);
+				rb2d.velocity = new Vector2 (0f, 0f);				//resetting the velocity so old value wont be used (no flickery jumping)
 				jump = false;
 			}
 
