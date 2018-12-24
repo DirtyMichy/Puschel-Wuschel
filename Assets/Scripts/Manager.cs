@@ -5,8 +5,6 @@ using UnityEngine.SceneManagement;
 using GamepadInput;
 using System.IO;
 
-//using UnityEditor;
-
 public class Manager : MonoBehaviour
 {
 	private bool GameOver = false;
@@ -71,24 +69,29 @@ public class Manager : MonoBehaviour
 			float leftestPos = 0;
 			float rightestPos = 0;
 
+			//get rightest player
 			for (int i = 0; i < playerCharactersAlive.Length; i++) {
 				if (playerCharactersAlive [i] != null) {
 					if (playerCharactersAlive [i].transform.position.x > rightestPos) {
 						rightestPos = playerCharactersAlive [i].transform.position.x;
 					}
+				}
+			}
 
-					leftestPos = rightestPos;
+			leftestPos = rightestPos;
 
+			for (int i = 0; i < playerCharactersAlive.Length; i++) {
+				if (playerCharactersAlive [i] != null) {
 					if (playerCharactersAlive [i].transform.position.x < leftestPos) {
 						leftestPos = playerCharactersAlive [i].transform.position.x;
 					}
 				}
-			}
-                
+			}		
+
 			float distance = Mathf.Abs (leftestPos - rightestPos);
 			float x = 0;
 
-//          Debug.Log("Distance: " + distance + "Left: " + Mathf.Abs(leftestPos) + "Right: " + Mathf.Abs(rightestPos));
+			Debug.Log ("Distance: " + distance + "Left: " + Mathf.Abs (leftestPos) + "Right: " + Mathf.Abs (rightestPos));
 
 			if (distance > zoomStart) {
 				Debug.Log ("Optimier mich!");

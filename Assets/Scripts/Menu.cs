@@ -12,7 +12,6 @@ public class Menu : MonoBehaviour
 	public static Menu current;
 
 	public int[] campaignCollectedMuffins;
-	//campaignCollectedMuffins[0] =0; 0= E1M1 0= not finished, 1= finished, 2= everythingFound
 	public GameObject playerCountText, backGround;
 	public GameObject[] Level;
 	public GameObject[] charPreviewers;
