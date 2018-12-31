@@ -196,10 +196,11 @@ public class Menu : MonoBehaviour
 
 			if ((GamePad.GetButton (GamePad.Button.A, gamePadIndex [i])) && !playerActive [i]) {
 				UIBeepSounds ();
-                   
-				if (!playerActive [i]) {
-					playerCount++;
+
+				if (playerActive [i]) {
 					playerRDY [i] = true;
+				} else {
+					playerCount++;
 					playerActive [i] = true;
 				}
 			}
