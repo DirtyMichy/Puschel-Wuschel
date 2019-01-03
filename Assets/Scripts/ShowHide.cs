@@ -2,23 +2,23 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ShowHide : MonoBehaviour 
+public class ShowHide : MonoBehaviour
 {
-	public GameObject objectToShow;
+    public GameObject objectToShow;
 
-	void OnTriggerEnter2D(Collider2D c)
-	{
-		if (c.tag == "Player")
-		{
-			objectToShow.SetActive (true);
-		}
-	}
+    void OnTriggerEnter2D(Collider2D c)
+    {
+        if (c.tag == "Player")
+        {
+            objectToShow.SetActive(true);
+        }
+    }
 
-	void OnTriggerExit2D(Collider2D c)
-	{
-		if (c.tag == "Player")
-		{
-			objectToShow.SetActive (false);
-		}
-	}
+    void OnTriggerExit2D(Collider2D c)
+    {
+        if (c.tag == "Player")
+        {
+            objectToShow.SetActive(false);
+        }
+    }
 }

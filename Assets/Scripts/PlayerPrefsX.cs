@@ -12,7 +12,18 @@ public class PlayerPrefsX
     static private int idx;
     static private byte[] byteBlock;
 
-    enum ArrayType { Float, Int32, Bool, String, Vector2, Vector3, Quaternion, Color }
+    enum ArrayType
+    {
+        Float,
+        Int32,
+        Bool,
+        String,
+        Vector2,
+        Vector3,
+        Quaternion,
+        Color
+
+    }
 
     public static bool SetBool(String name, bool value)
     {
@@ -472,7 +483,6 @@ public class PlayerPrefsX
     public static Vector3[] GetVector3Array(String key, Vector3 defaultValue, int defaultSize)
     {
         if (PlayerPrefs.HasKey(key))
-
         {
             return GetVector3Array(key);
         }

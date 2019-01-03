@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ChasePlayer : MonoBehaviour {
+public class ChasePlayer : MonoBehaviour
+{
     
     public GameObject currentTarget = null;
     public float rotationSpeed = 10f;
@@ -31,7 +32,7 @@ public class ChasePlayer : MonoBehaviour {
         if (currentTarget != null)
         {
             Vector3 theScale = transform.localScale;
-            if((currentTarget.transform.position.x > transform.position.x &&  theScale.y<=0) || (currentTarget.transform.position.x < transform.position.x && theScale.y>0))
+            if ((currentTarget.transform.position.x > transform.position.x && theScale.y <= 0) || (currentTarget.transform.position.x < transform.position.x && theScale.y > 0))
             {
                 theScale.y *= -1;
                 transform.localScale = theScale;

@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class KillZone : MonoBehaviour {
+public class KillZone : MonoBehaviour
+{
 
     void OnTriggerEnter2D(Collider2D c)
     {
-            if (c.tag != "Player")
-            {
-				Destroy(c.transform.gameObject);
-            }
+        if (c.tag != "Player")
+        {
+            Destroy(c.transform.gameObject);
+        }
     }
 }

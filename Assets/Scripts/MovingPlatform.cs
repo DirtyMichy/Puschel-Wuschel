@@ -2,22 +2,23 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MovingPlatform : MonoBehaviour {
+public class MovingPlatform : MonoBehaviour
+{
 
-	public enum easeTypes
-	{
-		easeInOutExpo,
-		easeOutExpo
-	}
+    public enum easeTypes
+    {
+        easeInOutExpo,
+        easeOutExpo
+    }
 
-	public enum loopTypes
-	{
-		pingPong,
-		none
-	}
+    public enum loopTypes
+    {
+        pingPong,
+        none
+    }
 
-	public easeTypes easeTypeSelection;
-	public loopTypes loopTypeSelection;
+    public easeTypes easeTypeSelection;
+    public loopTypes loopTypeSelection;
 
     public float rangeX = 4f;
     public float rangeY = 0f;
@@ -32,23 +33,23 @@ public class MovingPlatform : MonoBehaviour {
     }
 
     // Update is called once per frame
-    void Update ()
+    void Update()
     {
-        if(!doesFall && speed != 0 )
-			iTween.MoveBy(gameObject, iTween.Hash("y", rangeY, "x", rangeX, "loopType", loopTypeSelection.ToString(), "easeType", easeTypeSelection.ToString(), "speed", speed));
+        if (!doesFall && speed != 0)
+            iTween.MoveBy(gameObject, iTween.Hash("y", rangeY, "x", rangeX, "loopType", loopTypeSelection.ToString(), "easeType", easeTypeSelection.ToString(), "speed", speed));
     }
 
     private void OnCollisionStay2D(Collision2D collision)
     {
-        if(collision.gameObject.tag == "Player")
+        if (collision.gameObject.tag == "Player")
         {
             collision.gameObject.transform.parent = gameObject.transform;
         }
     }
 
-        private void OnCollisionExit2D(Collision2D collision)
+    private void OnCollisionExit2D(Collision2D collision)
     {
-        if(collision.gameObject.tag == "Player")
+        if (collision.gameObject.tag == "Player")
         {
             collision.gameObject.transform.parent = null;
         }
@@ -60,7 +61,7 @@ public class MovingPlatform : MonoBehaviour {
         if (doesFall)
         {
             StartCoroutine(ColliderCooldown());
-			iTween.PunchPosition(gameObject, iTween.Hash("y", rangeY, "easeType", easeTypeSelection.ToString(), "time", speed, "delay", delay));
+            iTween.PunchPosition(gameObject, iTween.Hash("y", rangeY, "easeType", easeTypeSelection.ToString(), "time", speed, "delay", delay));
         }
         else
             iTween.PunchPosition(gameObject, iTween.Hash("y", .5f, "time", 1f));
@@ -69,9 +70,9 @@ public class MovingPlatform : MonoBehaviour {
     IEnumerator ColliderCooldown()
     {
         yield return new WaitForSeconds(1f);        
-        GetComponent<EdgeCollider2D>().enabled=false;
+        GetComponent<EdgeCollider2D>().enabled = false;
         yield return new WaitForSeconds(1f);        
-        GetComponent<EdgeCollider2D>().enabled=true;
+        GetComponent<EdgeCollider2D>().enabled = true;
         transform.position = origin.position;
     }
 }

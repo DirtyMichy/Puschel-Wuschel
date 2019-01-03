@@ -40,7 +40,7 @@ public class SnowManShooting : MonoBehaviour
         if (currentTarget != null)
             point2Target = (Vector2)transform.position - (Vector2)currentTarget.transform.position;
 
-        if(currentTarget != null && !shooting)
+        if (currentTarget != null && !shooting)
             StartCoroutine("Shoot");
     }
 
@@ -49,18 +49,18 @@ public class SnowManShooting : MonoBehaviour
     {
         shooting = true;
 
-		//If there is an acompanying audio, play it
-            if (GetComponent<AudioSource>())
-                GetComponent<AudioSource>().Play();
+        //If there is an acompanying audio, play it
+        if (GetComponent<AudioSource>())
+            GetComponent<AudioSource>().Play();
             
-            animator.SetTrigger("Attack");
+        animator.SetTrigger("Attack");
 
-            yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(1f);
             
-            Instantiate(bullet, transform.position, transform.rotation);
+        Instantiate(bullet, transform.position, transform.rotation);
 
-            //Wait for it to be time to fire another shot
-            yield return new WaitForSeconds(shotDelay);
+        //Wait for it to be time to fire another shot
+        yield return new WaitForSeconds(shotDelay);
         
         shooting = false;
     }
