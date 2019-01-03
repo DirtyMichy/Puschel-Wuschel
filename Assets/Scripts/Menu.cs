@@ -194,24 +194,26 @@ public class Menu : MonoBehaviour
 		for (int i = 0; i < MAXPLAYER; i++) {
 			playerDpad [i] = GamePad.GetAxis (GamePad.Axis.Dpad, gamePadIndex [i]);      
 
-			if ((GamePad.GetButton (GamePad.Button.A, gamePadIndex [i])) && !playerActive [i]) {
+			if ((GamePad.GetButtonDown (GamePad.Button.A, gamePadIndex [i])) && !playerActive [i]) {
 				UIBeepSounds ();
+					
+				playerCount++;
+				playerActive [i] = true;
+				if (!charSelection)
+				playerRDY [i] = true;
 
-				if (playerActive [i]) {
-					playerRDY [i] = true;
-				} else {
-					playerCount++;
-					playerActive [i] = true;
-				}
 			}
 
 			if ((GamePad.GetButton (GamePad.Button.B, gamePadIndex [i])) && playerActive [i]) {
-				UIBeepSounds ();
-                   
-				if (playerActive [i] && !playerRDY [i]) {
+				UIBeepSounds ();                   
+
+				if (!charSelection) {
 					playerCount--;
 					playerActive [i] = false;
+					playerRDY [i] = true;
 				}
+				else
+					playerRDY [i] = false;
 			}   
                         
 			if (playerDpad [i].y == 0f) {
@@ -261,22 +263,17 @@ public class Menu : MonoBehaviour
 
 				if ((GamePad.GetButton (GamePad.Button.A, gamePadIndex [i])) && playerActive [i]) {
 					UIBeepSounds ();
-                  
-					if (!playerActive [i])
-						playerRDY [i] = false;
-					if (playerActive [i] && !playerRDY [i])
-						playerRDY [i] = true;  
+                  	playerRDY [i] = true;  
 				}
                 
 				if ((GamePad.GetButton (GamePad.Button.B, gamePadIndex [i])) && playerActive [i]) {
 					UIBeepSounds ();
                        
-					if (playerActive [i] && !playerRDY [i])
-						playerRDY [i] = true;
-					if (playerActive [i])
-						playerRDY [i] = false; 
+					if (playerActive [i] && playerRDY [i])
+						playerRDY [i] = false;
 				}
 
+				//choosing character with Dpad
 				if (playerActive [i] && !pressedPlayerDpad [i]) {
 					if ((GamePad.GetAxis (GamePad.Axis.Dpad, gamePadIndex [i]).y < 0f)) {
 						pressedPlayerDpad [i] = true;
