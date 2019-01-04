@@ -6,58 +6,53 @@ using System.IO;
 
 public class Exit : MonoBehaviour
 {
-	private bool exited = false;
+    private bool exited = false;
 
-	void OnTriggerEnter2D (Collider2D c)
-	{
-		if (!exited && c.tag == "Player") {
-			exited = true;
+    void OnTriggerEnter2D(Collider2D c)
+    {
+        if (c.tag == "Player")
+            ExitLevel();
+    }
 
-			//A saveFile should exist because its being created in the menu before a mission
-			if (File.Exists (Application.dataPath + "/fluffy.plush")) {
-				Debug.Log ("Savegame found");
+    void ExitLevel()
+    {
+        if (!exited)
+        {
+            exited = true;
 
-				SaveLoad.Load ();
-				Game.current = SaveLoad.savedGames [0];
-			}
+            //A saveFile should exist because its being created in the menu before a mission
+            if (File.Exists(Application.dataPath + "/fluffy.plush"))
+            {
+                Debug.Log("Savegame found");
 
-			int sceneNameAsInt = int.Parse (SceneManager.GetActiveScene ().name);
+                SaveLoad.Load();
+                Game.current = SaveLoad.savedGames[0];
+            }
 
-			Game.current.collected [sceneNameAsInt] = Manager.currentGameManager.GetComponent<Manager> ().collectedMuffins; 
+            int sceneNameAsInt = int.Parse(SceneManager.GetActiveScene().name);
 
-			SaveLoad.Save ();
-			if ((sceneNameAsInt + 1) < ((SceneManager.sceneCountInBuildSettings) - 1)) {
-				Debug.Log ((sceneNameAsInt + 1) + " less than " + (SceneManager.sceneCountInBuildSettings - 1));
-				SceneManager.LoadScene ((sceneNameAsInt + 1).ToString ());
-			} else
-				SceneManager.LoadScene ("Menu");
-		}
-	}
+            Game.current.collected[sceneNameAsInt] = Manager.currentGameManager.GetComponent<Manager>().collectedMuffins; 
 
-	void Update ()
-	{
-		//Cheat for debugging
-		if (Input.GetKeyDown (KeyCode.O) && !exited) {
-			exited = true;
+            SaveLoad.Save();
+            if ((sceneNameAsInt + 1) < ((SceneManager.sceneCountInBuildSettings) - 1))
+            {
+                Debug.Log((sceneNameAsInt + 1) + " less than " + (SceneManager.sceneCountInBuildSettings - 1));
+                SceneManager.LoadScene((sceneNameAsInt + 1).ToString());
+            }
+            else
+            {   
+                Game.current.firstTimeEntering = false;
+                SceneManager.LoadScene("Menu");
+            }
+        }
+    }
 
-			//A saveFile should exist because its being created in the menu before a mission
-			if (File.Exists (Application.dataPath + "/fluffy.plush")) {
-				Debug.Log ("Savegame found");
-
-				SaveLoad.Load ();
-				Game.current = SaveLoad.savedGames [0];
-			}
-
-			int sceneNameAsInt = int.Parse (SceneManager.GetActiveScene ().name);
-
-			Game.current.collected [sceneNameAsInt] = Manager.currentGameManager.GetComponent<Manager> ().collectedMuffins; 
-
-			SaveLoad.Save ();
-			if ((sceneNameAsInt + 1) < ((SceneManager.sceneCountInBuildSettings) - 1)) {
-				Debug.Log ((sceneNameAsInt + 1) + " less than " + (SceneManager.sceneCountInBuildSettings - 1));
-				SceneManager.LoadScene ((sceneNameAsInt + 1).ToString ());
-			} else
-				SceneManager.LoadScene ("Menu");
-		}
-	}
+    void Update()
+    {
+        //Cheat for debugging
+        if (Input.GetKeyDown(KeyCode.O) && !exited)
+        {
+            ExitLevel();
+        }
+    }
 }

@@ -36,11 +36,11 @@ public class Manager : MonoBehaviour
 		if (!File.Exists(Application.dataPath + "/fluffy.plush"))
 			Game.current = new Game();
 		else
-		{
+        {
+            Debug.Log("Loading File");
 			SaveLoad.Load();
 			Game.current = SaveLoad.savedGames[0];
 		}
-
 		playerCount = Game.current.playerCount;
 		playerChosenCharacter = Game.current.playerChosenCharacter;
 
@@ -56,7 +56,7 @@ public class Manager : MonoBehaviour
     
 	// Update is called once per frame
 	void Update()
-	{
+    {
 		if (CountPlayersAlive() <= 0 && !GameOver)
 		{
 			GameOver = true;

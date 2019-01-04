@@ -18,7 +18,7 @@ public class Menu : MonoBehaviour
     public GameObject[] allCharacters;
     //contains all playable characters
     public int currentLevelSelection = 0;
-    public AudioSource[] UIBeeps;
+    //public AudioSource[] UIBeeps;
     public AudioSource SoundPositive;
     public AudioSource SoundNegative;
     //Beeps for ButtonFeedBack
@@ -89,13 +89,15 @@ public class Menu : MonoBehaviour
             //Errors happen when we increase the amount of levels after a savefile has been created. So we will create an Array with a size of 100 so there will be no problems in the future (atleast when we don't create over 100 levels)
             Game.current.collected = new int[MAXLEVELS]; 
         }
-
         if (File.Exists(Application.dataPath + "/fluffy.plush"))
         {
             Debug.Log("Savegame found");
 			
             SaveLoad.Load();
             Game.current = SaveLoad.savedGames[0];
+
+            if(!Game.current.firstTimeEntering)
+            playerCount = Game.current.playerCount;            
         }
         //Debug.Log("Test: " + Game.current.test + " Collected.Length" + Game.current.collected.Length);
         Debug.Log("Collected[0] " + Game.current.collected[0]);
@@ -161,7 +163,6 @@ public class Menu : MonoBehaviour
 
         pressedPlayerDpad = new bool[MAXPLAYER];
         playerDpad = new Vector2[MAXPLAYER];
-        UIBeeps = GetComponents<AudioSource>();
         
         if (showCharSelection == 0)
         {
@@ -170,10 +171,14 @@ public class Menu : MonoBehaviour
         }
     }
 
-    void UIBeepSounds()
+    void UISoundPositive()
     {
-        if (UIBeeps.Length > 1)
-            UIBeeps[1].Play();
+        SoundPositive.Play();
+    }
+
+    void UISoundNegative()
+    {
+        SoundNegative.Play();
     }
 
     void Update()
@@ -189,7 +194,7 @@ public class Menu : MonoBehaviour
     void IterateThroughChars_Backward(int i)
     {        
         pressedPlayerDpad[i] = true;
-        UIBeepSounds();
+        UISoundPositive();
         if (playerChosenCharacter[i] > 0)
             playerChosenCharacter[i]--;
         else
@@ -199,7 +204,7 @@ public class Menu : MonoBehaviour
     void IterateThroughChars_Forward(int i)
     {        
         pressedPlayerDpad[i] = true;
-        UIBeepSounds();
+        UISoundPositive();
         if (playerChosenCharacter[i] < allCharacters.Length - 1)
             playerChosenCharacter[i]++;
         else
@@ -304,9 +309,11 @@ public class Menu : MonoBehaviour
     {
         if (!playerActive[i])
         {
-            playerCount++;
             playerActive[i] = true;
+            playerCount++;
             charPreviewers[i].SetActive(true);
+
+            Game.current.playerCount = playerCount;
 
             playerCountText.GetComponent<Text>().text = playerCount + "/4 Spielern";
 
@@ -316,14 +323,18 @@ public class Menu : MonoBehaviour
 
             CharPreviewers();
 
-            UIBeepSounds();
+            UISoundPositive();
         }
         else
         {
+            //sound plays only the first time
+            if(!playerRDY[i])
+            UISoundPositive();
+            
             playerRDY[i] = true;
 
-            charPreviewers[0].gameObject.transform.GetChild(playerChosenCharacter[0]).Find("ArrowUp").gameObject.SetActive(!playerRDY[0]);
-            charPreviewers[0].gameObject.transform.GetChild(playerChosenCharacter[0]).Find("ArrowDown").gameObject.SetActive(!playerRDY[0]);
+            charPreviewers[i].gameObject.transform.GetChild(playerChosenCharacter[i]).Find("ArrowUp").gameObject.SetActive(!playerRDY[i]);
+            charPreviewers[i].gameObject.transform.GetChild(playerChosenCharacter[i]).Find("ArrowDown").gameObject.SetActive(!playerRDY[i]);
 
             if (playerRDY[0] && playerRDY[1] && playerRDY[2] && playerRDY[3] && playerCount > 0)
             if (charSelection)
@@ -337,21 +348,20 @@ public class Menu : MonoBehaviour
                 SaveLoad.Save();
                 Startlevel();
             }
-
-            UIBeepSounds();
         }
     }
 
     void ButtonPressedB(int i)
     {
-        if (playerActive[i] && charSelection)
+        if (playerActive[i])
+        if (charSelection)
         {
             if (playerRDY[i])
             {
                 playerRDY[i] = false;
 
-                charPreviewers[0].gameObject.transform.GetChild(playerChosenCharacter[0]).Find("ArrowUp").gameObject.SetActive(!playerRDY[0]);
-                charPreviewers[0].gameObject.transform.GetChild(playerChosenCharacter[0]).Find("ArrowDown").gameObject.SetActive(!playerRDY[0]);
+                charPreviewers[i].gameObject.transform.GetChild(playerChosenCharacter[i]).Find("ArrowUp").gameObject.SetActive(!playerRDY[i]);
+                charPreviewers[i].gameObject.transform.GetChild(playerChosenCharacter[i]).Find("ArrowDown").gameObject.SetActive(!playerRDY[i]);
             }
             else
             {                       
@@ -359,17 +369,19 @@ public class Menu : MonoBehaviour
                 playerActive[i] = false;
                 playerRDY[i] = true;
 
+                Game.current.playerCount = playerCount;
+
                 playerCountText.GetComponent<Text>().text = playerCount + "/4 Spielern";
 
                 charPreviewers[i].SetActive(false);
                 CharPreviewers();
             }
-            UIBeepSounds();
+            UISoundNegative();
         }
         else
         {
             charSelection = true;
-            UIBeepSounds();
+            UISoundNegative();
             toggleLevelUI();
         } 
     }
@@ -463,7 +475,6 @@ public class Menu : MonoBehaviour
         
     void Startlevel()
     {
-        Game.current.playerCount = playerCount;
         SceneManager.LoadScene(currentLevelSelection.ToString());
     }
         
@@ -479,6 +490,6 @@ public class Menu : MonoBehaviour
             currentLevelSelection = Level.Length - 1;   //if so set the number to the last index
         }
 
-        UIBeepSounds();  
+        UISoundPositive();
     }
 }

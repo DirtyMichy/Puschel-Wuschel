@@ -6,6 +6,7 @@ public class Game {
 
 	public static Game current;
 	public string test;
+    public bool firstTimeEntering = true;
 	public int playerCount;
 	public int campaignStatus;
 	public int[] collected;
