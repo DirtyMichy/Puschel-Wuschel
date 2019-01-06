@@ -41,7 +41,6 @@ public class Exit : MonoBehaviour
             }
             else
             {   
-                Game.current.firstTimeEntering = false;
                 SceneManager.LoadScene("Menu");
             }
         }
