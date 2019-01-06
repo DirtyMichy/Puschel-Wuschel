@@ -6,7 +6,6 @@ using GamepadInput;
 using UnityEngine.UI;
 using System.IO;
 
-
 public class Menu : MonoBehaviour
 {
     public static Menu current;
@@ -94,10 +93,7 @@ public class Menu : MonoBehaviour
             Debug.Log("Savegame found");
 			
             SaveLoad.Load();
-            Game.current = SaveLoad.savedGames[0];
-
-            if(!Game.current.firstTimeEntering)
-            playerCount = Game.current.playerCount;            
+            Game.current = SaveLoad.savedGames[0];           
         }
         //Debug.Log("Test: " + Game.current.test + " Collected.Length" + Game.current.collected.Length);
         Debug.Log("Collected[0] " + Game.current.collected[0]);
