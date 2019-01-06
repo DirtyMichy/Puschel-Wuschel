@@ -102,7 +102,7 @@ public class Manager : MonoBehaviour
 			float distance = Mathf.Abs(leftestPos - rightestPos);
 			float x = 0;
 
-			Debug.Log("Distance: " + distance + "Left: " + Mathf.Abs(leftestPos) + "Right: " + Mathf.Abs(rightestPos));
+			//Debug.Log("Distance: " + distance + "Left: " + Mathf.Abs(leftestPos) + "Right: " + Mathf.Abs(rightestPos));
 
 			if (distance > zoomStart)
 			{

@@ -58,11 +58,16 @@ public class Menu : MonoBehaviour
         }
 
         charSelection = !levelUI[0].activeSelf;
-
-        for (int i = 0; i < MAXPLAYER; i++)
-        {
-            charPreviewers[i].SetActive(charSelection);
-        }
+        if (charSelection)
+            for (int i = 0; i < MAXPLAYER; i++)
+            {            
+                charPreviewers[i].SetActive(playerActive[i]);
+            }
+        else
+            for (int i = 0; i < MAXPLAYER; i++)
+            {            
+                charPreviewers[i].SetActive(false);
+            }
 
         if (charSelection)
             backGround.GetComponent<SpriteRenderer>().sprite = menuCharSelection;
@@ -87,20 +92,26 @@ public class Menu : MonoBehaviour
             Game.current.playerChosenCharacter = new int[MAXPLAYER];
             //Errors happen when we increase the amount of levels after a savefile has been created. So we will create an Array with a size of 100 so there will be no problems in the future (atleast when we don't create over 100 levels)
             Game.current.collected = new int[MAXLEVELS]; 
+            playerActive = new bool[MAXPLAYER];
+            playerChosenCharacter = new int[MAXPLAYER]; 
+            Game.current.playerCount = 1; 
         }
         if (File.Exists(Application.dataPath + "/fluffy.plush"))
         {
             Debug.Log("Savegame found");
 			
             SaveLoad.Load();
-            Game.current = SaveLoad.savedGames[0];           
+            Game.current = SaveLoad.savedGames[0];  
+            playerCount = Game.current.playerCount;
+            playerActive = Game.current.playerActive; 
+            playerChosenCharacter = Game.current.playerChosenCharacter;
         }
         //Debug.Log("Test: " + Game.current.test + " Collected.Length" + Game.current.collected.Length);
         Debug.Log("Collected[0] " + Game.current.collected[0]);
 
         //Game.current.test = "ABC";
         //Save the current Game as a new saved Game
-        SaveLoad.Save();
+        //SaveLoad.Save();
 
         //Debug.Log(Game.current.test);
 
@@ -132,18 +143,10 @@ public class Menu : MonoBehaviour
         int[] loadedCampaignCollectedMuffins = Game.current.collected;
 
         playerRDY = new bool[MAXPLAYER];
-        playerActive = new bool[MAXPLAYER];
-        playerChosenCharacter = new int[MAXPLAYER];
-
+        playerActive[0] = true;
         //Player 1 (int i = 0) is always active and is choosing a character which means he isnt ready at the start
-        for (int i = 1; i < playerRDY.Length; i++)
-            playerRDY[i] = true;
-        if (playerActive.Length > 0)
-            playerActive[0] = true;
-
-        Game.current.playerChosenCharacter = new int[MAXPLAYER];
-        if (Game.current.playerChosenCharacter.Length > 0)
-            playerChosenCharacter = Game.current.playerChosenCharacter;
+        for (int i = 0; i < playerActive.Length; i++)
+            playerRDY[i] = !playerActive[i];
 
         //get all saved stats, everything else will be 0 so the levelstats can get initialized below
         campaignCollectedMuffins = loadedCampaignCollectedMuffins;
@@ -165,6 +168,15 @@ public class Menu : MonoBehaviour
             charSelection = false;
             toggleLevelUI();
         }
+
+        for (int i = 0; i < MAXPLAYER; i++)
+        {            
+            charPreviewers[i].SetActive(playerActive[i]);   
+            charPreviewers[i].GetComponent<CharPreviewer>().SelectChar(playerChosenCharacter[i]);
+        }
+
+        playerCountText.GetComponent<Text>().text = playerCount + "/4 Spielern";
+        CharPreviewers();
     }
 
     void UISoundPositive()
@@ -185,6 +197,8 @@ public class Menu : MonoBehaviour
             Startlevel();
 
         MenuNavigation();
+
+        Debug.Log(Game.current.playerCount);
     }
 
     void IterateThroughChars_Backward(int i)
@@ -306,10 +320,12 @@ public class Menu : MonoBehaviour
         if (!playerActive[i])
         {
             playerActive[i] = true;
+            Game.current.playerActive = playerActive;
             playerCount++;
             charPreviewers[i].SetActive(true);
 
             Game.current.playerCount = playerCount;
+            SaveLoad.Save();
 
             playerCountText.GetComponent<Text>().text = playerCount + "/4 Spielern";
 
@@ -324,8 +340,8 @@ public class Menu : MonoBehaviour
         else
         {
             //sound plays only the first time
-            if(!playerRDY[i])
-            UISoundPositive();
+            if (!playerRDY[i])
+                UISoundPositive();
             
             playerRDY[i] = true;
 
@@ -363,9 +379,11 @@ public class Menu : MonoBehaviour
             {                       
                 playerCount--;
                 playerActive[i] = false;
+                Game.current.playerActive = playerActive;
                 playerRDY[i] = true;
 
                 Game.current.playerCount = playerCount;
+                SaveLoad.Save();
 
                 playerCountText.GetComponent<Text>().text = playerCount + "/4 Spielern";
 
@@ -401,7 +419,7 @@ public class Menu : MonoBehaviour
 
             //#################### BUTTON Y ####################
 
-            if ((GamePad.GetButton(GamePad.Button.Y, gamePadIndex[i])) && playerActive[i] && charSelection)
+            if ((GamePad.GetButtonDown(GamePad.Button.Y, gamePadIndex[i])) && playerActive[i] && charSelection)
                 Application.Quit();                   
         }
         
@@ -431,17 +449,24 @@ public class Menu : MonoBehaviour
         }
     }
 
+    //Aligns all previewers on the screen depending on the playerCount
     void CharPreviewers()
     {        
+        int row =-1; //-1 because if one player exists, row++ means the previewer will be centered at 0 (center screen)
         if (playerCount > 0)
             for (int i = 0; i < charPreviewers.Length; i++)
             {
-                Vector2 min = Camera.main.ViewportToWorldPoint(new Vector2(0, 0));
-                Vector2 max = Camera.main.ViewportToWorldPoint(new Vector2(1, 1));
-                Vector3 pos = new Vector3(0f, 0f, 0f);
+                if (playerActive[i])
+                    row++;
+                
+                    Vector2 min = Camera.main.ViewportToWorldPoint(new Vector2(0, 0));
+                    Vector2 max = Camera.main.ViewportToWorldPoint(new Vector2(1, 1));
+                    Vector3 pos = new Vector3(0f, 0f, 0f);
 
-                pos.x = min.x + ((max.x * 2) / (playerCount + 1)) + ((max.x * 2) / (playerCount + 1) * i);
-                charPreviewers[i].transform.position = pos;
+                pos.x = min.x + ((max.x * 2) / (playerCount + 1)) + ((max.x * 2) / (playerCount + 1) * row);
+                    
+                    charPreviewers[i].transform.position = pos;
+                
             }
     }
 
@@ -468,7 +493,7 @@ public class Menu : MonoBehaviour
 
         Level[currentLevelSelection].GetComponent<LevelStats>().currentlySelected = true;
     }
-        
+
     void Startlevel()
     {
         SceneManager.LoadScene(currentLevelSelection.ToString());
