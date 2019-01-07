@@ -23,6 +23,8 @@ public class Collectible : MonoBehaviour
 				Manager.currentGameManager.GetComponent<Manager> ().collectedMuffins++;
 
 				c.GetComponent<PlayerController> ().powerUpCount++;
+                c.transform.Find("PowerUpText").GetComponent<TextMesh>().text = c.GetComponent<PlayerController> ().powerUpCount+"";
+
 				if (c.GetComponent<PlayerController> ().powerUpCount < 10)
 					c.GetComponent<PlayerController> ().Body.transform.localScale += new Vector3 (0.05f, 0.15f, 0f);
 				GetComponent<AudioSource> ().Play ();

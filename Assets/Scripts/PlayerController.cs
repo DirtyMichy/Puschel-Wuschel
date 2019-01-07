@@ -125,12 +125,13 @@ public class PlayerController : MonoBehaviour
 	{
 		powerUpActivated = true;
 		GetComponent<Rigidbody2D>().freezeRotation = false;
-		GetComponent<Rigidbody2D>().mass = 100f;
+        GetComponent<Rigidbody2D>().mass = 100f;
 		while (powerUpCount > 0)
-		{        
+        {        
+            transform.Find("PowerUpText").GetComponent<TextMesh>().text = "";
 			yield return new WaitForSeconds(1f);
-			powerUpCount--;
-		}
+            powerUpCount--;
+        }
 		powerUpActivated = false;
 		GetComponent<Rigidbody2D>().freezeRotation = true;
 		GetComponent<Rigidbody2D>().mass = 1f;
