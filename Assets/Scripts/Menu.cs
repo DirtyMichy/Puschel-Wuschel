@@ -11,7 +11,7 @@ public class Menu : MonoBehaviour
     public static Menu current;
 
     public int[] campaignCollectedMuffins;
-    public GameObject playerCountText, backGround;
+    public GameObject playerCountText, backGround, charSelectionText;
     public GameObject[] Level;
     public GameObject[] charPreviewers;
     public GameObject[] allCharacters;
@@ -73,6 +73,8 @@ public class Menu : MonoBehaviour
             backGround.GetComponent<SpriteRenderer>().sprite = menuCharSelection;
         else
             backGround.GetComponent<SpriteRenderer>().sprite = menuLevelSelection;
+
+        charSelectionText.SetActive(charSelection);
     }
 
     // Use this for initialization
