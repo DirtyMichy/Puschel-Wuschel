@@ -6,6 +6,7 @@ public class Collectible : MonoBehaviour
 {
 	private bool collected = false;
 	public GameObject spawnParticles;
+    public int powerUpValue = 1;        //Tutorial uses a stronger powerUp to showCase the spinning
 
 	// Update is called once per frame
 	void Update ()
@@ -20,9 +21,9 @@ public class Collectible : MonoBehaviour
 			if (c.gameObject.GetComponent<PlayerController> ().alive) {
 				collected = true;
 
-				Manager.currentGameManager.GetComponent<Manager> ().collectedMuffins++;
+                Manager.currentGameManager.GetComponent<Manager> ().collectedMuffins++;
 
-				c.GetComponent<PlayerController> ().powerUpCount++;
+                c.GetComponent<PlayerController> ().powerUpCount+=powerUpValue;
                 c.transform.Find("PowerUpText").GetComponent<TextMesh>().text = c.GetComponent<PlayerController> ().powerUpCount+"";
 
 				if (c.GetComponent<PlayerController> ().powerUpCount < 10)

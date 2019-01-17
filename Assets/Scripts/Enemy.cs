@@ -9,7 +9,7 @@ public class Enemy : MonoBehaviour
     public float speed = 4f;
     public float delay = 1f;
     public GameObject web;
-    public bool killable = true;
+    public bool killable = true; //Die Ienumerator starts only one time
     public bool flipX = false;
     public bool resetPositionAfterKill = false;
     public GameObject spawnParticles;
@@ -40,8 +40,8 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    //Some enemies can be killed by superpowers
-    void OnTriggerEnter2D(Collider2D c)
+    //Some enemies can be killed by superpowers, why Stay instead of Enter? Because you can activate the PowerUp when already touching a destructible wall or something
+    void OnTriggerStay2D(Collider2D c)
     {
         if (c.tag == "Player" && killable)
         if (c.GetComponent<PlayerController>().powerUpActivated)
@@ -64,6 +64,7 @@ public class Enemy : MonoBehaviour
             gameObject.AddComponent<Rigidbody2D>();
 
         gameObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
+        gameObject.GetComponent<Rigidbody2D>().mass = 1f;
         gameObject.GetComponent<Rigidbody2D>().gravityScale = 0;
         gameObject.GetComponent<Rigidbody2D>().AddForce(Vector2.right * 1000f);
 

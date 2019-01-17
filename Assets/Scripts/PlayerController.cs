@@ -89,7 +89,7 @@ public class PlayerController : MonoBehaviour
 		}
 
 		if ((((Input.GetKeyDown(KeyCode.Space)
-		    || Input.GetKeyDown(KeyCode.W)
+		    || Input.GetKeyDown(KeyCode.A)
 		    || Input.GetKeyDown(KeyCode.UpArrow)) && playerID == 0)
 		    || GamePad.GetButton(GamePad.Button.A, gamePadIndex[playerID])) && alive && grounded)
 		{
@@ -159,7 +159,7 @@ public class PlayerController : MonoBehaviour
 
 
 
-			if ((Input.GetKey(KeyCode.A) || directionLeft || Input.GetKey(KeyCode.LeftArrow)) && playerID == 0)
+			if ((Input.GetKey(KeyCode.S) || directionLeft || Input.GetKey(KeyCode.LeftArrow)) && playerID == 0)
 				directionCurrent.x = -1f;
 			if ((Input.GetKey(KeyCode.D) || directionRight || Input.GetKey(KeyCode.RightArrow)) && playerID == 0)
 				directionCurrent.x = 1f;

@@ -7,6 +7,7 @@ using System.IO;
 public class Exit : MonoBehaviour
 {
     private bool exited = false;
+    private bool loadNextLevel = false;
 
     void OnTriggerEnter2D(Collider2D c)
     {
@@ -34,7 +35,7 @@ public class Exit : MonoBehaviour
             Game.current.collected[sceneNameAsInt] = Manager.currentGameManager.GetComponent<Manager>().collectedMuffins; 
 
             SaveLoad.Save();
-            if ((sceneNameAsInt + 1) < ((SceneManager.sceneCountInBuildSettings) - 1))
+            if ((sceneNameAsInt + 1) < ((SceneManager.sceneCountInBuildSettings) - 1) && loadNextLevel)
             {
                 Debug.Log((sceneNameAsInt + 1) + " less than " + (SceneManager.sceneCountInBuildSettings - 1));
                 SceneManager.LoadScene((sceneNameAsInt + 1).ToString());
