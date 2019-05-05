@@ -200,7 +200,7 @@ public class Menu : MonoBehaviour
 
         MenuNavigation();
 
-        Debug.Log(Game.current.playerCount);
+//        Debug.Log(Game.current.playerCount);
     }
 
     void IterateThroughChars_Backward(int i)
