@@ -1,36 +1,75 @@
 fileFormatVersion: 2
 guid: 08f7d9d9a52b606479b8bfb8565f252b
-timeCreated: 1458157228
-licenseType: Store
 TextureImporter:
-  fileIDToRecycleName:
-    21300000: cubeL
-    21300002: link1
-    21300004: ton
-    21300006: diamondL
-    21300008: cubeS
-    21300010: link2
-    21300012: diamondS
-    21300014: ballL
-    21300016: ballS
-    21300018: circleL
-    21300020: circleS
-    21300022: triangle
-    21300024: bridge
-    21300026: rope
-    21300028: pole
-    21300030: rect
-    21300032: banner
-    21300034: car
-    21300036: wheel
-  serializedVersion: 2
+  internalIDToNameTable:
+  - first:
+      213: 21300000
+    second: cubeL
+  - first:
+      213: 21300002
+    second: link1
+  - first:
+      213: 21300004
+    second: ton
+  - first:
+      213: 21300006
+    second: diamondL
+  - first:
+      213: 21300008
+    second: cubeS
+  - first:
+      213: 21300010
+    second: link2
+  - first:
+      213: 21300012
+    second: diamondS
+  - first:
+      213: 21300014
+    second: ballL
+  - first:
+      213: 21300016
+    second: ballS
+  - first:
+      213: 21300018
+    second: circleL
+  - first:
+      213: 21300020
+    second: circleS
+  - first:
+      213: 21300022
+    second: triangle
+  - first:
+      213: 21300024
+    second: bridge
+  - first:
+      213: 21300026
+    second: rope
+  - first:
+      213: 21300028
+    second: pole
+  - first:
+      213: 21300030
+    second: rect
+  - first:
+      213: 21300032
+    second: banner
+  - first:
+      213: 21300034
+    second: car
+  - first:
+      213: 21300036
+    second: wheel
+  externalObjects: {}
+  serializedVersion: 10
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
+    sRGBTexture: 1
     linearTexture: 0
-    correctGamma: 0
     fadeOut: 0
     borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
     mipMapFadeDistanceStart: 1
     mipMapFadeDistanceEnd: 3
   bumpmap:
@@ -39,37 +78,60 @@ TextureImporter:
     heightScale: 0.25
     normalMapFilter: 0
   isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
   grayScaleToAlpha: 0
-  generateCubemap: 0
+  generateCubemap: 6
   cubemapConvolution: 0
-  cubemapConvolutionSteps: 7
-  cubemapConvolutionExponent: 1.5
   seamlessCubemap: 0
   textureFormat: -1
   maxTextureSize: 2048
   textureSettings:
+    serializedVersion: 2
     filterMode: -1
     aniso: -1
-    mipBias: -1
-    wrapMode: 1
+    mipBias: -100
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
   nPOTScale: 0
   lightmap: 0
-  rGBM: 0
   compressionQuality: 50
-  allowsAlphaSplitting: 0
   spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
   alphaIsTransparency: 1
+  spriteTessellationDetail: -1
   textureType: 8
-  buildTargetSettings: []
+  textureShape: 1
+  singleChannelComponent: 0
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
+    serializedVersion: 2
     sprites:
-    - name: cubeL
+    - serializedVersion: 2
+      name: cubeL
       rect:
         serializedVersion: 2
         x: 21
@@ -79,12 +141,18 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      outline:
-      - - {x: -52.5, y: 52.5}
-        - {x: -52.5, y: -52.5}
-        - {x: 52.5, y: -52.5}
-        - {x: 52.5, y: 52.5}
-    - name: link1
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 02305410000000000800000000000000
+      internalID: 21300000
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: link1
       rect:
         serializedVersion: 2
         x: 235
@@ -94,20 +162,18 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      outline:
-      - - {x: -52.5, y: 52.5}
-        - {x: -52.5, y: -52.5}
-        - {x: 52.5, y: -52.5}
-        - {x: 52.5, y: 52.5}
-        - {x: -52.5, y: 52.5}
-        - {x: -52.5, y: -52.5}
-        - {x: 52.5, y: -52.5}
-        - {x: 52.5, y: 52.5}
-      - - {x: -52.5, y: 52.5}
-        - {x: -52.5, y: -52.5}
-        - {x: 52.5, y: -52.5}
-        - {x: 52.5, y: 52.5}
-    - name: ton
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 22305410000000000800000000000000
+      internalID: 21300002
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ton
       rect:
         serializedVersion: 2
         x: 453
@@ -117,16 +183,18 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      outline:
-      - - {x: -21.5, y: 86}
-        - {x: -73.5, y: 25}
-        - {x: -73.5, y: -80}
-        - {x: -53.5, y: -86}
-        - {x: 71.5, y: -86}
-        - {x: 73.5, y: -83}
-        - {x: 73.5, y: 24}
-        - {x: 37.5, y: 86}
-    - name: diamondL
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 42305410000000000800000000000000
+      internalID: 21300004
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: diamondL
       rect:
         serializedVersion: 2
         x: 641
@@ -136,16 +204,18 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      outline:
-      - - {x: -20, y: 59}
-        - {x: -58, y: 25}
-        - {x: -58, y: -9}
-        - {x: -9, y: -59}
-        - {x: 11, y: -59}
-        - {x: 58, y: -21}
-        - {x: 58, y: 11}
-        - {x: 25, y: 59}
-    - name: cubeS
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 62305410000000000800000000000000
+      internalID: 21300006
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cubeS
       rect:
         serializedVersion: 2
         x: 140
@@ -155,12 +225,18 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      outline:
-      - - {x: -30, y: 30}
-        - {x: -30, y: -30}
-        - {x: 30, y: -30}
-        - {x: 30, y: 30}
-    - name: link2
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 82305410000000000800000000000000
+      internalID: 21300008
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: link2
       rect:
         serializedVersion: 2
         x: 233
@@ -170,19 +246,18 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      outline:
-      - - {x: -90.5, y: 42}
-        - {x: -90.5, y: -31}
-        - {x: -73.5, y: -42}
-        - {x: 84.5, y: -42}
-        - {x: 90.5, y: -35}
-        - {x: 90.5, y: 41}
-        - {x: 85.5, y: 42}
-      - - {x: -48.5, y: 22}
-        - {x: 47.5, y: 21}
-        - {x: 48.5, y: -23}
-        - {x: -47.5, y: -22}
-    - name: diamondS
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a2305410000000000800000000000000
+      internalID: 21300010
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: diamondS
       rect:
         serializedVersion: 2
         x: 798
@@ -192,16 +267,18 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      outline:
-      - - {x: -7, y: 39}
-        - {x: -38, y: 18}
-        - {x: -38, y: -9}
-        - {x: -16, y: -39}
-        - {x: 7, y: -39}
-        - {x: 38, y: -16}
-        - {x: 38, y: 9}
-        - {x: 16, y: 39}
-    - name: ballL
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c2305410000000000800000000000000
+      internalID: 21300012
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ballL
       rect:
         serializedVersion: 2
         x: 15
@@ -211,18 +288,18 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      outline:
-      - - {x: -62.5, y: -48.5}
-        - {x: -59.5, y: -54.5}
-        - {x: -49.5, y: -62.5}
-        - {x: 43.5, y: -62.5}
-        - {x: 62.5, y: -55.5}
-        - {x: 62.5, y: 35.5}
-        - {x: 60.5, y: 45.5}
-        - {x: 48.5, y: 62.5}
-        - {x: -44.5, y: 62.5}
-        - {x: -62.5, y: 55.5}
-    - name: ballS
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e2305410000000000800000000000000
+      internalID: 21300014
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ballS
       rect:
         serializedVersion: 2
         x: 156
@@ -232,20 +309,18 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      outline:
-      - - {x: 34, y: 13}
-        - {x: 30, y: 22}
-        - {x: 19, y: 34}
-        - {x: -15, y: 34}
-        - {x: -34, y: 29}
-        - {x: -34, y: -17}
-        - {x: -22, y: -30}
-        - {x: -13, y: -34}
-        - {x: 13, y: -34}
-        - {x: 22, y: -30}
-        - {x: 30, y: -22}
-        - {x: 34, y: -13}
-    - name: circleL
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 03305410000000000800000000000000
+      internalID: 21300016
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: circleL
       rect:
         serializedVersion: 2
         x: 258
@@ -255,19 +330,18 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      outline:
-      - - {x: -71, y: 71}
-        - {x: -71, y: -64}
-        - {x: -56, y: -71}
-        - {x: 36, y: -71}
-        - {x: 70, y: -63}
-        - {x: 71, y: -59}
-        - {x: 71, y: 71}
-      - - {x: -38, y: -31}
-        - {x: -42, y: 24}
-        - {x: 39, y: 30}
-        - {x: 43, y: -25}
-    - name: circleS
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 23305410000000000800000000000000
+      internalID: 21300018
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: circleS
       rect:
         serializedVersion: 2
         x: 420
@@ -277,19 +351,18 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      outline:
-      - - {x: -44, y: 44}
-        - {x: -44, y: -33}
-        - {x: -38, y: -44}
-        - {x: 27, y: -44}
-        - {x: 44, y: -27}
-        - {x: 44, y: 35}
-        - {x: 24, y: 44}
-      - - {x: -20, y: -18}
-        - {x: -25, y: 7}
-        - {x: 14, y: 23}
-        - {x: 15, y: -23}
-    - name: triangle
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 43305410000000000800000000000000
+      internalID: 21300020
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: triangle
       rect:
         serializedVersion: 2
         x: 559
@@ -299,15 +372,18 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      outline:
-      - - {x: -40.5, y: 61}
-        - {x: -53.5, y: 61}
-        - {x: -53.5, y: -61}
-        - {x: -36.5, y: -61}
-        - {x: 53.5, y: -9}
-        - {x: 53.5, y: 7}
-        - {x: 52.5, y: 8}
-    - name: bridge
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 63305410000000000800000000000000
+      internalID: 21300022
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bridge
       rect:
         serializedVersion: 2
         x: 13
@@ -317,19 +393,18 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      outline:
-      - - {x: 113.5, y: 79.5}
-        - {x: 106.5, y: 90.5}
-        - {x: -106.5, y: 90.5}
-        - {x: -113.5, y: 79.5}
-        - {x: -113.5, y: -1.5}
-        - {x: -63.5, y: -56.5}
-        - {x: -47.5, y: -90.5}
-        - {x: 45.5, y: -90.5}
-        - {x: 76.5, y: -38.5}
-        - {x: 93.5, y: -2.5}
-        - {x: 113.5, y: 10.5}
-    - name: rope
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 83305410000000000800000000000000
+      internalID: 21300024
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rope
       rect:
         serializedVersion: 2
         x: 271
@@ -339,14 +414,18 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      outline:
-      - - {x: -82, y: 44.5}
-        - {x: -86, y: 27.5}
-        - {x: -86, y: -44.5}
-        - {x: 86, y: -44.5}
-        - {x: 86, y: 23.5}
-        - {x: 67, y: 44.5}
-    - name: pole
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a3305410000000000800000000000000
+      internalID: 21300026
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pole
       rect:
         serializedVersion: 2
         x: 632
@@ -356,28 +435,18 @@ TextureImporter:
       alignment: 9
       pivot: {x: 0.4199947, y: 0.81622565}
       border: {x: 0, y: 0, z: 0, w: 0}
-      outline:
-      - - {x: 171.16187, y: 61.989807}
-        - {x: 165.16187, y: 92.98981}
-        - {x: 98.161865, y: 92.98981}
-        - {x: 98.161865, y: 75.98981}
-        - {x: 95.161865, y: 36.989807}
-        - {x: -135.83813, y: 17.989807}
-        - {x: -144.83813, y: 18.989807}
-        - {x: -147.83813, y: 7.989807}
-        - {x: -147.83813, y: -15.010193}
-        - {x: -116.838135, y: -36.010193}
-        - {x: -22.838135, y: -32.010193}
-        - {x: 107.161865, y: -25.010193}
-        - {x: 107.161865, y: -113.01019}
-        - {x: 108.161865, y: -360.0102}
-        - {x: 109.161865, y: -395.0102}
-        - {x: 106.161865, y: -413.0102}
-        - {x: 176.16187, y: -413.0102}
-        - {x: 204.16187, y: -404.0102}
-        - {x: 204.16187, y: -360.0102}
-        - {x: 183.16187, y: -96.01019}
-    - name: rect
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c3305410000000000800000000000000
+      internalID: 21300028
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rect
       rect:
         serializedVersion: 2
         x: 278
@@ -387,16 +456,18 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      outline:
-      - - {x: -112.5, y: 28.5}
-        - {x: -116.5, y: 24.5}
-        - {x: -116.5, y: -24.5}
-        - {x: -112.5, y: -28.5}
-        - {x: 112.5, y: -28.5}
-        - {x: 116.5, y: -24.5}
-        - {x: 116.5, y: 24.5}
-        - {x: 112.5, y: 28.5}
-    - name: banner
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e3305410000000000800000000000000
+      internalID: 21300030
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: banner
       rect:
         serializedVersion: 2
         x: 8
@@ -406,20 +477,18 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      outline:
-      - - {x: 136.5, y: 45.5}
-        - {x: 81.5, y: 55.5}
-        - {x: -15.5, y: 55.5}
-        - {x: -34.5, y: 54.5}
-        - {x: -68.5, y: 55.5}
-        - {x: -143.5, y: 55.5}
-        - {x: -145.5, y: 48.5}
-        - {x: -145.5, y: -29.5}
-        - {x: -140.5, y: -53.5}
-        - {x: -134.5, y: -55.5}
-        - {x: 145.5, y: -55.5}
-        - {x: 145.5, y: 26.5}
-    - name: car
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 04305410000000000800000000000000
+      internalID: 21300032
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: car
       rect:
         serializedVersion: 2
         x: 0
@@ -429,24 +498,18 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      outline:
-      - - {x: 180.5, y: 3.5}
-        - {x: 102.5, y: 8.5}
-        - {x: 77.5, y: 47.5}
-        - {x: 67.5, y: 71.5}
-        - {x: 64.5, y: 78.5}
-        - {x: -25.5, y: 78.5}
-        - {x: -81.5, y: 72.5}
-        - {x: -94.5, y: -3.5}
-        - {x: -182.5, y: -13.5}
-        - {x: -182.5, y: -34.5}
-        - {x: -165.5, y: -76.5}
-        - {x: -162.5, y: -78.5}
-        - {x: 173.5, y: -78.5}
-        - {x: 177.5, y: -74.5}
-        - {x: 182.5, y: -28.5}
-        - {x: 182.5, y: 2.5}
-    - name: wheel
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 24305410000000000800000000000000
+      internalID: 21300034
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wheel
       rect:
         serializedVersion: 2
         x: 52
@@ -456,18 +519,29 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      outline:
-      - - {x: 27, y: 49.5}
-        - {x: -33, y: 49.5}
-        - {x: -50, y: 27.5}
-        - {x: -50, y: -22.5}
-        - {x: -41, y: -49.5}
-        - {x: 24, y: -49.5}
-        - {x: 26, y: -48.5}
-        - {x: 50, y: -28.5}
-        - {x: 50, y: 27.5}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 44305410000000000800000000000000
+      internalID: 21300036
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
   spritePackingTag: 
+  pSDRemoveMatte: 1
+  pSDShowRemoveMatteOption: 1
   userData: 
   assetBundleName: 
   assetBundleVariant: 
