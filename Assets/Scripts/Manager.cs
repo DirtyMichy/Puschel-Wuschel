@@ -23,6 +23,8 @@ public class Manager : MonoBehaviour
 	private float cameraOffsetY = -0.76f;
 	public GameObject spawnParticles;
 
+	public string levelTheme = "none";
+
 	public static Manager currentGameManager;
 
 	// Use this for initialization

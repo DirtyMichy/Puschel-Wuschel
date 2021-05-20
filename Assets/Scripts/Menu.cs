@@ -498,7 +498,7 @@ public class Menu : MonoBehaviour
 
     void Startlevel()
     {
-        SceneManager.LoadScene(currentLevelSelection.ToString());
+        SceneManager.LoadScene(Level[currentLevelSelection].name.ToString());
     }
         
     //Makes navigation through the levels inside the menu possible
