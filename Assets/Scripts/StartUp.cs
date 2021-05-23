@@ -10,7 +10,7 @@ public class Startup
 {
 	static Startup()
 	{
-		Debug.Log("Up and running");
+		//Debug.Log("Up and running");
 	}
 }
 #endif 
