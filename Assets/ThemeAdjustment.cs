@@ -8,6 +8,9 @@ public class ThemeAdjustment : MonoBehaviour
 {
     void Awake()
     {
-        GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>(SceneManager.GetActiveScene().name + "/" + SceneManager.GetActiveScene().name + "_" + gameObject.name.Remove(gameObject.name.LastIndexOf(" (")));        
+        if (gameObject.name.Contains(" ("))
+            GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>(SceneManager.GetActiveScene().name + "/" + SceneManager.GetActiveScene().name + "_" + gameObject.name.Remove(gameObject.name.LastIndexOf(" (")));
+        else
+            GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>(SceneManager.GetActiveScene().name + "/" + SceneManager.GetActiveScene().name + "_" + gameObject.name);
     }
 }

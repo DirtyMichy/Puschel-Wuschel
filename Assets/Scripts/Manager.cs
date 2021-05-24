@@ -20,7 +20,7 @@ public class Manager : MonoBehaviour
 	public GameObject currentCheckPoint;
 	//current checkpoint at which players can respawn
 	public float zoomStart = 15f;
-	private float cameraOffsetY = -0.76f;
+	private float cameraOffsetY = -0.5f;
 	public GameObject spawnParticles;
 
 	public string levelTheme = "none";

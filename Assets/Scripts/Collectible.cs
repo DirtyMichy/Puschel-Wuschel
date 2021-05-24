@@ -8,12 +8,6 @@ public class Collectible : MonoBehaviour
 	public GameObject spawnParticles;
     public int powerUpValue = 1;        //Tutorial uses a stronger powerUp to showCase the spinning
 
-	// Update is called once per frame
-	void Update ()
-    {
-        iTween.PunchPosition(gameObject, iTween.Hash("y", 2f));
-	}
-
     void OnTriggerEnter2D(Collider2D c)
     {
         if(!collected && c.tag == "Player")
