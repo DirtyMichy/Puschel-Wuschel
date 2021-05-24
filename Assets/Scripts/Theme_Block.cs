@@ -37,8 +37,18 @@ public class Theme_Block : MonoBehaviour
             gras.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>(SceneManager.GetActiveScene().name + "/" + SceneManager.GetActiveScene().name + "_Gras");
             Debug.Log("Loading gras: " + SceneManager.GetActiveScene().name + "_Gras");
         }
+        else
+        if (spawnGras && gameObject.transform.childCount == 1)
+        {
+            transform.GetChild(0).gameObject.name = "Gras";
+            transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>(SceneManager.GetActiveScene().name + "/" + SceneManager.GetActiveScene().name + "_Gras");
+            Debug.Log("Loading gras: " + SceneManager.GetActiveScene().name + "_Gras");
+        }
+        else
+        if (!spawnGras)
+            DestroyImmediate(transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>());
 
-        if (chosenBlock != blockType.None)
+            if (chosenBlock != blockType.None)
             GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>(SceneManager.GetActiveScene().name + "/" + SceneManager.GetActiveScene().name + "_" + chosenBlock);
         /*
         switch (SceneManager.GetActiveScene().name)

@@ -85,24 +85,24 @@ public class PlayerController : MonoBehaviour
                 StartCoroutine(powerUp());
         }
 
+        //Jumping
         if ((((Input.GetKeyDown(KeyCode.Space)
             || Input.GetKeyDown(KeyCode.A)
             || Input.GetKeyDown(KeyCode.UpArrow)) && playerID == 0)
             || GamePad.GetButton(GamePad.Button.A, gamePadIndex[playerID])) && alive && grounded)
         {
             jump = true;
-            GetComponent<AudioSource>().Play();
-            grounded = false;
         }
 
+        grounded = false; //after jumping we check again inside the for loop if we are grounded
 
         if (powerUpActivated)
         {
             GetComponent<Rigidbody2D>().angularVelocity = 640f * -transform.localScale.x;
         }
     }
-
-    public void Jump()
+    /*
+    public void Jumps()
     {
         for (int i = 0; i < groundCheck.Length; i++)
         {
@@ -114,10 +114,9 @@ public class PlayerController : MonoBehaviour
         {
             jump = true;
             GetComponent<AudioSource>().Play();
-            grounded = false;
         }
     }
-
+    */
     IEnumerator powerUp()
     {
         powerUpActivated = true;
@@ -143,7 +142,7 @@ public class PlayerController : MonoBehaviour
     }
 
     public void GoLeft()
-    {		
+    {
         directionRight = false;
         directionLeft = true;
     }
@@ -153,8 +152,6 @@ public class PlayerController : MonoBehaviour
         if (alive)
         {
             Vector2 directionCurrent = GamePad.GetAxis(GamePad.Axis.LeftStick, gamePadIndex[playerID]);
-
-
 
             if ((Input.GetKey(KeyCode.S) || directionLeft || Input.GetKey(KeyCode.LeftArrow)) && playerID == 0)
                 directionCurrent.x = -1f;
@@ -172,10 +169,10 @@ public class PlayerController : MonoBehaviour
                     rb2d.velocity = new Vector2(Mathf.Sign(rb2d.velocity.x) * maxSpeed * iceForce, rb2d.velocity.y);
             }
 
-
+            /*
             if (rb2d.velocity.x == 0 && directionCurrent.x != 0)
                 rb2d.AddForce(new Vector2(0f, -0.1f * jumpForce * GetComponent<Rigidbody2D>().mass));
-
+            */
 
             if (directionCurrent.x > 0 && !facingRight)
                 Flip();
@@ -184,6 +181,9 @@ public class PlayerController : MonoBehaviour
 
             if (jump)
             {
+                GetComponent<AudioSource>().Play();
+                grounded = false;
+
                 rb2d.AddForce(new Vector2(0f, jumpForce * GetComponent<Rigidbody2D>().mass));
                 rb2d.velocity = new Vector2(0f, 0f);				//resetting the velocity so old value wont be used (no flickery jumping)
                 jump = false;
@@ -199,7 +199,6 @@ public class PlayerController : MonoBehaviour
             }
 
             directionRight = false;
-            directionLeft = false;
         }
     }
 
