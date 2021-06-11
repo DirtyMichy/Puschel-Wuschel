@@ -38,10 +38,7 @@ public class PlayerController : MonoBehaviour
 
     public void Awake()
     {
-        //0 = Forest
-        //1 = Halloween
-        //2 = Xmas
-        //3 = Western
+        //Check if we want our CowBoyHat
         Transform hat = transform.Find("CowBoyHat");
         if (hat != null)
         {
@@ -50,7 +47,7 @@ public class PlayerController : MonoBehaviour
                     hat.GetComponent<SpriteRenderer>().enabled = true;			
         }
 
-        cam = Camera.main;
+        //cam = Camera.main;
 
         anim = GetComponent<Animator>();
         rb2d = GetComponent<Rigidbody2D>();
@@ -65,11 +62,10 @@ public class PlayerController : MonoBehaviour
     public void SetPlayerID(int i)
     {
         playerID = i;
-        if (i == 0)
-            cam = Camera.main;
+        //if (i == 0)
+        //    cam = Camera.main;
     }
 
-    // Update is called once per frame
     void Update()
     {
         for (int i = 0; i < groundCheck.Length; i++)
@@ -98,39 +94,26 @@ public class PlayerController : MonoBehaviour
 
         if (powerUpActivated)
         {
-            GetComponent<Rigidbody2D>().angularVelocity = 640f * -transform.localScale.x;
+            rb2d.angularVelocity = 640f * -transform.localScale.x;
         }
     }
-    /*
-    public void Jumps()
-    {
-        for (int i = 0; i < groundCheck.Length; i++)
-        {
-            if (Physics2D.Linecast(transform.position, groundCheck[i].position, 1 << LayerMask.NameToLayer("Ground")))
-                grounded = true;
-        }
 
-        if (!jump && alive && grounded)
-        {
-            jump = true;
-            GetComponent<AudioSource>().Play();
-        }
-    }
-    */
     IEnumerator powerUp()
     {
         powerUpActivated = true;
-        GetComponent<Rigidbody2D>().freezeRotation = false;
-        GetComponent<Rigidbody2D>().mass = 100f;
+        rb2d.freezeRotation = false;
+        rb2d.mass = 100f;
+
         while (powerUpCount > 0)
         {        
             transform.Find("PowerUpText").GetComponent<TextMesh>().text = "";
             yield return new WaitForSeconds(1f);
             powerUpCount--;
         }
+
         powerUpActivated = false;
-        GetComponent<Rigidbody2D>().freezeRotation = true;
-        GetComponent<Rigidbody2D>().mass = 1f;
+        rb2d.freezeRotation = true;
+        rb2d.mass = 1f;
         transform.rotation = new Quaternion(0f, 0f, 0f, 0f);
         Body.transform.localScale = new Vector3(1f, 1f, 1f);
     }
@@ -158,21 +141,10 @@ public class PlayerController : MonoBehaviour
             if ((Input.GetKey(KeyCode.D) || directionRight || Input.GetKey(KeyCode.RightArrow)) && playerID == 0)
                 directionCurrent.x = 1f;
 			
-            //if (grounded || !(rb2d.velocity.x == 0 && rb2d.velocity.y == 0)) 
-            {
-                //Debug.Log(directionCurrent.x);
-                if (directionCurrent.x * rb2d.velocity.x < maxSpeed)
-                    rb2d.AddForce(Vector2.right * directionCurrent.x * moveForce * iceForce);
+            if (directionCurrent.x * rb2d.velocity.x < maxSpeed)
+                rb2d.AddForce(Vector2.right * directionCurrent.x * moveForce * iceForce);
 
-                //???
-                if (Mathf.Abs(rb2d.velocity.x) > maxSpeed)
-                    rb2d.velocity = new Vector2(Mathf.Sign(rb2d.velocity.x) * maxSpeed * iceForce, rb2d.velocity.y);
-            }
-
-            /*
-            if (rb2d.velocity.x == 0 && directionCurrent.x != 0)
-                rb2d.AddForce(new Vector2(0f, -0.1f * jumpForce * GetComponent<Rigidbody2D>().mass));
-            */
+            //rb2d.AddForce(Vector2.up * moveForce/4f *  -1f);
 
             if (directionCurrent.x > 0 && !facingRight)
                 Flip();
@@ -184,8 +156,8 @@ public class PlayerController : MonoBehaviour
                 GetComponent<AudioSource>().Play();
                 grounded = false;
 
-                rb2d.AddForce(new Vector2(0f, jumpForce * GetComponent<Rigidbody2D>().mass));
-                rb2d.velocity = new Vector2(0f, 0f);				//resetting the velocity so old value wont be used (no flickery jumping)
+                rb2d.AddForce(new Vector2(0f, jumpForce * rb2d.mass));
+                rb2d.velocity = new Vector2(0f, 0f);                            //resetting the velocity so old value wont be used (no flickery jumping)
                 jump = false;
             }
 
