@@ -58,13 +58,12 @@ public class MovingPlatform : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.tag == "Player")
-        if (doesFall)
-        {
-            StartCoroutine(ColliderCooldown());
-            iTween.PunchPosition(gameObject, iTween.Hash("y", rangeY, "easeType", easeTypeSelection.ToString(), "time", speed, "delay", delay));
-        }
-        else
-            iTween.PunchPosition(gameObject, iTween.Hash("y", .5f, "time", 1f));
+            if (doesFall)
+            {
+                StartCoroutine(ColliderCooldown());
+                //iTween.PunchPosition(gameObject, iTween.Hash("y", rangeY, "easeType", easeTypeSelection.ToString(), "time", speed, "delay", delay));
+            }
+            //iTween.PunchPosition(gameObject, iTween.Hash("y", .5f, "time", 1f));
     }
 
     IEnumerator ColliderCooldown()

@@ -48,8 +48,13 @@ public class Theme_Block : MonoBehaviour
         if (!spawnGras)
             DestroyImmediate(transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>());
 
-            if (chosenBlock != blockType.None)
+        if (chosenBlock != blockType.None)
+        {
             GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>(SceneManager.GetActiveScene().name + "/" + SceneManager.GetActiveScene().name + "_" + chosenBlock);
+
+            if (!Resources.Load<Sprite>(SceneManager.GetActiveScene().name + "/" + SceneManager.GetActiveScene().name + "_" + chosenBlock))
+                GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Default/Default");
+        }
         /*
         switch (SceneManager.GetActiveScene().name)
         {
